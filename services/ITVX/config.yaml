@@ -1,0 +1,6 @@
+service_name: ITVX
+description: A UK independent broadcaster
+
+media_dict:
+  Film: None
+
