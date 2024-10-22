@@ -102,7 +102,7 @@ bash
     Open a pull request.
 
 Images
-    ![VineFeeder GUI]https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder1.png
+    ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder1.png)
 
 License
 
