@@ -3,20 +3,7 @@
 VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) which acts as a front-end for Devine (https://github.com/devine-dl/devine)
 
 Vinefeeder enables users to interact with various streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.
-Features
 
-    *Dynamic Service Loading*: Services are loaded dynamically from a predefined folder. 
-    Each service has its own configuration and logic, allowing flexible media handling.
-    Service-Specific Parsing: Each service can define its own method of parsing media 
-    content, making the platform adaptable to different service architectures.
-    Alphabetical Service Listing: Services are displayed as clickable buttons in 
-    alphabetical order, enhancing the user experience.
-    GUI Interface: The interface is built using PyQt6, offering a user-friendly experience
-    for selecting media content.
-    Category Browsing: Services support browsing by category, allowing users to explore 
-    content within specific genres or collections.
-    Video Download: Once media content is selected, videos can be downloaded directly
-    from the service using predefined tools (e.g., devine).
 
 Installation
 Requirements
