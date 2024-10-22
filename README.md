@@ -118,6 +118,7 @@ bash
 Images
     ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder1.png)
     ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder2.png)
+    ![Vinefeeder GUI}(https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder3.png)
 
 License
 
