@@ -86,11 +86,12 @@ To add a new streaming service:
     Add the following:
         A config.yaml file with the media_dict.
         An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
+        Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
 
 VineFeeder will dynamically detect and load the new service on the next run.
 Contributing
 
-We welcome contributions! If you want to add a new feature, fix a bug, or improve existing functionality, please fork the repository and submit a pull request.
+Contribution. If you want to add a new feature, fix a bug, or improve existing functionality, please fork the repository and submit a pull request.
 Steps to Contribute
 
     Fork the project.
