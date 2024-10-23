@@ -26,6 +26,7 @@ Features:
 
 
 **Installation**
+
 Requirements
 
     Python 3.8 or higher
@@ -86,10 +87,15 @@ To add a new streaming service:
         A config.yaml file with the media_dict. see below
         An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
         Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
-        Note: Most web-sites that provie on-demand streaming have a 'browse' page where video categories may be selected for view. Use some/all of these 
+        Note: Most web-sites that provide on-demand streaming have a 'browse' page where video categories may be selected for view. Use some/all of these 
         links to produce a media_dict of ( catergory: link, }
 
 VineFeeder will dynamically detect and load the new service on the next run.
+
+*Special Devine Commands*
+If your use requirements are such that each video you download using Devine needs many parameters to be passed to the downloader this tool may not meet your needs:
+see https://github.com/billybanana80/DevineGUI 
+If however you are happy to set your download parameters once, for each service in Devine's config.yaml then this project may work well for you and provide the fornt-end devien has always lacked.
 
 **Contributing**
 
