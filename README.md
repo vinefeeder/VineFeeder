@@ -41,11 +41,8 @@ Requirements
         rich
         Scrapy
 
-You can install the necessary packages by running:
-
-With bash or a Window's Terminal install python modules to the same python environment (env) as Devine
+You can install the necessary packages with bash or a Window's Terminal install python modules to the same python environment (env) as Devine
 Be sure Devine works correctly, then
-
     pip install -r requirements.txt
 for VineFeeder
 
