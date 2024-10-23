@@ -45,6 +45,7 @@ Be sure Devine works correctly, then
 for VineFeeder
 
 **Setup**
+
 Clone the repository:
 With bash or a Window's Terminal
 
