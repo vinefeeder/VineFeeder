@@ -1,8 +1,8 @@
-**VineFeeder**
+#VineFeeder#
 
-VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) which acts as a front-end for Devine (https://github.com/devine-dl/devine)
+VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
-Vinefeeder enables users to interact with various streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.
+Vinefeeder enables users to interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.
 
 Features:
 
@@ -25,7 +25,7 @@ Features:
     from the service using predefined tools (e.g., devine).
 
 
-Installation
+**Installation**
 Requirements
 
     Python 3.8 or higher
@@ -38,15 +38,17 @@ Requirements
 
 You can install the necessary packages by running:
 
-bash
+With bash or a Window's Terminal install python modules to the same python environment (env) as Devine
+Be sure Devine works correctly, then
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
+for VineFeeder
 
-Setup
+**Setup**
 
     Clone the repository:
 
-bash
+With bash or a Window's Terminal
 
 git clone https://github.com/your-username/vinefeeder.git
 cd vinefeeder
@@ -58,11 +60,11 @@ cd vinefeeder
     Modify the config.yaml file for each service to include its media_dict, which defines the categories and URLs used for browsing.
     Modify the config.yaml services: with the full path to your VineFeeder services folder.
 
-Usage
+**Usage**
 
 Run the application by executing the main script:
 
-bash
+With bash or a Window's Terminal
 
 python vineFeeder.py
 
