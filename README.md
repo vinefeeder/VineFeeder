@@ -106,6 +106,7 @@ If however you are happy to set your download parameters once, for each service,
 **Contributing**
 
 Contributors are welcomed to add services to front-end those services provided by Devine.
+Presently only ALL4 is fully configured and I am working on ITVX
 .
 
 Images
