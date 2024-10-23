@@ -1,4 +1,4 @@
-#VineFeeder#
+# VineFeeder
 
 VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
