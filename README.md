@@ -31,11 +31,15 @@ Requirements
 
     Python 3.8 or higher
     Required Python modules (install via pip):
-        httpx
-        PyQt6
         beaupy
-        yaml
+        devine
+        httpx
         jmespath
+        PyQt6
+        PyQt6_sip
+        PyYAML
+        rich
+        Scrapy
 
 You can install the necessary packages by running:
 
