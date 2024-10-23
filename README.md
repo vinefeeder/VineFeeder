@@ -92,7 +92,8 @@ To add a new streaming service:
 
 VineFeeder will dynamically detect and load the new service on the next run.
 
-*Special Devine Commands*
+**Special Devine Commands**
+
 If your use requirements are such that each video you download using Devine needs many parameters to be passed to the downloader this tool may not meet your needs:
 see https://github.com/billybanana80/DevineGUI 
 If however you are happy to set your download parameters once, for each service in Devine's config.yaml then this project may work well for you and provide the fornt-end devien has always lacked.
