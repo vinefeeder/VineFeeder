@@ -59,6 +59,7 @@ With bash or a Window's Terminal
     Modify the config.yaml services: with the full path to your VineFeeder services folder.
 
 **Usage**
+
 Run the application by executing the main script:
 
     With bash or a Window's Terminal
@@ -74,7 +75,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Search by URL: Input a direct URL to download media content.
     Download Media: Select a media item to start the download process.
 
-*Custom Services*
+**Custom Services**
 
 To add a new streaming service:
 
@@ -86,7 +87,8 @@ To add a new streaming service:
 
 VineFeeder will dynamically detect and load the new service on the next run.
 
-*Contributing*
+**Contributing**
+
 Contributor are welcomed to add services to front-end those services provided by Devine.
 .
 
@@ -95,5 +97,6 @@ Images
     ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder2.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder3.png)
 
-*License*
+**License**
+
 This project is licensed under the MIT License. See the LICENSE file for more details.
