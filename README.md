@@ -53,8 +53,8 @@ With bash or a Window's Terminal
 
 Each streaming service should be placed in the services folder, with each service having its own folder that contains:
 
-     + A config.yaml file with the service configuration.
-     + An __init__.py file defining the service's loader class (e.g., All4Loader).  Note All4 is fully implemented and should be used as a example.
++ A config.yaml file with the service configuration.
++ An __init__.py file defining the service's loader class (e.g., All4Loader).  Note All4 is fully implemented and should be used as a example.
 
 Modify the config.yaml file for each service to include its media_dict, which defines the categories and URLs used for browsing.
 Modify the config.yaml services: with the full path to your VineFeeder services folder.
