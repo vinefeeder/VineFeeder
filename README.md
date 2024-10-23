@@ -68,6 +68,7 @@ Modify the config.yaml services: with the full path to your VineFeeder services 
 Run the application by executing the main script:
 
 With bash or a Window's Terminal
+
     python vinefeeder.py
 
 *Interacting with Services*
