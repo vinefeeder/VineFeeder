@@ -21,7 +21,7 @@ Features:
 *Category Browsing*: Services support browsing by category, allowing users to explore 
     content within specific genres or collections.
     
-"Video Download": Once media content is selected, videos can be downloaded directly
+*Video Download*: Once media content is selected, videos can be downloaded directly
     from the service using predefined tools (e.g., devine).
 
 
@@ -45,13 +45,11 @@ Be sure Devine works correctly, then
 for VineFeeder
 
 **Setup**
-
-    Clone the repository:
-
+Clone the repository:
 With bash or a Window's Terminal
 
-git clone https://github.com/your-username/vinefeeder.git
-cd vinefeeder
+    git clone https://github.com/your-username/vinefeeder.git
+    cd vinefeeder
 
     Each streaming service should be placed in the services folder, with each service having its own folder that contains:
         A config.yaml file with the service configuration.
@@ -61,17 +59,13 @@ cd vinefeeder
     Modify the config.yaml services: with the full path to your VineFeeder services folder.
 
 **Usage**
-
 Run the application by executing the main script:
 
-With bash or a Window's Terminal
+    With bash or a Window's Terminal
+    python vineFeeder.py
 
-python vineFeeder.py
-
-Interacting with Services
-
+*Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
-
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
 
 Services are displayed in alphabetical order for easy access. From there, you can:
@@ -80,7 +74,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Search by URL: Input a direct URL to download media content.
     Download Media: Select a media item to start the download process.
 
-Custom Services
+*Custom Services*
 
 To add a new streaming service:
 
@@ -91,37 +85,15 @@ To add a new streaming service:
         Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
 
 VineFeeder will dynamically detect and load the new service on the next run.
-Contributing
 
-Contribution. If you want to add a new feature, fix a bug, or improve existing functionality, please fork the repository and submit a pull request.
-Steps to Contribute
-
-    Fork the project.
-    Create your feature branch:
-
-    bash
-
-git checkout -b feature/your-feature
-
-Commit your changes:
-
-bash
-
-git commit -m 'Add your feature'
-
-Push to the branch:
-
-bash
-
-    git push origin feature/your-feature
-
-    Open a pull request.
+*Contributing*
+Contributor are welcomed to add services to front-end those services provided by Devine.
+.
 
 Images
     ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder1.png)
     ![VineFeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder2.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder3.png)
 
-License
-
+*License*
 This project is licensed under the MIT License. See the LICENSE file for more details.
