@@ -68,7 +68,7 @@ Modify the config.yaml services: with the full path to your VineFeeder services 
 Run the application by executing the main script:
 
 With bash or a Window's Terminal
-    python vineFeeder.py
+    python vinefeeder.py
 
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
