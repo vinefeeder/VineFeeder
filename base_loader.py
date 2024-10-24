@@ -4,6 +4,7 @@ from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
 import os, sys, time
+from vinefeeder import VineFeeder as VF
 
 class BaseLoader:
     def __init__(self, headers):
@@ -137,11 +138,11 @@ class BaseLoader:
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         # Get user input for selecting series and episode(s)
-        user_input = input("Enter series number(s) or a range (e.g., 2, 3, 5..7) or 'all' for all series: ")
+        user_input = input("Enter series number(s) or a range (e.g., 2, 3, 5..7) or 'all' or '0' for all series: ")
 
         # Parse the input
         selected_series = []
-        if user_input == 'all':  # If the user enters 'all', display all episodes
+        if user_input == 'all' or user_input == '0':  # If the user enters 'all', display all episodes
             selected_series = self.episode_series_numbers
         else:
             # Handle single digits, multiple digits, and ranges
@@ -180,14 +181,57 @@ class BaseLoader:
         else:
             print("No category selected. Returning to main menu.")
 
-    def clean_terminal(self):
-        if os.name == 'posix':
-            time.sleep(2)    
-            os.system('reset') 
+    def display_beaupylist(self, beaupylist):
+
+        found = select(beaupylist, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
+        if found:
+            return found
         else:
-            time.sleep(2)
+            return None
+        
+    def process_received_urls_from_category(self, url, res):
+        """
+        Process the receive category vidoes based on the response length and URL.
+        
+        Parameters
+        ----------
+        url : str
+            The URL to process.
+        res : list
+            The response from the URL.
+        
+        Returns
+        -------
+        None
+        """
+        # check for single link for imediate download
+        if len(res) == 1:
+                self.receive(1, url)
+                return
+        if 'film' in url:  # by defintion - single
+            # direct download
+            self.receive(1, url)
+            return
+        else:
+            #if 'https'
+            # greedy search
+            self.receive(0, url)
+            return
+
+    def clean_terminal(self):
+        # clear for next use
+        time.sleep(3)
+        if os.name == 'posix':       
+            os.system('clear')
+            print("Ready!")
+            return
+        else:
             os.system('cls')
-           
+            print("Ready!")
+            return
+        
+            
+    
               
 
         

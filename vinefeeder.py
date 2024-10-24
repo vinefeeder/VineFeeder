@@ -242,15 +242,18 @@ class VineFeeder(QWidget):
                             if 'http' in text_to_pass:  
                                 loader_instance.receive(1, text_to_pass)
                                 self.clear_search_box()  # inx 1 signifies direct download
-                                sys.exit()
+                                loader_instance.clean_terminal()
+                                sys.exit(0)
                             else:
                                 loader_instance.receive(3, text_to_pass) # inx 3 for keyword search
                                 self.clear_search_box()
-                                sys.exit()
+                                loader_instance.clean_terminal()
+                                sys.exit(0)
                         else:
                             inx, text_to_pass = self.do_action_select(service_name)  # returns a (int , url)
                             loader_instance.receive(inx, text_to_pass)
-                            sys.exit()
+                            loader_instance.clean_terminal()
+                            sys.exit(0)
                     else:
                         print(f"Service class {loader_class_name} has no 'receive' method")
                 else:
