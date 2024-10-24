@@ -4,7 +4,6 @@ from parsing_utils import extract_params_json, prettify
 from rich.console import Console
 import subprocess
 import sys, re, json
-from beaupy import select
 import jmespath
 import vinefeeder as VF
 
@@ -44,11 +43,12 @@ class All4Loader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
-
         # direct download
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'ALL4', search_term])
             subprocess.run(['devine', 'dl', 'ALL4', search_term])  # url
+            #self.clean_terminal()
+            return
 
         # keyword search
         elif inx == 3:
@@ -65,7 +65,7 @@ class All4Loader(BaseLoader):
             search_term = search_term.split('/')[4] 
             # fetch_videos_by_category search_term may have other params to remove
             if '?' in search_term:  
-                search_term = search_term.split('?')[0]
+                search_term = search_term.split('?')[0].replace('-',' ')
             return (self.fetch_videos(search_term))
         
         elif 'http' in search_term and inx == 2:
@@ -78,8 +78,9 @@ class All4Loader(BaseLoader):
     
         print(f"[info] Finished downloading for {search_term}")
         print("[info] Ready: waiting for service selection...")
-        self.clean_terminal()
+        #return self.clean_terminal()
         return
+        
 
 
     def fetch_videos(self, search_term):
@@ -90,19 +91,16 @@ class All4Loader(BaseLoader):
             html = self.get_data(url)
             if 'No Matches' in html:
                 print('Nothing found for that search; try again.')
-                self.clean_terminal()
+                sys.exit(0)
             else:
                 parsed_data = self.parse_data(html)  # to json
         except:
             print(f'No valid data returned for {url}')
-            self.clean_terminal()
-            sys.exit(0)
-            return None
-        
-
+            #return self.clean_terminal()
+            return
+    
         # Assuming that parsed_data has a 'results' key containing video data
         if parsed_data and 'results' in parsed_data:
-            
             for item in parsed_data['results']:
                 series_name = item.get('brand', {}).get('websafeTitle', 'Unknown Series')
                 episode = {
@@ -135,10 +133,9 @@ class All4Loader(BaseLoader):
             myhtml = self.get_data(url=url)
         except:
             print(f"No valid data at {url} found.\n Exiting")
-            self.clean_terminal()
             sys.exit(0)
-        parsed_data = extract_params_json(myhtml)
 
+        parsed_data = extract_params_json(myhtml)
         self.clear_series_data()  # Clear existing series data
 
         # Extract the episodes from the parsed data of the selected series
@@ -160,22 +157,23 @@ class All4Loader(BaseLoader):
                 self.add_episode(series_name, episode)
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
-
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
+
+        # specific to ALL4
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            if url == 'None':
+            if url  == 'None':
                 print(f"No valid URL for {item.split(',')[1]}")
                 continue
             url = "https://www.channel4.com" + url
             
             # debug uncomment
             #print(url)
-            #continue
 
             # fetch video
             subprocess.run(['devine', 'dl', 'ALL4', url])
-            self.clean_terminal()
+            #self.clean_terminal()
+            return
 
 
     def fetch_videos_by_category(self, browse_url):
@@ -199,9 +197,10 @@ class All4Loader(BaseLoader):
 
             # Extract brand items
             myjson = init_data['initialData']['brands']['items']
+
             # jmespath is a json parser that searches complex json
-            # and, in this, case produces a simple dict from which
-            # res(ults) are extracted.
+            # and, in this case, produces a simple dict from which
+            # res(ults) are more easily extracted.
             res = jmespath.search("""
             [*].{
                 href: hrefLink,
@@ -217,25 +216,20 @@ class All4Loader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            return
-
-        # Use beaupy to select a video
-        found = select(beaupylist, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
+            sys.exit(0)
+        
+        # call function in BaseLoader 
+        found = self.display_beaupylist(beaupylist)
+        
         if found:
             ind = found.split(' ')[0]
             url = res[int(ind)]['href']
             # url may be for series or single Film
             url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
 
-            # some categories may produce links to single videos
-            # so the next action should be download and not a greedy search
-            # for channel4 Film returns a list of single videos
-            if 'film' in url:
-                # direct download
-                self.receive(1, url)
-            else:
-                # greedy search
-                self.receive(0, url)
+            # process short-cut downlaod or do greedy search on url
+            return self.process_received_urls_from_category(url, res)
+            
         else:
             print("No video selected.")
-            return None
+            sys.exit(0)
