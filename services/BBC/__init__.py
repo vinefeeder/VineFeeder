@@ -49,10 +49,8 @@ class BbcLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+        
         # direct download
-
-
-
         if 'http' in search_term and inx == 1:
         
             subprocess.run(['devine', 'dl', 'iP', search_term])  # url
