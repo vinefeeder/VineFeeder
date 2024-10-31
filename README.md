@@ -80,6 +80,9 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Browse Categories: Select a media category to view available content.
     Search by URL: Input a direct URL to download media content.
     Download Media: Select a media item to start the download process.
+**Services**
+
+Currently two services are working All4 and BBC and others will be available over time.
 
 **Custom Services**
 
