@@ -25,20 +25,24 @@ class BaseLoader:
         self.headers = headers
         self.series_data = {}  # In-memory store for initial series selection
         self.final_episode_data = [] 
+        self.browse_video_list = []
         self.console = Console()
 
     def clear_series_data(self):
         self.series_data={}
 
-    def get_data(self, url):
+    def get_data(self, url, headers=None):
         """Fetch data from a given URL."""
-        response = self.client.get(url, headers=self.headers, follow_redirects=True)
+
+        if not headers:
+            headers = self.headers
+        response = self.client.get(url, headers=headers, follow_redirects=True)
         if response.status_code != 200:
             raise Exception("Failed to retrieve data.")
         return response.text
     
     def parse_data(self, html):
-        # Parsing logic (this could be moved to parsing_utils)
+        """Parse HTML data into JSON format."""
         return parse_json(html)
 
     def add_episode(self, series_name, episode):
@@ -138,7 +142,7 @@ class BaseLoader:
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         # Get user input for selecting series and episode(s)
-        user_input = input("Enter series number(s) or a range (e.g., 2, 3, 5..7) or 'all' or '0' for all series: ")
+        user_input = input("\nEnter series number(s) or a range (e.g., 2, 3, 5..7) or 'all' or '0' for all series: ")
 
         # Parse the input
         selected_series = []
@@ -153,13 +157,14 @@ class BaseLoader:
                     selected_series.extend(range(start, end + 1))
                 else:  # Single digit
                     selected_series.append(int(part))  # Store as int for comparison
+
         # reverse order if needed
         #selected_series = selected_series[::-1]
 
         # Filter the episodes based on the selected series numbers
         for series_no in selected_series:
             for episode in self.series_data[series_name]: 
-                if episode['series_no'] == int(series_no):
+                if int(episode['series_no']) == int(series_no):
                     """store in list container"""
                     self.add_final_episode(episode)
                     
@@ -175,8 +180,6 @@ class BaseLoader:
         
         if category:
             url = media_dict[category]
-            #print(f"Selected category: {category}")
-            #print(f"Fetching videos from: {url}")
             self.fetch_videos_by_category(url)
         else:
             print("No category selected. Returning to main menu.")
@@ -189,7 +192,7 @@ class BaseLoader:
         else:
             return None
         
-    def process_received_urls_from_category(self, url, res):
+    def process_received_url_from_category(self, url, category='null'):
         """
         Process the receive category vidoes based on the response length and URL.
         
@@ -197,6 +200,7 @@ class BaseLoader:
         ----------
         url : str
             The URL to process.
+        
         res : list
             The response from the URL.
         
@@ -204,14 +208,16 @@ class BaseLoader:
         -------
         None
         """
-        # check for single link for imediate download
-        if len(res) == 1:
-                self.receive(1, url)
-                return
+        if 'film' in category:  # by defintion - single
+            # direct download
+            self.receive(1, url)
+            return
+
         if 'film' in url:  # by defintion - single
             # direct download
             self.receive(1, url)
             return
+            
         else:
             #if 'https'
             # greedy search
@@ -222,7 +228,7 @@ class BaseLoader:
         # clear for next use
         time.sleep(3)
         if os.name == 'posix':       
-            os.system('clear')
+            #os.system('clear')
             print("Ready!")
             return
         else:
@@ -261,6 +267,6 @@ class BaseLoader:
         raise NotImplementedError("This method must be implemented in the service-specific loader.")
     
     @abstractmethod
-    def fetch_videos_by_category(self, url):
+    def fetch_videos(self, search_term: str):
         """This is a base method to be overridden by each service."""
         raise NotImplementedError("This method must be implemented in the service-specific loader.")

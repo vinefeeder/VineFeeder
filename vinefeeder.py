@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import QTimer
-from PyQt6.QtCore import QMetaObject
 import sys
 import os
 import importlib.util
@@ -88,9 +87,7 @@ class VineFeeder(QWidget):
             palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
             self.setPalette(palette)
             self.search_url_label.setStyleSheet("color: white;")
-            
-            
-
+            self.dark_mode_checkbox.setStyleSheet("color: white;")
             
             # Set button text to white in dark mode, remove red border
             for i in range(self.highlighted_layout.count()):
@@ -158,12 +155,13 @@ class VineFeeder(QWidget):
     def do_action_select(self, service_name):
         """
         Top level choice for action required. Called if search_box is empty.
-        Uses beaupy to display a list of 3 options: 
+        Uses beaupy to display a list of 4 options: 
+            - Search by keyword
             - Greedy Search by URL
             - Browse by Category
             - Download by URL
         Uses the selected option to call the appropriate function:
-            - 0 for greedy search
+            - 0 for greedy search with url
             - 1 for direct url download
             - 2 for browse 
             - 3 for search with keyword
@@ -172,10 +170,10 @@ class VineFeeder(QWidget):
         
 
         fn = [
-            "Search by keyword(s)",
             "Greedy Search by URL",
-            'Browse by Category',
             'Download by URL',
+            'Browse by Category',
+            "Search by keyword(s)",
             ]
         
         action = select(fn, preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="pink1")
@@ -228,16 +226,14 @@ class VineFeeder(QWidget):
 
                 # Dynamically instantiate the loader class
                 loader_class_name = f"{service_name.capitalize()}Loader"  # Assuming class name is based on service name (e.g., Chan4Loader)
-                #print(f"Attempting to load class: {loader_class_name}")
                 
                 if hasattr(module, loader_class_name):
                     loader_class = getattr(module, loader_class_name)
                     loader_instance = loader_class()  # Instantiate the service class
-                    #print(f"Instantiated class: {loader_class_name}")
-
+                    
                     # Call the receive method of the loaded service's instance
                     if hasattr(loader_instance, 'receive'):
-                        #print(f"Calling 'receive' method on {loader_class_name}")
+                        
                         if text_to_pass:
                             if 'http' in text_to_pass:  
                                 loader_instance.receive(1, text_to_pass)
@@ -264,8 +260,6 @@ class VineFeeder(QWidget):
             print(f"Service {service_name} not found!")
     def clear_search_box(self):
         self.search_url_entry.clear()
-
-
 
 
 if __name__ == "__main__":
