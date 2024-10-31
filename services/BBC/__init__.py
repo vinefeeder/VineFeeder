@@ -274,7 +274,7 @@ class BbcLoader(BaseLoader):
                 url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
 
                 # process short-cut download or do greedy search on url
-                return self.process_received_urls_from_category(url, category)
+                return self.process_received_url_from_category(url, category)
             
         else:
             print("No video selected.")
