@@ -8,13 +8,13 @@ from base_loader import BaseLoader
 from parsing_utils import extract_params_json, prettify, parse_json
 from rich.console import Console
 import subprocess
-import sys, re, json
-from beaupy import select
+import sys, json, re
 import jmespath
-from httpx import Client
+from beaupy import select_multiple
 
-client = Client()
 console = Console()
+
+
 
 
 class BbcLoader(BaseLoader):
@@ -26,7 +26,6 @@ class BbcLoader(BaseLoader):
             'Referer': 'https://www.bbc.com/',
         }
         super().__init__(headers)
-        client = Client(headers=headers)
 
     def receive(self, inx: None, search_term: None):    
         """
@@ -49,8 +48,10 @@ class BbcLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
-        
         # direct download
+
+
+
         if 'http' in search_term and inx == 1:
         
             subprocess.run(['devine', 'dl', 'iP', search_term])  # url
@@ -66,10 +67,19 @@ class BbcLoader(BaseLoader):
         elif inx == 0:  
             # from greedy-search OR selecting Browse-category
             # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
-
             # need a search keyword(s) from url 
             # split and select series name
-            search_term = search_term.split('/')[4] 
+            #https://www.bbc.co.uk/iplayer/episodes/p09pm77q/vigil
+            # or deal with case bbc https://www.bbc.co.uk/iplayer/episode/m0022ww3/
+
+            pattern = r'(?<!\w)(?=[a-zA-Z0-9]{8})(?![a-zA-Z]{8})[a-zA-Z0-9]{8}(?!\w)'
+            # Search for the pattern in the input string
+            match = re.search(pattern, search_term)
+
+            if match:
+                    return (self.fetch_videos(search_term))
+            else:
+                search_term = search_term.split('/')[-1].replace('-',' ') 
             # fetch_videos_by_category search_term may have other params to remove
             if '?' in search_term:  
                 search_term = search_term.split('?')[0].replace('-',' ')
@@ -141,7 +151,7 @@ class BbcLoader(BaseLoader):
             url = f"https://www.bbc.co.uk/iplayer/episode/{url.split('/')[-1]}"
         else:
             url = self.get_selected_url(selected)
-            
+            # thanks to kenyard for help with url preparation
             url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=q5wcnsqvnacnhjap7gzts9y6"
             #print(url)
         
@@ -158,34 +168,116 @@ class BbcLoader(BaseLoader):
 
         # Extract the episodes from the parsed data of the selected series
         if parsed_data and 'programme_episodes' in parsed_data:
-            series_name = parsed_data['programme_episodes']['programme']['title'] or 'unknownTitle'
-            
+            try:
+                series_name = parsed_data['programme_episodes']['programme']['title'] or 'unknownTitle'
+            except KeyError:
+                print(f"No data found for {url}")
+                sys.exit(1)
+            except:
+                print(f"No episodes currently available for {url}")
+                print(f"Try again but be sure to use the series utmost top level url!")
+                sys.exit(1)
+        
             # Go through each episode in the selected series
             episodes = parsed_data.get('programme_episodes').get('elements')
             for item in episodes:
                 try:
                     episode = {
-                        
+            
                         'series_no': item['subtitle'].split(':')[0].split(' ')[1] or '01',
                         # 'title' is episode number here, some services use descriptive text
                         'title': item['subtitle'].split(':')[1].split(' ')[-1] or '01',
                         'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
                         'synopsis': item['synopses']['small']  or None,
                     }
-                except KeyError:
-                    continue  # Skip any episode that doesn't have the required information
+                except:
+                    try:
+                        episode = {
+                            'series_no': 0,
+                            # 'title' is episode number here, some services use descriptive text
+                            'title': item['subtitle'],  # could be date
+                            'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
+                            'synopsis': item['synopses']['small']  or None,
+                        }
+                    except KeyError:
+                        continue
+                     # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
 
-        # specific to iP
+        # specific to BBC
         for item in selected_final_episodes:
             #print(item)
             mlist = item.split(',')
             url = mlist[2].strip()
             print(url)
-        
             subprocess.run(['devine', 'dl', 'iP', url])
-        #self.clean_terminal()
         return
+    
+    def fetch_videos_by_category(self, browse_url):
+        """
+        Fetches videos from a category (Channel 4 specific).
+        Args:
+            browse_url (str): URL of the category page.
+        Returns:
+            None
+        """
+        beaupylist =[]
+
+        req = self.client.get(browse_url, headers=self.headers)
+        init_data = extract_params_json(req.content.decode(), '__IPLAYER_REDUX_STATE__')
+        
+        
+        '''
+        # for bug fixing
+        console.print_json(data=init_data)
+        file = open("init_data.json", "w")
+        file.write(json.dumps(init_data))
+        file.close()
+        '''
+
+        myjson = init_data
+        #console.print_json(data=myjson)
+        category = myjson['bundles'][0]['id']
+
+        res = jmespath.search(
+            """
+            bundles[*].entities[*].episode[].{
+                href: id,
+                label: title.default,
+                overlaytext: synopsis.small
+            }
+            """,
+            myjson
+        )
+        #console.print_json(data=res)
+
+        # Build the beaupylist for display
+        for i, item in enumerate(res):
+                label = item['label']
+                overlaytext = item['overlaytext']
+                beaupylist.append(f"{i} {label}\n\t{overlaytext}") # \n\t used to split text later
+
+        found = self.display_beaupylist(beaupylist)
+        if found:
+            if not 'film' in category:
+                #extract search_term for greedy search
+                search_term = found.split('\n\t')[0].split(' ')[1]
+                return self.process_received_url_from_category(search_term, res)
+            else:
+                ind = found.split(' ')[0]
+                url = res[int(ind)]['href']
+                # url may be for series or single Film
+                url = f"https://www.bbc.co.uk/iplayer/episode/{url}"
+                url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
+
+                # process short-cut download or do greedy search on url
+                return self.process_received_urls_from_category(url, category)
+            
+        else:
+            print("No video selected.")
+            sys.exit(0)
+
+
