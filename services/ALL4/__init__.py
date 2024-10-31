@@ -186,21 +186,17 @@ class All4Loader(BaseLoader):
         """
         beaupylist = []
         try:
-            req = self.client.get(browse_url, headers=self.headers)
+            req = self.get_data(browse_url, headers=self.headers)
             
-            # Parse the __PARAMS__ data (Channel 4 specific - cannot use parsing_utils/
-            init_data = re.search(
-                r'<script>window\.__PARAMS__ = (.*)</script>',
-                req.content.decode().replace('\u200c', '').replace('\r\n', '').replace('undefined', 'null')
-            )
-            init_data = json.loads(init_data.group(1))
-
+            # Parse the __PARAMS__ data 
+            init_data = extract_params_json(req, '__PARAMS__')
             # Extract brand items
             myjson = init_data['initialData']['brands']['items']
 
-            # jmespath is a json parser that searches complex json
+            # jmespath is an efficient json parser that searches complex json
             # and, in this case, produces a simple dict from which
             # res(ults) are more easily extracted.
+            # C4 specific
             res = jmespath.search("""
             [*].{
                 href: hrefLink,
@@ -208,11 +204,11 @@ class All4Loader(BaseLoader):
                 overlaytext: overlayText            
             } """, myjson)
 
-            # Build the beaupy list for display
+            # Build the beaupylist for display
             for i, item in enumerate(res):
                 label = item['label']
                 overlaytext = item['overlaytext']
-                beaupylist.append(f"{i} {label}\n\t{overlaytext}")
+                beaupylist.append(f"{i} {label}\n\t{overlaytext}") # \t used to split text later
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
@@ -227,8 +223,8 @@ class All4Loader(BaseLoader):
             # url may be for series or single Film
             url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
 
-            # process short-cut downlaod or do greedy search on url
-            return self.process_received_urls_from_category(url, res)
+            # process short-cut download or do greedy search on url
+            return self.process_received_url_from_category(url)
             
         else:
             print("No video selected.")
