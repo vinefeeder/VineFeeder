@@ -99,3 +99,39 @@ def prettify(val, splitchar: str = '\t'):
         return f"{title}\t{synopsis}"
     except:
         return f"[#89B4FA]{val}[/]"   
+def split(strng, sep, pos):
+
+    """
+    Split a string into two parts at a specified position.
+
+    This function takes a string and splits it into two parts using a given 
+    separator. It returns two substrings: the first containing the elements 
+    before the specified position, and the second containing the elements 
+    from the specified position onward.
+
+    Args:
+        strng (str): The input string to be split.
+        sep (str): The separator to use for splitting the string.
+        pos (int): The position at which to split the string.
+
+    Returns:
+        tuple: A tuple containing two strings. The first string is the 
+               concatenation of elements before the specified position, 
+               and the second string is the concatenation of elements 
+               from the specified position onward.
+    """
+
+    strng = strng.split(sep)
+    return sep.join(strng[:pos]), sep.join(strng[pos:])
+
+
+'''
+check for bbc 8 alpha-numerics
+#https://www.bbc.co.uk/iplayer/episodes/p09pm77q/
+                pattern = r'(?<!\w)(?=[a-zA-Z0-9]{8})(?![a-zA-Z]{8})[a-zA-Z0-9]{8}(?!\w)'
+                # Search for the pattern in the input string
+                match = re.search(pattern, search_term)
+
+                if match:
+                        return (self.fetch(search_term))
+'''
