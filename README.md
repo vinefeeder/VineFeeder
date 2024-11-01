@@ -82,7 +82,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Download Media: Select a media item to start the download process.
 **Services**
 
-Currently two services are working All4 and BBC and others will be available over time.
+Currently two services are working  - All4 and BBC, but probably still buggy - and others may be available over time.
 
 **Custom Services**
 
@@ -108,7 +108,7 @@ If however you are happy to set your download parameters once, for each service,
 **Contributing**
 
 Contributors are welcomed to add services to front-end those services provided by Devine.
-Presently only ALL4 is fully configured and I am working on ITVX
+Presently only ALL4 and BBC is fully configured but expect them to be buggy; I am working on ITVX
 .
 
 Images
