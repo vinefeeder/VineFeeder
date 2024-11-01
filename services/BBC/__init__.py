@@ -258,7 +258,7 @@ class BbcLoader(BaseLoader):
         if found:
             if not 'film' in category:
                 #extract search_term for greedy search
-                search_term = found.split('\n\t')[0].split(' ')[1]
+                search_term = found.split('\n\t')[0][2:]
                 return self.process_received_url_from_category(search_term, res)
             else:
                 ind = found.split(' ')[0]
