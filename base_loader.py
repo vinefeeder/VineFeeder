@@ -4,7 +4,7 @@ from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
 import os, sys, time
-from vinefeeder import VineFeeder as VF
+#from vinefeeder import VineFeeder as VF
 
 class BaseLoader:
     def __init__(self, headers):
@@ -217,7 +217,10 @@ class BaseLoader:
             # direct download
             self.receive(1, url)
             return
-            
+        
+        if not 'https' in url:  # browse entry
+            self.receive(3, url)
+            return
         else:
             #if 'https'
             # greedy search
