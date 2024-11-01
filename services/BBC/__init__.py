@@ -5,12 +5,12 @@ The BBC does not use  script = window.__PARAMS__ = ..."""
 from base_loader import BaseLoader
 from parsing_utils import rinse
 from base_loader import BaseLoader
-from parsing_utils import extract_params_json, prettify, parse_json
+from parsing_utils import extract_params_json,  parse_json, split
 from rich.console import Console
 import subprocess
 import sys, json, re
 import jmespath
-from beaupy import select_multiple
+
 
 console = Console()
 
@@ -53,8 +53,12 @@ class BbcLoader(BaseLoader):
 
 
         if 'http' in search_term and inx == 1:
+            # check form of url https://www.bbc.co.uk/iplayer/episode/m00049t7 minimum
+            # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h breaks devine
+            search_term = split(search_term, ' ', 1)[0].replace('episodes', 'episode')
+            
         
-            subprocess.run(['devine', 'dl', 'iP', search_term])  # url
+            subprocess.run(['devine', 'dl', 'iP', search_term], stderr=subprocess.STDOUT)  # url
             #self.clean_terminal()
             return
 
@@ -64,27 +68,24 @@ class BbcLoader(BaseLoader):
             return (self.fetch_videos(search_term))  
         
         # ALTERNATIVES BELOW FROM POP-UP MENU  
-        elif inx == 0:  
+        elif inx == 0 and 'https' in search_term:  
             # from greedy-search OR selecting Browse-category
-            # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
+
             # need a search keyword(s) from url 
             # split and select series name
-            #https://www.bbc.co.uk/iplayer/episodes/p09pm77q/vigil
-            # or deal with case bbc https://www.bbc.co.uk/iplayer/episode/m0022ww3/
+            
 
-            pattern = r'(?<!\w)(?=[a-zA-Z0-9]{8})(?![a-zA-Z]{8})[a-zA-Z0-9]{8}(?!\w)'
-            # Search for the pattern in the input string
-            match = re.search(pattern, search_term)
-
-            if match:
-                    return (self.fetch_videos(search_term))
+            if 'episodes' in search_term:
+                # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h
+                search_term = split(search_term, '/', 6)[1]  # search_term 
+                # fetch_videos_by_category search_term may have other params to remove
+                if '?' in search_term:  
+                    search_term = search_term.split('?')[0].replace('-',' ')
+                return (self.fetch_videos(search_term))     
             else:
-                search_term = search_term.split('/')[-1].replace('-',' ') 
-            # fetch_videos_by_category search_term may have other params to remove
-            if '?' in search_term:  
-                search_term = search_term.split('?')[0].replace('-',' ')
-            return (self.fetch_videos(search_term))
-        
+                print(f"No search term found  in {search_term}\nTry again with a series name in the url.")
+                sys.exit(0)
+                
         elif 'http' in search_term and inx == 2:
             self.fetch_videos_by_category(search_term)  # search_term here holds a URL!!!
             
@@ -213,7 +214,7 @@ class BbcLoader(BaseLoader):
             mlist = item.split(',')
             url = mlist[2].strip()
             print(url)
-            subprocess.run(['devine', 'dl', 'iP', url])
+            subprocess.run(['devine', 'dl', 'iP', url], stderr=subprocess.STDOUT, )
         return
     
     def fetch_videos_by_category(self, browse_url):
