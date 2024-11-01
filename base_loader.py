@@ -98,7 +98,7 @@ class BaseLoader:
             mysorted_list = sorted({int(ep['series_no']) for ep in self.series_data[series_name]})
         except Exception as e:
             print(f"Error: {e}")    
-        print(mysorted_list)
+        #print(mysorted_list)
         return mysorted_list
     
     def display_non_contiguous_series(self, episode_series_numbers):
