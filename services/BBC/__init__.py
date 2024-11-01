@@ -48,18 +48,15 @@ class BbcLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
-        # direct download
-
-
-
+        # TWO ALTERNATES FROM GUI-TEXT ENTRY; POULATED WITH KEYWORD OR URL
+        # direct download from url
         if 'http' in search_term and inx == 1:
             # check form of url https://www.bbc.co.uk/iplayer/episode/m00049t7 minimum
             # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h breaks devine
-            search_term = split(search_term, ' ', 1)[0].replace('episodes', 'episode')
+            # https://www.bbc.co.uk/iplayer/episode/b008bjg1/a-perfect-spy-episode-1
+            search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
             
-        
             subprocess.run(['devine', 'dl', 'iP', search_term], stderr=subprocess.STDOUT)  # url
-            #self.clean_terminal()
             return
 
         # keyword search
@@ -70,10 +67,6 @@ class BbcLoader(BaseLoader):
         # ALTERNATIVES BELOW FROM POP-UP MENU  
         elif inx == 0 and 'https' in search_term:  
             # from greedy-search OR selecting Browse-category
-
-            # need a search keyword(s) from url 
-            # split and select series name
-            
 
             if 'episodes' in search_term:
                 # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h
