@@ -20,6 +20,8 @@ def parse_json(html):
 
 def extract_params_json(html, discriminator="__PARAMS__", index=0):
     """
+    For scripts like <script>window.__PARAMS__ = ...;</script>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Extract the JSON data from the HTML content that is stored in the 
     __PARAMS__ variable. This is typically used to parse the JSON data 
     from the HTML content of a page that contains a script tag with a 
@@ -45,8 +47,7 @@ def extract_params_json(html, discriminator="__PARAMS__", index=0):
         if 0 <= index < len(scripts):
             selected_script = scripts[index].get()
         else:
-            return None
-            
+            return None        
         
         # Remove 'window.__PARAMS__ =' and trailing semicolon
         json_data = selected_script.strip().replace(f'window.{discriminator} = ', '').rstrip(';').replace('\u200c', '').replace('\r\n', '')
@@ -70,6 +71,59 @@ def extract_params_json(html, discriminator="__PARAMS__", index=0):
         print(f"Unexpected error: {e}")
         return None
        
+def extract_script_with_id_json(html, discriminator="__NEXT_DATA__", index=0):
+    """
+    For scripts like <script id="__NEXT_DATA__" type="application/json">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Extract the JSON data from the HTML content that is stored in the 
+    __PARAMS__ variable. This is typically used to parse the JSON data 
+    from the HTML content of a page that contains a script tag with a 
+    __PARAMS__ variable.
+    pass other discriminator if needed. 
+
+    Args:
+        html (str): The HTML content from which to extract the JSON data.
+
+    Returns:
+        dict: The parsed JSON data, or None if no __PARAMS__ variable 
+              was found, or if the JSON could not be parsed.
+    """
+    try:
+        # Use Scrapy's Selector to locate the script tag containing "__PARAMS__"
+        sel = Selector(text=html)
+
+        # Extract the script content that contains 'window.__PARAMS__'
+        #selected_script = sel.xpath(f'//script[contains(text(), "{discriminator}")]/text()').extract_first()
+        # xpath = '//script[@id="__NEXT_DATA__" and @type="application/json"]/text()'
+        scripts = sel.xpath(f'//script[@id="{discriminator}" and @type="application/json"]/text()')
+        
+        if 0 <= index < len(scripts):
+            selected_script = scripts[index].get()
+        else:
+            return None        
+        
+        # Remove 'window.__PARAMS__ =' and trailing semicolon
+        json_data = selected_script.strip().replace(f'window.{discriminator} = ', '').rstrip(';').replace('\u200c', '').replace('\r\n', '')
+
+        # Replace 'undefined' with 'null' to make the JSON valid
+        json_data = json_data.replace('undefined', 'null')
+
+        # Parse the JSON string
+        parsed_json = json.loads(json_data)
+
+        # Debugging: Print parsed JSON to verify it worked
+        #print("Parsed JSON:")
+        #print(json.dumps(parsed_json, indent=4))
+
+        return parsed_json
+    
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON: {e}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
+
 def rinse(string):
     """Remove non-printable characters from a string."""
     illegals = "*'%$!(),;"

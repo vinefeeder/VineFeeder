@@ -146,7 +146,7 @@ class BaseLoader:
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         # Get user input for selecting series and episode(s)
-        user_input = input("\nEnter series number(s) or a range (e.g., 2, 3, 5..7) or 'all' or '0' for all series: ")
+        user_input = input("\nEnter SERIES NUMBER(s) or a range\n(e.g., 2, 3, 5..7) use commas to separate\neither 'all' or '0' for all-series: ")
 
         # Parse the input
         selected_series = []
@@ -191,10 +191,7 @@ class BaseLoader:
     def display_beaupylist(self, beaupylist):
 
         found = select(beaupylist, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
-        if found:
-            return found
-        else:
-            return None
+        return found
         
     def process_received_url_from_category(self, url, category='null'):
         """
@@ -235,7 +232,7 @@ class BaseLoader:
         # clear for next use
         time.sleep(3)
         if os.name == 'posix':       
-            os.system('clear')
+            #os.system('clear')
             print("Ready!")
             return
         else:
