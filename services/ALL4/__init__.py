@@ -156,6 +156,12 @@ class All4Loader(BaseLoader):
                     continue  # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
         
+        if self.get_number_of_episodes(series_name) == 1:
+            item = self.get_series(series_name)[0]
+            item = self.series_data[list(self.series_data.keys())[0]][0]
+            url = "https://www.channel4.com" + item['url']
+            subprocess.run(['devine', 'dl', 'ALL4', url])
+            return None
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
