@@ -11,7 +11,7 @@ class ItvxLoader(BaseLoader):
     def __init__(self):
         headers = {
             'Accept': '*/*',
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
+            'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)',
             'Origin': 'https://www.itv.com',
             'Referer': 'https://www.itv.com/',
         }
@@ -83,6 +83,7 @@ class ItvxLoader(BaseLoader):
             'Accept-Encoding': 'gzip, deflate, br',
             'authority':'www.itv.com',
             'Host': 'textsearch.prd.oasvc.itv.com',
+            'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)'
         }
         url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,widevine,fairplay,bbts,progressive,hd,rtmpe&onlyFree=true&platform=dotcom&query={search_term}&size=24"
         html = self.get_data(url, headers)
@@ -139,10 +140,6 @@ class ItvxLoader(BaseLoader):
                 'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)',
             }
             myhtml = self.get_data(url=url, headers=headers)
-            ''' for debug
-            f = open('itv.html', 'w')
-            f.write(myhtml)
-            f.close()'''
         except:
             print(f"No valid data at {url} found.\n Exiting")
             sys.exit(0)
@@ -180,24 +177,31 @@ class ItvxLoader(BaseLoader):
         } """,  mytitles) 
 
         for item in res:
-
             try:
-                    episode = {
-                        'series_no': item['series'] or None,
-                        #'episode_no': item['episode'] or None,
-                        'title': f"{item['episode'] or None}:{item['eptitle'] or None}",
-                        'url': f"https://www.itv.com/watch/{programmeSlug}/{programmeId}/{item['letterA']}",
-                        'synopsis': rinse(item['description']) or None   # remove non printable
+                episode = {
+                    'series_no': item['series'] or None,
+                    'title': f"{item['episode'] or ''}:{item['eptitle'] or ''}",  # concatenate episode and title to fit with BaseLoader format of 4 elements
+                    'url': f"https://www.itv.com/watch/{programmeSlug}/{programmeId}/{item['letterA']}",
+                    'synopsis': rinse(item['description']) or None   # remove non printable
             }
             except KeyError:
                 continue  # Skip any episode that doesn't have the required information
 
             self.add_episode(programmeSlug, episode)
+            
+        # if only one result direct download    
+        if len(self.series_data) == 1:
+            item = self.series_data[list(self.series_data.keys())[0]][0]
+            url = item['url']
+            subprocess.run(['devine', 'dl', 'ITVX', url])
+            return None
+
         self.prepare_series_for_episode_selection(programmeSlug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
             subprocess.run(['devine', 'dl', 'ITVX', url])
+            
         return None
 
     
