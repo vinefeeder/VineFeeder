@@ -76,6 +76,9 @@ class BaseLoader:
         )
         return selected_episodes
     
+    def get_final_episode_list(self):
+        return self.final_episode_data
+    
     def display_final_episode_list(self, final_episode_data):
         """Use beaupy to display episodes for a selected series."""
         #episodes = self.series_data.get(series_name, [])
