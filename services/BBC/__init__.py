@@ -195,7 +195,7 @@ class BbcLoader(BaseLoader):
                     episode = {
                         'series_no': item['subtitle'].split(':')[0].split(' ')[1] or '01',
                         # 'title' is episode number here, some services use descriptive text
-                        'title': item['subtitle'].split(':')[1].split(' ')[-1] or '01',
+                        'title': item['subtitle'].split(':')[1] , #.split(' ')[-1] or '01',
                         'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
                         'synopsis': item['synopses']['small']  or None,
                     }
