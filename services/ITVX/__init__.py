@@ -143,7 +143,7 @@ class ItvxLoader(BaseLoader):
         except:
             print(f"No valid data at {url} found.\n Exiting")
             sys.exit(0)
-        parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__',)
+        parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__', 0)
         self.clear_series_data()  # Clear existing series data
 
         '''
@@ -188,13 +188,13 @@ class ItvxLoader(BaseLoader):
                 continue  # Skip any episode that doesn't have the required information
 
             self.add_episode(programmeSlug, episode)
-            
-        # if only one result direct download    
+
+        '''# if only one result direct download    
         if len(self.series_data) == 1:
             item = self.series_data[list(self.series_data.keys())[0]][0]
             url = item['url']
             subprocess.run(['devine', 'dl', 'ITVX', url])
-            return None
+            return None'''
 
         self.prepare_series_for_episode_selection(programmeSlug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
