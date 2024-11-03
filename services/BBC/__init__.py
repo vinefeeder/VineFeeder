@@ -5,7 +5,7 @@ The BBC does not use  script = window.__PARAMS__ = ..."""
 from base_loader import BaseLoader
 from parsing_utils import rinse
 from base_loader import BaseLoader
-from parsing_utils import extract_params_json,  parse_json, split
+from parsing_utils import extract_params_json,  parse_json, split, extract_with_xpath 
 from rich.console import Console
 import subprocess
 import sys, json, re
@@ -135,25 +135,38 @@ class BbcLoader(BaseLoader):
             return self.second_fetch(selected_series)  # Return URLs for selected episodes
         return None
     
-    def second_fetch(self, selected):
+    def second_fetch(self, selected_series):
         # 'selected' is search term
         """
         Given a selected series name, fetch its HTML and extract its episodes.
+        need programme Id for url lookup
         Or if given a direct url, fetch it and process for greedy download.
         The function will prepare the series data for episode selection and display the final episode list.
         It will return the URLs for the selected episodes.
         """
+
+        selected = selected_series
+
+        #  option for direct url
         if 'https' in selected:  # direct url provided skip url preparation
             url = selected  # 'https://www.bbc.co.uk/iplayer/episodes/m000mfhl'
             url = f"https://www.bbc.co.uk/iplayer/episode/{url.split('/')[-1]}"
+        # option for search
         else:
-            url = self.get_selected_url(selected)
+            url = self.get_selected_url(selected) # Here url is a progrmmme Id (b0074m37)
+    
             # thanks to kenyard for help with url preparation
-            url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=q5wcnsqvnacnhjap7gzts9y6"
-            #print(url)
-        
-        myhtml = self.get_data(url=url)
-        parsed_data = parse_json(myhtml)
+         
+            
+            myurl = f'https://ibl.api.bbci.co.uk/ibl/v1/episodes/{url}?rights=mobile&availability=available&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp'
+            myhtml = self.get_data(url=myurl, headers=self.headers)
+            parsed_data = parse_json(myhtml)
+            SINGLE = True
+            if parsed_data['episodes'] == []:
+                SINGLE = False
+                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
+                myhtml = self.get_data(url=url, headers=self.headers)
+                parsed_data = parse_json(myhtml)          
 
         # testing
         #file = open("init_data.json", "w")
@@ -164,7 +177,7 @@ class BbcLoader(BaseLoader):
         self.clear_series_data()  # Clear existing series data
 
         # Extract the episodes from the parsed data of the selected series
-        if parsed_data and 'programme_episodes' in parsed_data:
+        if parsed_data and 'programme_episodes' in parsed_data and not SINGLE :
             try:
                 series_name = parsed_data['programme_episodes']['programme']['title'] or 'unknownTitle'
             except KeyError:
@@ -175,12 +188,11 @@ class BbcLoader(BaseLoader):
                 print(f"Try again but be sure to use the series utmost top level url!")
                 sys.exit(1)
         
-            # Go through each episode in the selected series
+            # Go through each episode in the selected series and add it to the series data
             episodes = parsed_data.get('programme_episodes').get('elements')
             for item in episodes:
                 try:
                     episode = {
-            
                         'series_no': item['subtitle'].split(':')[0].split(' ')[1] or '01',
                         # 'title' is episode number here, some services use descriptive text
                         'title': item['subtitle'].split(':')[1].split(' ')[-1] or '01',
@@ -190,24 +202,28 @@ class BbcLoader(BaseLoader):
                 except:
                     try:
                         episode = {
-                            'series_no': 0,
+                            'series_no': 0,  # special or one-off'
                             # 'title' is episode number here, some services use descriptive text
                             'title': item['subtitle'],  # could be date
                             'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
                             'synopsis': item['synopses']['small']  or None,
                         }
                     except KeyError:
-                        continue
-                     # Skip any episode that doesn't have the required information
+                        continue   # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
 
+        # Single episode  expedite download
+        else:
+            
+            url = f"https://www.bbc.co.uk/iplayer/episode/{parsed_data['episodes'][0]['id']}/{parsed_data['episodes'][0]['title']}"
+            subprocess.run(['devine', 'dl', 'iP', url])
+            return  
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
 
         # specific to BBC
         for item in selected_final_episodes:
-            #print(item)
             mlist = item.split(',')
             url = mlist[2].strip()
             print(url)
