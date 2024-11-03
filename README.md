@@ -82,7 +82,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Download Media: Select a media item to start the download process.
 **Services**
 
-Currently two services are working  - All4 and BBC, but probably still buggy - and others may be available over time.
+Currently two services are working  - All4 and BBC and partially ITVX, but BBC and ITVX are still buggy - others may be available over time.
 
 **Custom Services**
 
