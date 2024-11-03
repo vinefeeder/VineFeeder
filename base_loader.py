@@ -31,6 +31,9 @@ class BaseLoader:
     def clear_series_data(self):
         self.series_data={}
 
+    def get_series_data(self):
+        return self.series_data
+
     def get_data(self, url, headers=None):
         """Fetch data from a given URL."""
 
@@ -50,6 +53,8 @@ class BaseLoader:
         if series_name not in self.series_data:
             self.series_data[series_name] = []
         self.series_data[series_name].append(episode)
+    def get_number_of_episodes(self, series_name):
+        return len(self.series_data.get(series_name, []))   
 
     def add_final_episode(self, episode):
         """build episode list for final selction for download"""
