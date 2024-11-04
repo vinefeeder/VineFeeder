@@ -21,7 +21,7 @@ class All4Loader(BaseLoader):
         super().__init__(headers)
 
     # entry point from Vinefeeder
-    def receive(self, inx: None, search_term: None):
+    def receive(self, inx: None, search_term: None, category=None):
    
         """
         First fetch for series titles matching all or part of search_term.
@@ -69,6 +69,7 @@ class All4Loader(BaseLoader):
             return (self.fetch_videos(search_term))
         
         elif 'http' in search_term and inx == 2:
+            self.category = category
             self.fetch_videos_by_category(search_term)  # search_term here holds a URL!!!
             
         else:
@@ -158,7 +159,6 @@ class All4Loader(BaseLoader):
         
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
-            item = self.series_data[list(self.series_data.keys())[0]][0]
             url = "https://www.channel4.com" + item['url']
             subprocess.run(['devine', 'dl', 'ALL4', url])
             return None
