@@ -71,7 +71,7 @@ def extract_params_json(html, discriminator="__PARAMS__", index=0):
         print(f"Unexpected error: {e}")
         return None
        
-def extract_script_with_id_json(html, discriminator, index=0):
+def extract_script_with_id_json(html:str, discriminator:str, index:int=0):
     """
     For scripts like <script id="__NEXT_DATA__" type="application/json">
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,11 +102,8 @@ def extract_script_with_id_json(html, discriminator, index=0):
         else:
             return None        
         
-        # Remove 'window.__PARAMS__ =' and trailing semicolon
-        json_data = selected_script.strip().replace(f'window.{discriminator} = ', '').rstrip(';').replace('\u200c', '').replace('\r\n', '')
-
         # Replace 'undefined' with 'null' to make the JSON valid
-        json_data = json_data.replace('undefined', 'null')
+        json_data = selected_script.replace('undefined', 'null')
 
         # Parse the JSON string
         parsed_json = json.loads(json_data)
@@ -231,15 +228,3 @@ def split(strng, sep, pos):
 
     strng = strng.split(sep)
     return sep.join(strng[:pos]), sep.join(strng[pos:])
-
-
-'''
-check for bbc 8 alpha-numerics
-#https://www.bbc.co.uk/iplayer/episodes/p09pm77q/
-                pattern = r'(?<!\w)(?=[a-zA-Z0-9]{8})(?![a-zA-Z]{8})[a-zA-Z0-9]{8}(?!\w)'
-                # Search for the pattern in the input string
-                match = re.search(pattern, search_term)
-
-                if match:
-                        return (self.fetch(search_term))
-'''

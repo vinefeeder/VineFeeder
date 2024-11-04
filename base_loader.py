@@ -4,7 +4,6 @@ from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
 import os, sys, time
-#from vinefeeder import VineFeeder as VF
 
 class BaseLoader:
     def __init__(self, headers):
@@ -27,6 +26,7 @@ class BaseLoader:
         self.final_episode_data = [] 
         self.browse_video_list = []
         self.console = Console()
+        self.category = None
 
     def clear_series_data(self):
         self.series_data={}
@@ -106,7 +106,6 @@ class BaseLoader:
             mysorted_list = sorted({int(ep['series_no']) for ep in self.series_data[series_name]})
         except Exception as e:
             print(f"Error: {e}")    
-        #print(mysorted_list)
         return mysorted_list
     
     def display_non_contiguous_series(self, episode_series_numbers):
@@ -133,6 +132,13 @@ class BaseLoader:
         The function will check if the series numbers are contiguous and display the final episode list.
         It will return the URLs for the selected episodes.
         """
+        # bail out if episode count is limited to 12
+        number_episodes = self.get_number_of_episodes(series_name)
+        if number_episodes <=12:
+            for episode in self.series_data[series_name]: 
+                    """store in list container"""
+                    self.add_final_episode(episode)
+            return
         try:
             self.episode_series_numbers = self.get_episodes_series_numbers(series_name)
             
@@ -181,27 +187,12 @@ class BaseLoader:
                     self.add_final_episode(episode)
                     
 
-    def do_browse(self, media_dict):
-        """Browse videos by category using beaupy.
-        use media_dict from service-name/config.yaml"""
-        if not media_dict:
-            print("No media_dict available.")
-            return
-        
-        category = select(list(media_dict.keys()),  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="pink1", page_size=8)
-        
-        if category:
-            url = media_dict[category]
-            self.fetch_videos_by_category(url)
-        else:
-            print("No category selected. Returning to main menu.")
-
     def display_beaupylist(self, beaupylist):
 
         found = select(beaupylist, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
         
-    def process_received_url_from_category(self, url, category='null'):
+    def process_received_url_from_category(self, url, category=None):
         """
         Process the receive category vidoes based on the response length and URL.
         
@@ -217,12 +208,14 @@ class BaseLoader:
         -------
         None
         """
-        if 'film' in category:  # by defintion - single
+        if not category:  # no category
+            category = self.category
+        if 'Film' in category or 'Movie' in category:  # by defintion - single
             # direct download
             self.receive(1, url)
             return
 
-        if 'film' in url:  # by defintion - single
+        if 'film' in url or 'movie' in url:  # by defintion - single
             # direct download
             self.receive(1, url)
             return

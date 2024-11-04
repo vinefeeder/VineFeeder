@@ -166,8 +166,7 @@ class VineFeeder(QWidget):
             - 2 for browse 
             - 3 for search with keyword
         Returns a tuple of the function selector and the url or None if no valid data is entered.
-        """
-        
+        """       
 
         fn = [
             "Greedy Search by URL",
@@ -180,11 +179,11 @@ class VineFeeder(QWidget):
         inx = 0 # default to greedy       
         if 'Greedy' in action:
             url = input('URL for greedy search ')
-            return 0, url
+            return 0, url, None
             
         elif 'Download' in action:
             url = input('URL for direct download ')
-            return 1, url
+            return 1, url, None
         
         elif 'Browse' in action:
             media_dict = self.available_service_media_dict[service_name]
@@ -193,11 +192,11 @@ class VineFeeder(QWidget):
                 beaupylist.append(item)
             found = select(beaupylist,  preprocessor=lambda val: prettify(val),   cursor="🢧", cursor_style="pink1",  page_size=PAGE_SIZE, pagination=True)
             url = media_dict[found]
-            return 2, url
+            return 2, url, found  # found is category
         
         elif 'Search' in action:
             keyword = input('Keyword(s) for search ')
-            return 3, keyword
+            return 3, keyword, None
         
         else:
             print("No valid data entered!")
@@ -246,8 +245,8 @@ class VineFeeder(QWidget):
                                 loader_instance.clean_terminal()
                                 sys.exit(0)
                         else:
-                            inx, text_to_pass = self.do_action_select(service_name)  # returns a (int , url)
-                            loader_instance.receive(inx, text_to_pass)
+                            inx, text_to_pass, found = self.do_action_select(service_name)  # returns a (int , url)
+                            loader_instance.receive(inx, text_to_pass, found)
                             loader_instance.clean_terminal()
                             sys.exit(0)
                     else:
