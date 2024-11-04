@@ -30,7 +30,7 @@ class BbcLoader(BaseLoader):
         }
         super().__init__(headers)
 
-    def receive(self, inx: None, search_term: None):    
+    def receive(self, inx: None, search_term: None, category=None):    
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -83,6 +83,7 @@ class BbcLoader(BaseLoader):
                 sys.exit(0)
                 
         elif 'http' in search_term and inx == 2:
+            self.category = category
             self.fetch_videos_by_category(search_term)  # search_term here holds a URL!!!
             
         else:
@@ -279,7 +280,7 @@ class BbcLoader(BaseLoader):
             if not 'film' in category:
                 #extract search_term for greedy search
                 search_term = found.split('\n\t')[0][2:]
-                return self.process_received_url_from_category(search_term, res)
+                return self.process_received_url_from_category(search_term)
             else:
                 ind = found.split(' ')[0]
                 url = res[int(ind)]['href']
@@ -288,7 +289,7 @@ class BbcLoader(BaseLoader):
                 url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
 
                 # process short-cut download or do greedy search on url
-                return self.process_received_url_from_category(url, category)
+                return self.process_received_url_from_category(url)
             
         else:
             print("No video selected.")
