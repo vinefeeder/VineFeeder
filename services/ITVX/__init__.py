@@ -4,6 +4,7 @@ import subprocess
 from rich.console import Console
 import jmespath
 import sys
+import json
 
 console = Console()
 
@@ -17,7 +18,7 @@ class ItvxLoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None):
+    def receive(self, inx: None, search_term: None, category=None):
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -57,13 +58,14 @@ class ItvxLoader(BaseLoader):
 
             # need a search keyword(s) from url 
             # split and select series name
-            search_term = search_term.split('/')[4] 
+            search_term = search_term.split('/')[4].replace('-',' ') 
             # fetch_videos_by_category search_term may have other params to remove
             if '?' in search_term:  
                 search_term = search_term.split('?')[0].replace('-',' ')
             return (self.fetch_videos(search_term))
         
         elif 'http' in search_term and inx == 2:
+            self.category = category
             self.fetch_videos_by_category(search_term)  # search_term here holds a URL!!!
             
         else:
@@ -189,12 +191,12 @@ class ItvxLoader(BaseLoader):
 
             self.add_episode(programmeSlug, episode)
 
-        '''# if only one result direct download    
-        if len(self.series_data) == 1:
+        # if only one result direct download    
+        '''if len(self.series_data[0]) == 1:
             item = self.series_data[list(self.series_data.keys())[0]][0]
             url = item['url']
             subprocess.run(['devine', 'dl', 'ITVX', url])
-            return None'''
+            return'''
 
         self.prepare_series_for_episode_selection(programmeSlug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
@@ -204,4 +206,70 @@ class ItvxLoader(BaseLoader):
             
         return None
 
-    
+    def fetch_videos_by_category(self, browse_url):
+        """
+        Fetches videos from a category (ITVX specific).
+        Args:
+            browse_url (str): URL of the category page.
+        Returns:
+            None
+        """
+        beaupylist = [] # hold beaupy data for display and programme selection
+        headers = {
+            'host':'www.itv.com',
+            'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)',
+        }
+        try:
+            myhtml = self.get_data(browse_url, headers=headers)
+            
+        
+            parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__', 0)
+            #console.print_json(data=parsed_data)
+
+            # jmespath is an efficient json parser that searches complex json
+            # and, in this case, produces a simple dict from which
+            # res(ults) are more easily extracted.
+            # ITVX specific
+            mytitles = jmespath.search('props.pageProps.collection.shows', parsed_data)
+            res = jmespath.search("""
+                [].{
+                    title: titleSlug,
+                    programmeId: encodedProgrammeId.letterA,
+                    episodeId: encodedEpisodeId.letterA,
+                    synopsis: description
+                }
+            """, mytitles)
+
+            # Add the URL to each entry in res
+            # ITV does not have a url in json data thus need to build.
+            for entry in res:
+                entry['url'] = f"https://www.itv.com/watch/{entry['title']}/{entry['programmeId']}/{entry['episodeId']}"
+
+            #console.print_json(data=res)
+
+            # Build the beaupylist for display
+            for i, item in enumerate(res):
+                title = (item['title'].replace('-', ' ')).title()
+                url = item['url']
+                synopsis = item['synopsis']
+                beaupylist.append(f"{i} {title.replace('_',' ')}\n\t{synopsis}") # \t used to split text later
+
+        except Exception as e:
+            print(f"Error fetching category data: {e}")
+            sys.exit(0)
+        
+        # call function in BaseLoader 
+        found = self.display_beaupylist(beaupylist)
+        
+        if found:
+            ind = found.split(' ')[0]
+            url = res[int(ind)]['url']
+            # url may be for series or single Film
+            url = url.encode('utf-8', 'ignore').decode().strip()  # has spaces!
+
+            # process short-cut download or do greedy search on url
+            return self.process_received_url_from_category(url)
+            
+        else:
+            print("No video selected.")
+            sys.exit(0)
