@@ -82,11 +82,12 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Download Media: Select a media item to start the download process.
 **Services**
 
-Currently two services are working  - All4 and BBC and partially ITVX, but BBC and ITVX are still buggy - others may be available over time.
+Currently three services are working  - All4, BBC and ITVX and partially ITVX, but expect a few teething bugs. 
+Other services: I next plan to work on My5
 
 **Custom Services**
 
-To add a new streaming service:
+To add a new service:
 
     Create a new folder for the service inside the services directory.
     Add the following:
@@ -96,7 +97,7 @@ To add a new streaming service:
         Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where video categories may be selected for view. Use some/all of these 
         links to produce a media_dict of ( catergory: link, }
 
-VineFeeder will dynamically detect and load the new service on the next run.
+VineFeeder will dynamically detect and load the new services on the next start.
 
 **Special Devine Commands**
 
