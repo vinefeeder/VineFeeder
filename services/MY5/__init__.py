@@ -1,10 +1,8 @@
 from base_loader import BaseLoader
-from parsing_utils import rinse
 import jmespath
 from rich.console import Console
 import sys  
-import re
-from parsing_utils import parse_json, extract_params_json
+from parsing_utils import parse_json
 import subprocess
 
 console = Console()
@@ -126,7 +124,7 @@ class My5Loader(BaseLoader):
             sys.exit(0)
 
         parsed_data = parse_json(myhtml)
-        console.print_json(data=parsed_data)
+        #console.print_json(data=parsed_data)
         self.clear_series_data()  # Clear existing series data
 
         # Extract the episodes from the parsed data of the selected series
@@ -141,13 +139,13 @@ class My5Loader(BaseLoader):
                     myhtml = self.get_data(url=url)
                     parsed_data = parse_json(myhtml)
                     if len(parsed_data['episodes']) == 0:
-                        brndslug = brndslug + "-cutdowns"
+                        brndslug = brndslug + "-cutdowns"  
                         url = f"https://corona.channel5.com/shows/{brndslug}/seasons/{item['seasonNumber']}/episodes.json?platform=my5desktop&friendly=1&linear=true"
                         url = url.encode('utf-8', 'ignore').decode().strip() 
                         myhtml = self.get_data(url=url)
                         parsed_data = parse_json(myhtml)
 
-                    console.print_json(data=parsed_data)
+                    #console.print_json(data=parsed_data)
                     series_name = parsed_data['episodes'][0]['sh_f_name'] 
                     for item in parsed_data['episodes']:
                         
