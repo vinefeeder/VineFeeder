@@ -233,7 +233,7 @@ class BaseLoader:
         # clear for next use
         time.sleep(3)
         if os.name == 'posix':       
-            os.system('clear')
+            #os.system('clear')
             print("Ready!")
             return
         else:
