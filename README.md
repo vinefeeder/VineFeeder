@@ -83,7 +83,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
 **Services**
 
 Currently four services are working  - All4, BBC, ITVX and My5, but expect a few teething bugs. 
-Other services: I next plan to work on My5
+Other services: I next plan to work on STV and U (UKTVplay)
 
 **Custom Services**
 
