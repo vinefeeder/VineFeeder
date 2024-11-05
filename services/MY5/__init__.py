@@ -128,22 +128,23 @@ class My5Loader(BaseLoader):
         self.clear_series_data()  # Clear existing series data
 
         # Extract the episodes from the parsed data of the selected series
-        brndslug = selected.lower().replace(' ','-').replace(':','-').replace("'",'-').replace('--','-')    
-        #brndslug = re.sub(r"[^\w\s]", "-", selected.lower()).replace(" ", "-").replace('--','-')
-
+        brndslug = url.split('/')[4]
         if parsed_data and 'seasons' in parsed_data:
             for item in parsed_data['seasons']: 
                 try:
-                    url = f"https://corona.channel5.com/shows/{brndslug}/seasons/{item['seasonNumber']}/episodes.json?platform=my5desktop&friendly=1&linear=true"
+                    # no season means single episode
+                    # check and call self.receive for single episode
+                    if item['seasonNumber'] == None:  
+                        url = f"https://www.channel5.com/show/{brndslug}"
+                        self.receive(1, url)
+                        return
+                    else:
+                        url = f"https://corona.channel5.com/shows/{brndslug}/seasons/{item['seasonNumber']}/episodes.json?platform=my5desktop&friendly=1&linear=true"
                     url = url.encode('utf-8', 'ignore').decode().strip() 
                     myhtml = self.get_data(url=url)
                     parsed_data = parse_json(myhtml)
                     if len(parsed_data['episodes']) == 0:
-                        brndslug = brndslug + "-cutdowns"  
-                        url = f"https://corona.channel5.com/shows/{brndslug}/seasons/{item['seasonNumber']}/episodes.json?platform=my5desktop&friendly=1&linear=true"
-                        url = url.encode('utf-8', 'ignore').decode().strip() 
-                        myhtml = self.get_data(url=url)
-                        parsed_data = parse_json(myhtml)
+                        continue
 
                     #console.print_json(data=parsed_data)
                     series_name = parsed_data['episodes'][0]['sh_f_name'] 
