@@ -196,6 +196,7 @@ class StvLoader(BaseLoader):
                 }
         # STV only provde one series' worth of episodes in one request
         # tabs are populated with series_guid to allow for multiple series calls
+        # some tabs are not series - varies across titles??
         
         for index in range(0, tabs):    # last 4 tabs are not series
         
@@ -212,8 +213,6 @@ class StvLoader(BaseLoader):
             f.write(json.dumps(next_parsed_data))
             f.close()'''
             
-           
-
             for item in next_parsed_data['results']:
 
                 try:
