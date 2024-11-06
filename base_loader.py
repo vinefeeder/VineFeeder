@@ -44,6 +44,22 @@ class BaseLoader:
             raise Exception("Failed to retrieve data.")
         return response.text
     
+    def get_options(self, url, headers=None):
+        if not headers:
+            headers = self.headers
+        response = self.client.options(url, headers=headers, follow_redirects=True)
+        if response.status_code != 200:
+            raise Exception("Failed to retrieve options-data.")
+        return response.headers
+    
+    def post_data(self, url, data=None, json=None, headers=None):
+        if not headers:
+            headers = self.headers
+        response = self.client.post(url, data=data, json=json, headers=headers, follow_redirects=True)
+        if response.status_code != 200:
+            raise Exception("Failed to retrieve data.")
+        return response
+
     def parse_data(self, html):
         """Parse HTML data into JSON format."""
         return parse_json(html)
@@ -155,13 +171,11 @@ class BaseLoader:
             print(f"There are {max_series} series within this title. You may choose from 1 to {max_series}.")
         else:  # Non-contiguous series
             print("Series are non-contiguous:")
-            '''for idx, series_no in enumerate(episode_series_numbers, 1):
-                print(f"{idx}: Series {series_no}")'''
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         # Get user input for selecting series and episode(s)
         user_input = input("\nEnter SERIES NUMBER(s) or a range\n(e.g., 2, 3, 5..7) use commas to separate\neither 'all' or '0' for all-series: ")
-
+        print('\n')
         # Parse the input
         selected_series = []
         if user_input == 'all' or user_input == '0':  # If the user enters 'all', display all episodes
@@ -176,11 +190,10 @@ class BaseLoader:
                 else:  # Single digit
                     selected_series.append(int(part))  # Store as int for comparison
 
-        # reverse order if needed
-        #selected_series = selected_series[::-1]
-
+        
         # Filter the episodes based on the selected series numbers
         for series_no in selected_series:
+         
             for episode in self.series_data[series_name]: 
                 if int(episode['series_no']) == int(series_no):
                     """store in list container"""
