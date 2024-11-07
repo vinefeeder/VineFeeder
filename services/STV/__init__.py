@@ -3,6 +3,7 @@ from parsing_utils import  extract_script_with_id_json, parse_json
 import subprocess
 from rich.console import Console
 import sys, json
+import jmespath
 
 console = Console()
 
@@ -41,7 +42,7 @@ class StvLoader(BaseLoader):
         # direct download
 
         if 'http' in search_term and inx == 1:
-            #print(['devine', 'dl', 'ALL4', search_term])
+            #print(['devine', 'dl', 'STV', search_term])
             subprocess.run(['devine', 'dl', 'STV', search_term])  # url
             #self.clean_terminal()
             return
@@ -58,7 +59,8 @@ class StvLoader(BaseLoader):
             # https://player.stv.tv/summary/joan
             # need a search keyword(s) from url 
             # split and select series name
-            search_term = search_term.split('/')[4] 
+            
+            search_term = search_term.split('/')[-1] 
             # fetch_videos_by_category search_term may have other params to remove
             if '?' in search_term:  
                 search_term = search_term.split('?')[0].replace('-',' ')
@@ -92,6 +94,8 @@ class StvLoader(BaseLoader):
         }
         url = "https://search-api.swiftype.com/api/v1/public/engines/search.json"
         
+
+
         response = self.get_options(url, headers=headers)
         
         xdata = response['x-request-id']
@@ -194,43 +198,72 @@ class StvLoader(BaseLoader):
                 'Connection': 'keep-alive',
                 'Origin': 'https://player.stv.tv',
                 }
-        # STV only provde one series' worth of episodes in one request
+        # STV mostly provde one series' worth of episodes in one request
         # tabs are populated with series_guid to allow for multiple series calls
-        # some tabs are not series - varies across titles??
-        
-        for index in range(0, tabs):    # last 4 tabs are not series
-        
-            #while 'Autoplay' not in parsed_data['props']['pageProps']['data']['tabs'][index]['title']:
-            if 'Autoplay' in  parsed_data['props']['pageProps']['data']['tabs'][index]['title'] or \
-                'Trailer' in  parsed_data['props']['pageProps']['data']['tabs'][index]['title']:
-                break
-            series_guid = parsed_data['props']['pageProps']['data']['tabs'][index]['params']['query']['series.guid']
-            response = self.get_data(f"https://player.api.stv.tv/v1/episodes?series.guid={series_guid}&limit=100&groupToken=0071", headers = headers)
-            next_parsed_data = parse_json(response)
+        # some tabs are not series and only have a programme.guid for example:-
+        # props►pageProps►data►tabs►0►params►query►programme.guid
+        # test here
+        try:
+            PROGGUID = parsed_data['props']['pageProps']['data']['tabs'][0]['params']['query']['programme.guid']
+        except:
+            PROGGUID = None
 
-            '''console.print_json(data=next_parsed_data)
-            f = open("2stv.json",'w')
-            f.write(json.dumps(next_parsed_data))
-            f.close()'''
-            
-            for item in next_parsed_data['results']:
+        if PROGGUID:               
 
+            for item in parsed_data['props']['pageProps']['data']['tabs'][0]['data']:
                 try:
-                    series_no = item['playerSeries']['name'] 
+                    series_no = int('0')
                     title = item['title']
-                    url = item ['_permalink']
+                    url = f"https://player.stv.tv{item['link']}"  #https://player.stv.tv/episode/4nlk/loose-women
                     synopsis = item['summary']
 
                     episode = {
-                        'series_no': int(series_no.replace('Series ', '')),
-                        'title': title,
-                        'url': url,  # 
+                        'series_no': series_no,
+                        'title': title.replace(', ','-'),  # date with comma messes up later when selecting url for devien
+                        'url': url,  
                         'synopsis': synopsis
                     }
                     self.add_episode(series_data, episode)
 
                 except KeyError as e:
-                    print(f"Error: {e}")    
+                    print(f"Error: {e}")   
+
+        else: 
+        
+            for index in range(0, tabs): 
+
+                # last few tabs may not contain series so check
+                if 'Autoplay' in  parsed_data['props']['pageProps']['data']['tabs'][index]['title'] or \
+                    'Trailer' in  parsed_data['props']['pageProps']['data']['tabs'][index]['title']:
+                    break
+
+                series_guid = parsed_data['props']['pageProps']['data']['tabs'][index]['params']['query']['series.guid']
+                response = self.get_data(f"https://player.api.stv.tv/v1/episodes?series.guid={series_guid}&limit=100&groupToken=0071", headers = headers)
+                next_parsed_data = parse_json(response)
+
+                '''console.print_json(data=next_parsed_data)
+                f = open("2stv.json",'w')
+                f.write(json.dumps(next_parsed_data))
+                f.close()'''
+                
+                for item in next_parsed_data['results']:
+
+                    try:
+                        series_no = item['playerSeries']['name'] 
+                        title = item['title']
+                        url = item ['_permalink']
+                        synopsis = item['summary']
+
+                        episode = {
+                            'series_no': int(series_no.replace('Series ', '')),
+                            'title': title,
+                            'url': url,  # 
+                            'synopsis': synopsis
+                        }
+                        self.add_episode(series_data, episode)
+
+                    except KeyError as e:
+                        print(f"Error: {e}")    
             
 
 
@@ -240,4 +273,67 @@ class StvLoader(BaseLoader):
             url = item.split(',')[2].lstrip()
             subprocess.run(['devine', 'dl', 'STV', url])  
         return None	
+    
+    def fetch_videos_by_category(self, browse_url):
+        """
+        Fetches videos from a category (Channel 4 specific).
+        Args:
+            browse_url (str): URL of the category page.
+        Returns:
+            None
+        """
+        beaupylist = []
+        try:
+            req = self.get_data(browse_url, headers=self.headers)
+            
+            # Parse the __PARAMS__ data 
+            init_data =extract_script_with_id_json(req, '__NEXT_DATA__', 0)
+
+            '''console.print_json(data=init_data)
+            f = open("cat_stv.json",'w')
+            f.write(json.dumps(init_data))
+            f.close()'''
+            # Extract brand items
+           
+            myjson = jmespath.search('props.pageProps.data.assets', init_data)
+
+            # jmespath is an efficient json parser that searches complex json
+            # and, in this case, produces a simple dict from which
+            # res(ults) are more easily extracted.
+            # STV specific
+            
+            res = jmespath.search("""
+                [].{
+                    label: title,
+                    overlaytext: description,
+                    href: link
+                    }
+                    """, myjson)       
+        
+            # Build the beaupylist for display
+            for i, item in enumerate(res):
+                label = item['label']
+                overlaytext = item['overlaytext']
+                beaupylist.append(f"{i} {label}\n\t{overlaytext}") # \t used to split text later
+
+        except Exception as e:
+            print(f"Error fetching category data: {e}")
+            sys.exit(0)
+        
+        # call function in BaseLoader 
+        found = self.display_beaupylist(beaupylist)
+        
+        if found:
+            ind = found.split(' ')[0]
+            url = f"https://playerstv.tv{res[int(ind)]['href']}"
+            # url may be for series or single Film
+            url = url.encode('utf-8', 'ignore').decode().strip()  # if has spaces!
+
+            # process short-cut download or do greedy search on url
+            return self.process_received_url_from_category(url)
+            
+        else:
+            print("No video selected.")
+            sys.exit(0)
+
 
