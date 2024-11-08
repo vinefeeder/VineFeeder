@@ -82,8 +82,8 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     Download Media: Select a media item to start the download process.
 **Services**
 
-Currently five services are working  - All4, BBC, ITVX, My5 and STV, but expect a few teething bugs. 
-Other services: I next plan to work on U (UKTVplay)
+Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
+Other services: awaiting conributors!!
 
 **Custom Services**
 
@@ -109,7 +109,7 @@ If however you are happy to set your download parameters once, for each service,
 **Contributing**
 
 Contributors are welcomed to add services to front-end those services provided by Devine.
-Presently five UK services are fully configured; contributions for other services welcome.
+Presently six UK services are fully configured; contributions for other services welcome.
 .
 
 Images
