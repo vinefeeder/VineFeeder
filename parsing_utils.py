@@ -232,6 +232,6 @@ def split_options(option_string):
     if option_string is None:
         return []
     else:
-        return option_string.replace(" ", "|").split("|")
+        return option_string.strip().split(" ")
 
 
