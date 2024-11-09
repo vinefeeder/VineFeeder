@@ -145,7 +145,8 @@ class BaseLoader:
         """
         Prepare the series data for episode selection and display the final episode list.
         Given a selected series name, fetch its HTML and extract its episodes.
-        The function will check if the series numbers are contiguous and display the final episode list.
+        The function will check if the series numbers are contiguous and display 
+        the final episode list.
         It will return the URLs for the selected episodes.
         """
         # bail out if episode count is limited to 12
@@ -168,13 +169,15 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            print(f"There are {max_series} series within this title. You may choose from 1 to {max_series}.")
+            print(f"There are {max_series} series within this title.\
+                   You may choose from 1 to {max_series}.")
         else:  # Non-contiguous series
             print("Series are non-contiguous:")
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         # Get user input for selecting series and episode(s)
-        user_input = input("\nEnter SERIES NUMBER(s) or a range\n(e.g., 2, 3, 5..7) use commas to separate\neither 'all' or '0' for all-series: ")
+        user_input = input("\nEnter SERIES NUMBER(s) or a range\n(e.g., 2, 3, 5..7)\
+                            use commas to separate\neither 'all' or '0' for all-series: ")
         print('\n')
         # Parse the input
         selected_series = []
@@ -202,7 +205,8 @@ class BaseLoader:
 
     def display_beaupylist(self, beaupylist):
 
-        found = select(beaupylist, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
+        found = select(beaupylist, preprocessor=lambda val: prettify(val),\
+                        cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
         
     def process_received_url_from_category(self, url, category=None):

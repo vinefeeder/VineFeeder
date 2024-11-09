@@ -27,12 +27,16 @@ class VineFeeder(QWidget):
         """
         Initialize the VineFeeder object.
 
-        This method sets up the VineFeeder object by calling necessary functions to initialize the UI, store available services dynamically, load services, and create buttons dynamically.
+        This method sets up the VineFeeder object by calling necessary functions to 
+        initialize the UI, store available services dynamically, load services, 
+        and create buttons dynamically.
         """
         super().__init__()
         self.init_ui()
         self.available_services = {}  # Store available services dynamically
         self.available_service_media_dict = {}
+        self.available_services_hlg_status = {}
+        self.available_services_options = {}
         self.load_services()  # Discover and load services
         self.create_service_buttons()  # Create buttons dynamically
 
@@ -40,7 +44,8 @@ class VineFeeder(QWidget):
         """
         Initialize the UI components and layout.
 
-        This method creates the necessary UI components and sets up the layout. It also connects the dark mode checkbox to the toggle_dark_mode method.
+        This method creates the necessary UI components and sets up the layout. 
+        It also connects the dark mode checkbox to the toggle_dark_mode method.
         """
         self.setWindowTitle("VineFeeder")
         layout = QVBoxLayout()
@@ -71,13 +76,21 @@ class VineFeeder(QWidget):
         """
         Toggle the application's dark mode on or off.
 
-        This method is connected to the dark mode checkbox's stateChanged signal. When the checkbox is checked, the application is set to dark mode. When unchecked, the application is set to light mode.
+        This method is connected to the dark mode checkbox's stateChanged signal. 
+        When the checkbox is checked, the application is set to dark mode. When unchecked, 
+        the application is set to light mode.
 
-        In dark mode, the window and text colors are changed to dark colors, and the search label and dark mode checkbox text are changed to white. Buttons are also set to have a white text color and a dark grey background color.
+        In dark mode, the window and text colors are changed to dark colors, 
+        and the search label and dark mode checkbox text are changed to white. 
+        Buttons are also set to have a white text color and a dark grey background color.
 
-        In light mode, the window and text colors are set back to their default values, and the search label and dark mode checkbox text are changed back to black. Buttons are also reset to their default appearance.
+        In light mode, the window and text colors are set back to their default values, 
+        and the search label and dark mode checkbox text are changed back to black. 
+        Buttons are also reset to their default appearance.
 
-        NOTE: This method uses a QTimer to delay the application of the dark mode style slightly. This is to ensure that the rendering of the UI components is complete before applying the style changes.
+        NOTE: This method uses a QTimer to delay the application of the dark mode style slightly. 
+        This is to ensure that the rendering of the UI components is complete 
+        before applying the style changes.
         """
         if self.dark_mode_checkbox.isChecked():
             palette = QPalette()
@@ -138,6 +151,10 @@ class VineFeeder(QWidget):
                         service_config = yaml.safe_load(f)
                         service_name = service_config.get("service_name", service)
                         service_media_dict = service_config.get("media_dict", {})
+                        service_hlg_status = service_config.get("hlg_status", False)
+                        service_options = service_config.get("options", {})
+                        self.available_services_hlg_status[service_name] = service_hlg_status #UHD wanted?
+                        self.available_services_options[service_name] = service_options
                         self.available_service_media_dict[service_name] = service_media_dict
                         # Add the service to available_services dict
                         self.available_services[service_name] = init_file
@@ -229,24 +246,24 @@ class VineFeeder(QWidget):
                 if hasattr(module, loader_class_name):
                     loader_class = getattr(module, loader_class_name)
                     loader_instance = loader_class()  # Instantiate the service class
-                    
-                    # Call the receive method of the loaded service's instance
+                    hlg_status = self.available_services_hlg_status[service_name] # UHD if available.
+                    options = self.available_services_options[service_name]
                     if hasattr(loader_instance, 'receive'):
                         
                         if text_to_pass:
                             if 'http' in text_to_pass:  
-                                loader_instance.receive(1, text_to_pass)
+                                loader_instance.receive(1, text_to_pass, None, hlg_status, options)
                                 self.clear_search_box()  # inx 1 signifies direct download
                                 loader_instance.clean_terminal()
                                 sys.exit(0)
                             else:
-                                loader_instance.receive(3, text_to_pass) # inx 3 for keyword search
+                                loader_instance.receive(3, text_to_pass, None, hlg_status, options) # inx 3 for keyword search
                                 self.clear_search_box()
                                 loader_instance.clean_terminal()
                                 sys.exit(0)
                         else:
                             inx, text_to_pass, found = self.do_action_select(service_name)  # returns a (int , url)
-                            loader_instance.receive(inx, text_to_pass, found)
+                            loader_instance.receive(inx, text_to_pass, found, hlg_status, options)
                             loader_instance.clean_terminal()
                             sys.exit(0)
                     else:
@@ -262,7 +279,7 @@ class VineFeeder(QWidget):
 
 
 if __name__ == "__main__":
-    # say hello
+    # say hello nicely
     pretty_print()
     app = QApplication(sys.argv)
     window = VineFeeder()
