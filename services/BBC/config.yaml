@@ -2,6 +2,10 @@ service: BBC
 
 description: A UK Public Sevice broadcaster
 
+hlg_status: True
+
+options: 
+
 media_dict:
   Film: 'https://www.bbc.co.uk/iplayer/categories/films/featured'
   Documentary: 'https://www.bbc.co.uk/iplayer/categories/documentaries/featured'

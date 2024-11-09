@@ -2,13 +2,14 @@ from base_loader import BaseLoader
 import jmespath
 from rich.console import Console
 import sys  
-from parsing_utils import parse_json
+from parsing_utils import parse_json, split_options
 import subprocess
 
 console = Console()
 
 class My5Loader(BaseLoader):
     def __init__(self):
+        self.options = ''
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -17,8 +18,8 @@ class My5Loader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None):
-       
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
+        self.options = options
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -43,7 +44,8 @@ class My5Loader(BaseLoader):
 
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'MY5', search_term])
-            subprocess.run(['devine', 'dl', 'MY5', search_term])  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *options_list, 'MY5', search_term])  # url
             
             return
 
@@ -55,7 +57,7 @@ class My5Loader(BaseLoader):
         # ALTERNATIVES BELOW FROM POP-UP MENU  
         elif inx == 0:  
             # from greedy-search OR selecting Browse-category
-            # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
+            # example: https://www.channel5.com/the-teacher/season-2/episode-2
 
             # need a search keyword(s) from url 
             # split and select series name
@@ -113,7 +115,8 @@ class My5Loader(BaseLoader):
         """
         if 'https' in selected:  # direct url: not sure how this may happen with My5??
             url = selected
-            subprocess.run(['devine', 'dl', 'MY5', url])
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *options_list, 'MY5', url])
             return
         else:
             url = self.get_selected_url(selected)
@@ -163,8 +166,10 @@ class My5Loader(BaseLoader):
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
-
-        # specific to MY5
+        
+        # download
+       
+        options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
             if url  == 'None':
@@ -175,7 +180,8 @@ class My5Loader(BaseLoader):
             #print(url)
 
             # finally fetch video
-            subprocess.run(['devine', 'dl', 'MY5', url])
+            
+            subprocess.run(['devine', 'dl', *options_list, 'MY5', url])
             #self.clean_terminal()
             return
         

@@ -3,14 +3,13 @@
 The BBC does not use  script = window.__PARAMS__ = ..."""
 
 from base_loader import BaseLoader
-from parsing_utils import rinse
 from base_loader import BaseLoader
-from parsing_utils import extract_params_json,  parse_json, split, extract_with_xpath 
+from parsing_utils import extract_params_json,  parse_json, split, split_options
 from rich.console import Console
 import subprocess
 import sys, json, re
 import jmespath
-
+from scrapy.selector import Selector
 
 console = Console()
 
@@ -22,6 +21,10 @@ Note: The BBC is outrageously difficult. Do not use this as a template for other
 
 class BbcLoader(BaseLoader):
     def __init__(self):
+        self.HLG = None
+        self.AVAILABLE_HLG = False
+        self.uhd_list = []
+        self.options = ""
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
@@ -29,8 +32,28 @@ class BbcLoader(BaseLoader):
             'Referer': 'https://www.bbc.com/',
         }
         super().__init__(headers)
+    # Check if UHD content is available BBC specific
+    def check_uhd(self):
+        """
+        Fetch the list of UHD content from the BBC iPlayer website.
+        Returns:
+            list: A list of URLs with UHD content.
+        """
+    
+        uhd_url = "https://www.bbc.co.uk/iplayer/help/questions/programme-availability/uhd-content"
+        html = self.get_data(uhd_url)
+        sel = Selector(text=html)
+        uhd_list = sel.xpath('(//ul)[8]//a/@href').getall()
+        return uhd_list    
 
-    def receive(self, inx: None, search_term: None, category=None):    
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None):  
+        self.HLG = hlg_status 
+        self.options = options
+
+         #preapare in UHD list
+        self.uhd_list = self.check_uhd()
+        
+        
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -58,8 +81,8 @@ class BbcLoader(BaseLoader):
             # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h breaks devine
             # https://www.bbc.co.uk/iplayer/episode/b008bjg1/a-perfect-spy-episode-1
             search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
-            
-            subprocess.run(['devine', 'dl', 'iP', search_term], stderr=subprocess.STDOUT)  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', options_list,'iP', search_term])  # url
             return
 
         # keyword search
@@ -102,7 +125,7 @@ class BbcLoader(BaseLoader):
         
     def fetch_videos(self, search_term):
         """Fetch videos from BBC using a search term."""
-        
+
         #url = f"https://search.api.bbci.co.uk/formula/iplayer-ibl-root?q={search_term}&apikey=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp&seqId=0582e0f0-b911-11ee-806c-11c6c885ab56"
         url =  f"https://ibl.api.bbc.co.uk/ibl/v1/new-search?q={search_term}&rights=web&mixin=live"
         try:
@@ -221,18 +244,38 @@ class BbcLoader(BaseLoader):
         else:
             
             url = f"https://www.bbc.co.uk/iplayer/episode/{parsed_data['episodes'][0]['id']}/{parsed_data['episodes'][0]['title']}"
-            subprocess.run(['devine', 'dl', 'iP', url])
+             #check for UHD content
+            for hlg_item in self.uhd_list:
+                if series_name.lower() in hlg_item:
+                    self.AVAILABLE_HLG = True
+                    break 
+            options_list = split_options(self.options)
+            if self.HLG and self.AVAILABLE_HLG:
+                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
+            else:
+                subprocess.run(['devine', 'dl', *options_list, 'iP', url])
             return  
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
 
         # specific to BBC
+        options_list = split_options(self.options)
         for item in selected_final_episodes:
+            #check for UHD content
+            for hlg_item in self.uhd_list:
+                if series_name.lower() in hlg_item:
+                    self.AVAILABLE_HLG = True
+                    break 
+
             mlist = item.split(',')
             url = mlist[2].strip()
-            print(url)
-            subprocess.run(['devine', 'dl', 'iP', url], stderr=subprocess.STDOUT, )
+            
+            if self.HLG and self.AVAILABLE_HLG:
+                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
+            else:
+                subprocess.run(['devine', 'dl', *options_list, 'iP', url])
+              
         return
     
     def fetch_videos_by_category(self, browse_url):

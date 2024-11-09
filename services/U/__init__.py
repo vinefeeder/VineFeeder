@@ -1,5 +1,5 @@
 from base_loader import BaseLoader
-from parsing_utils import rinse
+from parsing_utils import split_options
 import jmespath
 import sys
 import json
@@ -10,6 +10,7 @@ console = Console()
 
 class ULoader(BaseLoader):
     def __init__(self):
+        self.options = ''
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -18,7 +19,8 @@ class ULoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None):
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None):  
+        self.options = options
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -41,8 +43,8 @@ class ULoader(BaseLoader):
         """
         # direct download
         if 'http' in search_term and inx == 1:
-            
-            subprocess.run(['devine', 'dl', 'UKTV', search_term])  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *options_list, 'UKTV', search_term])  # url
             
             return
 
@@ -178,9 +180,10 @@ class ULoader(BaseLoader):
 
         self.prepare_series_for_episode_selection(brand_slug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
+        options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            subprocess.run(['devine', 'dl', 'UKTV', url])
+            subprocess.run(['devine', 'dl', *options_list, 'UKTV', url])
             
         return None
     

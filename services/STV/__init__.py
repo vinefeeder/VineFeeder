@@ -1,5 +1,5 @@
 from base_loader import BaseLoader
-from parsing_utils import  extract_script_with_id_json, parse_json
+from parsing_utils import  extract_script_with_id_json, parse_json, split_options
 import subprocess
 from rich.console import Console
 import sys, json
@@ -9,6 +9,7 @@ console = Console()
 
 class StvLoader(BaseLoader):
     def __init__(self):
+        self.options = ''
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -17,7 +18,9 @@ class StvLoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None):
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None):  
+        self.options = options  
+
    
         """
         First fetch for series titles matching all or part of search_term.
@@ -43,7 +46,8 @@ class StvLoader(BaseLoader):
 
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'STV', search_term])
-            subprocess.run(['devine', 'dl', 'STV', search_term])  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl',*options_list,'STV', search_term])  # url
             #self.clean_terminal()
             return
 
@@ -269,9 +273,10 @@ class StvLoader(BaseLoader):
 
         self.prepare_series_for_episode_selection(series_data) # creates list of series;
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
+        options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            subprocess.run(['devine', 'dl', 'STV', url])  
+            subprocess.run(['devine', 'dl', *options_list, 'STV', url])  
         return None	
     
     def fetch_videos_by_category(self, browse_url):

@@ -1,6 +1,6 @@
 # channel 4 __init__.py
 from base_loader import BaseLoader
-from parsing_utils import extract_params_json, prettify
+from parsing_utils import extract_params_json, split_options
 from rich.console import Console
 import subprocess
 import sys
@@ -12,6 +12,7 @@ console = Console()
 
 class All4Loader(BaseLoader):
     def __init__(self):
+        self.options = ''
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -21,7 +22,7 @@ class All4Loader(BaseLoader):
         super().__init__(headers)
 
     # entry point from Vinefeeder
-    def receive(self, inx: None, search_term: None, category=None):
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
    
         """
         First fetch for series titles matching all or part of search_term.
@@ -43,10 +44,12 @@ class All4Loader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+        self.options = options
         # direct download
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'ALL4', search_term])
-            subprocess.run(['devine', 'dl', 'ALL4', search_term])  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *options_list, 'ALL4', search_term])  # url
             #self.clean_terminal()
             return
 
@@ -97,7 +100,7 @@ class All4Loader(BaseLoader):
                 parsed_data = self.parse_data(html)  # to json
         except:
             print(f'No valid data returned for {url}')
-            #return self.clean_terminal()
+            
             return
     
         # Assuming that parsed_data has a 'results' key containing video data
@@ -156,11 +159,14 @@ class All4Loader(BaseLoader):
                 except KeyError:
                     continue  # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
-        
+
+        options_list = split_options(self.options)
+
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
             url = "https://www.channel4.com" + item['url']
-            subprocess.run(['devine', 'dl', 'ALL4', url])
+            
+            subprocess.run(['devine', 'dl' ,*options_list, 'ALL4', url])
             return None
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
@@ -174,12 +180,9 @@ class All4Loader(BaseLoader):
                 continue
             url = "https://www.channel4.com" + url
             
-            # debug uncomment
-            #print(url)
-
-            # fetch video
-            subprocess.run(['devine', 'dl', 'ALL4', url])
-            #self.clean_terminal()
+         
+            subprocess.run(['devine', 'dl', *options_list, 'ALL4', url])
+        
             return
 
 

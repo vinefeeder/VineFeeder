@@ -1,5 +1,7 @@
 service: STV
 
+options:
+
 media_dict:
   Films: https://player.stv.tv/categories/movies
   Sport: https://player.stv.tv/categories/the-sport-hub

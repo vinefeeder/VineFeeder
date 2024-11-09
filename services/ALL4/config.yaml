@@ -1,6 +1,6 @@
 service_name: ALL4
 
-description: A UK public broadcaster funded by advertising 
+options:
 
 media_dict:
   Film: 'https://www.channel4.com/categories/film'

@@ -1,5 +1,5 @@
 from base_loader import BaseLoader
-from parsing_utils import rinse, extract_params_json, extract_script_with_id_json
+from parsing_utils import rinse, split_options, extract_script_with_id_json
 import subprocess
 from rich.console import Console
 import jmespath
@@ -10,6 +10,7 @@ console = Console()
 
 class ItvxLoader(BaseLoader):
     def __init__(self):
+        self.options = ''
         headers = {
             'Accept': '*/*',
             'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)',
@@ -18,7 +19,8 @@ class ItvxLoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None):
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
+        self.options = options
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -41,8 +43,8 @@ class ItvxLoader(BaseLoader):
         """
         # direct download
         if 'http' in search_term and inx == 1:
-            
-            subprocess.run(['devine', 'dl', 'ITVX', search_term])  # url
+            options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *options_list, 'ITVX', search_term])  # url
             
             return
 
@@ -191,18 +193,14 @@ class ItvxLoader(BaseLoader):
 
             self.add_episode(programmeSlug, episode)
 
-        # if only one result direct download    
-        '''if len(self.series_data[0]) == 1:
-            item = self.series_data[list(self.series_data.keys())[0]][0]
-            url = item['url']
-            subprocess.run(['devine', 'dl', 'ITVX', url])
-            return'''
 
         self.prepare_series_for_episode_selection(programmeSlug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
+        options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            subprocess.run(['devine', 'dl', 'ITVX', url])
+            
+            subprocess.run(['devine', 'dl', *options_list, 'ITVX', url])
             
         return None
 

@@ -1,5 +1,6 @@
 service: MY5
 
+options: 
 media_dict:
   Films: https://corona.channel5.com/shows/search.json?platform=my5desktop&friendly=1&vod_subgenres%5B%5D=6100117389032&vod_subgenres%5B%5D=6100117390032&vod_subgenres%5B%5D=6100117391032
   Documentary: https://corona.channel5.com/shows/search.json?platform=my5desktop&friendly=1&vod_subgenres[]=6100110273032&vod_subgenres[]=6100105092032&vod_subgenres[]=6100105093032&vod_subgenres[]=6100105094032&vod_subgenres[]=6100105095032&vod_subgenres[]=6100105096032&vod_subgenres[]=6100105097032&vod_subgenres[]=6100110268032&vod_subgenres[]=6100110269032&vod_subgenres[]=6100110270032&vod_subgenres[]=6100110271032&vod_subgenres[]=6100110272032
