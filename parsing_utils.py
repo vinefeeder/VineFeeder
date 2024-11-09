@@ -1,6 +1,6 @@
 import json
 from scrapy import Selector
-
+from httpx import Client 
 
 def parse_json(html):
     try:
@@ -227,3 +227,11 @@ def split(strng, sep, pos):
 
     strng = strng.split(sep)
     return sep.join(strng[:pos]), sep.join(strng[pos:])
+
+def split_options(option_string):
+    if option_string is None:
+        return []
+    else:
+        return option_string.replace(" ", "|").split("|")
+
+
