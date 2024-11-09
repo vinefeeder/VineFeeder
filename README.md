@@ -11,6 +11,8 @@ Features:
     
 *Service-Specific Parsing*: Each service can define its own method of parsing media 
     content, making the platform adaptable to different service architectures.
+    Additionally each service may store a string of download options for devine such as 
+    video resolution or subtitle format.
     
 *Alphabetical Service Listing*: Services are displayed as clickable buttons in 
     alphabetical order, enhancing the user experience.
@@ -23,6 +25,7 @@ Features:
     
 *Video Download*: Once media content is selected, videos can be downloaded directly
     from the service using predefined tools (e.g., devine).
+*Ultra-High-definition*:  Videos in UHD are automatically requested from sites that provide such quality.
 
 
 **Installation**
@@ -62,6 +65,7 @@ Each streaming service should be placed in the services folder, with each servic
 
 Modify the config.yaml file for each service to include its media_dict, which defines the categories and URLs used for browsing.
 Modify the config.yaml services: with the full path to your VineFeeder services folder.
+Modify Devine's download options under the config.yaml sub-heading of options enter a string of options as you would use on the command line with Devine
 
 **Usage**
 
@@ -74,6 +78,7 @@ With bash or a Window's Terminal
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
+Each service's config.yaml may have an 'options:' entry just add the string you would use with devine.
 
 Services are displayed in alphabetical order for easy access. From there, you can:
 
