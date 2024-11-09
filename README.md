@@ -25,7 +25,9 @@ Features:
     
 *Video Download*: Once media content is selected, videos can be downloaded directly
     from the service using predefined tools (e.g., devine).
+    
 *Ultra-High-definition*:  Videos in UHD are automatically requested from sites that provide such quality.
+hlg_status in config.yaml may be set to False to avoid donloading UHD quality.
 
 
 **Installation**
