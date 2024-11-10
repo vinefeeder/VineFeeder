@@ -194,7 +194,7 @@ class BbcLoader(BaseLoader):
                 SINGLE = False
                 url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
                 myhtml = self.get_data(url=url, headers=self.headers)
-                parsed_data = parse_json(myhtml)          
+                parsed_data = parse_json(myhtml)         
 
         # testing
         #file = open("init_data.json", "w")
@@ -242,7 +242,7 @@ class BbcLoader(BaseLoader):
 
         # Single episode  expedite download
         else:
-            
+            series_name = parsed_data['episodes'][0]['title']
             url = f"https://www.bbc.co.uk/iplayer/episode/{parsed_data['episodes'][0]['id']}/{parsed_data['episodes'][0]['title']}"
              #check for UHD content
             for hlg_item in self.uhd_list:
