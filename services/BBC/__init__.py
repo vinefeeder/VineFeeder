@@ -77,9 +77,7 @@ class BbcLoader(BaseLoader):
         # TWO ALTERNATES FROM GUI-TEXT ENTRY; POULATED WITH KEYWORD OR URL
         # direct download from url
         if 'http' in search_term and inx == 1:
-            # check form of url https://www.bbc.co.uk/iplayer/episode/m00049t7 minimum
-            # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h breaks devine
-            # https://www.bbc.co.uk/iplayer/episode/b008bjg1/a-perfect-spy-episode-1
+           
             search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
             options_list = split_options(self.options)
             subprocess.run(['devine', 'dl', options_list,'iP', search_term])  # url
@@ -91,8 +89,9 @@ class BbcLoader(BaseLoader):
             return (self.fetch_videos(search_term))  
         
         # ALTERNATIVES BELOW FROM POP-UP MENU  
+        # from greedy-search OR selecting Browse-category
         elif inx == 0 and 'https' in search_term:  
-            # from greedy-search OR selecting Browse-category
+            
 
             if 'episode' in search_term:
                 # https://www.bbc.co.uk/iplayer/episodes/p09twdp8/showtrial?seriesId=m0023h9h
@@ -125,32 +124,33 @@ class BbcLoader(BaseLoader):
         
     def fetch_videos(self, search_term):
         """Fetch videos from BBC using a search term."""
+        
 
         #url = f"https://search.api.bbci.co.uk/formula/iplayer-ibl-root?q={search_term}&apikey=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp&seqId=0582e0f0-b911-11ee-806c-11c6c885ab56"
-        url =  f"https://ibl.api.bbc.co.uk/ibl/v1/new-search?q={search_term}&rights=web&mixin=live"
+        #url =  f"https://ibl.api.bbc.co.uk/ibl/v1/new-search?q={search_term}&rights=web&mixin=live"
+        url = f"https://search.api.bbci.co.uk/formula/iplayer-ibl-root?q={search_term}&apikey=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp&seqId=0582e0f0-b911-11ee-806c-11c6c885ab56"
+    
         try:
             html = self.get_data(url)
-            if 'No Matches' in html:
+            #if 'No Matches' in html:
+            if not 'results' in html:
                 print('Nothing found for that search; try again.')
                 sys.exit(0)
             else:
-                parsed_data = self.parse_data(html)  # to json
+                parsed_data = parse_json(html)  # to json
         except:
             print(f'No valid data returned for {url}')
             return
         
-        #### debug ####
-        #console.print_json(data=parsed_data)
 
-        # Assuming that parsed_data has a 'results' key containing video data
-        if parsed_data and 'new_search' in parsed_data:
+        if parsed_data and 'results' in parsed_data:
             
-            for item in parsed_data['new_search']['results']:
+            for item in parsed_data['results']:
                 series_name = item.get('title', 'Unknown Title')  # BBC has a 'title' key for series names
                 
                 episode = {
                     'title': item.get('title', 'Unknown Title'),
-                    'url': f"{item.get('id', '')}",
+                    'url': f"{item.get('url', '')}",
                     'synopsis': item.get('synopsis', 'No synopsis available.')
                 }
                 self.add_episode(series_name, episode)
@@ -178,11 +178,11 @@ class BbcLoader(BaseLoader):
         #  option for direct url
         if 'https' in selected:  # direct url provided skip url preparation
             url = selected  # 'https://www.bbc.co.uk/iplayer/episodes/m000mfhl'
-            url = f"https://www.bbc.co.uk/iplayer/episode/{url.split('/')[-1]}"
+            #url = f"https://www.bbc.co.uk/iplayer/episode/{url.split('/')[-1]}"
         # option for search
         else:
-            url = self.get_selected_url(selected) # Here url is a progrmmme Id (b0074m37)
-    
+            url = self.get_selected_url(selected) # Here url is hhtps://www.bbc.co.uk/iplayer/episodes/m000mfhl
+            url = url.split('/')[-1]
             # thanks to kenyard for help with url preparation
          
             
