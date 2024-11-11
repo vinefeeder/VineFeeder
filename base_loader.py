@@ -22,7 +22,7 @@ class BaseLoader:
         """
         self.client = Client()
         self.headers = headers
-        self.series_data = {}  # In-memory store for initial series selection
+        self.series_data = {}  
         self.final_episode_data = [] 
         self.browse_video_list = []
         self.console = Console()
@@ -85,7 +85,7 @@ class BaseLoader:
     def display_series_list(self):
         """Use beaupy to list all series and allow user to select one."""
         series_list = list(self.series_data.keys())
-        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor_style="cyan")
+        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="pink1", page_size=12, pagination=True)
         return selected_series
 
     def display_episode_list(self, series_name):
@@ -105,7 +105,7 @@ class BaseLoader:
         #episodes = self.series_data.get(series_name, [])
         episode_list = [f"{ep['series_no']}, {ep['title']}, {ep['url']}, \n\t {ep['synopsis']}" for ep in final_episode_data]
         selected_episodes = select_multiple(
-            episode_list,  preprocessor=lambda val: prettify(val),  minimal_count=1, cursor_style="pink1" ,pagination=True, page_size = 8,
+            episode_list,  preprocessor=lambda val: prettify(val),  minimal_count=1,  cursor_style="pink1" ,pagination=True, page_size = 8,
         )
         return selected_episodes
     
@@ -130,16 +130,17 @@ class BaseLoader:
         This is used when the series numbers are not contiguous, so the user can
         easily see which series numbers are available.
         """
-        num_columns = 4
+        
+        num_columns = 7
         num_rows = (len(episode_series_numbers) + num_columns - 1) // num_columns
 
-        # Print in a grid format
         for row in range(num_rows):
             for col in range(num_columns):
-                idx = row + col * num_rows
-                if idx < len(episode_series_numbers):
-                    print(f"{idx + 1}: Series {episode_series_numbers[idx]:<5}", end=' ')
-            print()  # Move to the next line after each row
+                idx = row * num_columns + col 
+                if idx < len(episode_series_numbers): 
+                    print(f"{episode_series_numbers[idx]:<3}", end=' ')
+            print() 
+
 
     def prepare_series_for_episode_selection(self, series_name):
         """
@@ -169,19 +170,17 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            print(f"There are {max_series} series within this title.\
-                   You may choose from 1 to {max_series}.")
+            print(f"There are {max_series} series within this title.\nYou may choose from 1 to {max_series}.")
         else:  # Non-contiguous series
             print("Series are non-contiguous:")
             self.display_non_contiguous_series(self.episode_series_numbers)
 
-        # Get user input for selecting series and episode(s)
-        user_input = input("\nEnter SERIES NUMBER(s) or a range\n(e.g., 2, 3, 5..7)\
-                            use commas to separate\neither 'all' or '0' for all-series: ")
+        
+        user_input = input("\nHint:- 2, 3, 5..13\n'all' or '0' for all-series: ? ")
         print('\n')
-        # Parse the input
+    
         selected_series = []
-        if user_input == 'all' or user_input == '0':  # If the user enters 'all', display all episodes
+        if user_input == 'all' or user_input == '0':  
             selected_series = self.episode_series_numbers
         else:
             # Handle single digits, multiple digits, and ranges
@@ -248,13 +247,13 @@ class BaseLoader:
 
     def clean_terminal(self):
         # clear for next use
-        time.sleep(3)
+        time.sleep(1)
         if os.name == 'posix':       
             #os.system('clear')
             print("Ready!")
             return
         else:
-            os.system('cls')
+            #os.system('cls')
             print("Ready!")
             return
         
