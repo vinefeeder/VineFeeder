@@ -34,12 +34,12 @@ class BaseLoader:
     def get_series_data(self):
         return self.series_data
 
-    def get_data(self, url, headers=None):
+    def get_data(self, url,headers=None, params=None ):
         """Fetch data from a given URL."""
 
         if not headers:
             headers = self.headers
-        response = self.client.get(url, headers=headers, follow_redirects=True)
+        response = self.client.get(url, headers=headers, params=params, follow_redirects=True)
         if response.status_code != 200:
             raise Exception("Failed to retrieve data.")
         return response.text
