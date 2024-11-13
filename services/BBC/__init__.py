@@ -125,15 +125,16 @@ class BbcLoader(BaseLoader):
     def fetch_videos(self, search_term):
         """Fetch videos from BBC using a search term."""
         
-
+        url = f"https://ibl.api.bbc.co.uk/ibl/v1/new-search"
         #url = f"https://search.api.bbci.co.uk/formula/iplayer-ibl-root?q={search_term}&apikey=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp&seqId=0582e0f0-b911-11ee-806c-11c6c885ab56"
-        #url =  f"https://ibl.api.bbc.co.uk/ibl/v1/new-search?q={search_term}&rights=web&mixin=live"
-        url = f"https://search.api.bbci.co.uk/formula/iplayer-ibl-root?q={search_term}&apikey=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp&seqId=0582e0f0-b911-11ee-806c-11c6c885ab56"
-    
+        params = {
+            'q': search_term,
+            'rights': 'web',
+            'mixin': 'live'
+        }
         try:
-            html = self.get_data(url)
-            #if 'No Matches' in html:
-            if not 'results' in html:
+            html = self.get_data(url, self.headers, params)
+            if not 'new_search' in html:
                 print('Nothing found for that search; try again.')
                 sys.exit(0)
             else:
@@ -142,15 +143,15 @@ class BbcLoader(BaseLoader):
             print(f'No valid data returned for {url}')
             return
         
-
-        if parsed_data and 'results' in parsed_data:
+          
+        if parsed_data and 'new_search' in parsed_data:
             
-            for item in parsed_data['results']:
+            for item in parsed_data['new_search']['results']:
                 series_name = item.get('title', 'Unknown Title')  # BBC has a 'title' key for series names
                 
                 episode = {
                     'title': item.get('title', 'Unknown Title'),
-                    'url': f"{item.get('url', '')}",
+                    'url': f"{item.get('id', '')}",
                     'synopsis': item.get('synopsis', 'No synopsis available.')
                 }
                 self.add_episode(series_name, episode)
