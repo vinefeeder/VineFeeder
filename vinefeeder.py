@@ -14,12 +14,20 @@ from pretty import pretty_print
 from rich.console import Console
 from beaupy import select
 from parsing_utils import prettify
+import click
 
-
-PAGE_SIZE = 12
+PAGE_SIZE = 8  # size of beaupy pagination
 
 
 console = Console()
+
+
+"""
+Example usage:
+    python vinefeeder.py --help       # Show help text
+    python vinefeeder.py              # Launch VineFeeder GUI
+"""
+
 
 class VineFeeder(QWidget):
     
@@ -278,10 +286,16 @@ class VineFeeder(QWidget):
         self.search_url_entry.clear()
 
 
-if __name__ == "__main__":
+@click.command(help='VineFeeder: A tool to download videos from various streaming services.\
+\n\nExample usage:\n\n    python vinefeeder.py --help       # Show help text\n\n    python vinefeeder.py              # Launch VineFeeder GUI')
+def main():
     # say hello nicely
     pretty_print()
     app = QApplication(sys.argv)
     window = VineFeeder()
     window.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()

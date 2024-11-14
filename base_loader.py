@@ -224,6 +224,7 @@ class BaseLoader:
         -------
         None
         """
+
         if not category:  # no category
             category = self.category
         if 'Film' in category or 'Movie' in category:  # by defintion - single
