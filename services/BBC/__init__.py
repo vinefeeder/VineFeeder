@@ -115,11 +115,6 @@ class BbcLoader(BaseLoader):
         else:
             print(f"Unknown error when searching for {search_term}")
             
-        # prepare terminal for next run    
-    
-        print(f"[info] Finished downloading for {search_term}")
-        print("[info] Ready: waiting for service selection...")
-        #return self.clean_terminal()
         return
         
     def fetch_videos(self, search_term):
@@ -130,7 +125,7 @@ class BbcLoader(BaseLoader):
         params = {
             'q': search_term,
             'rights': 'web',
-            'mixin': 'live'
+            #'mixin': 'live'
         }
         try:
             html = self.get_data(url, self.headers, params)
