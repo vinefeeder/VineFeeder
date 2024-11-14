@@ -26,6 +26,18 @@ console = Console()
 Example usage:
     python vinefeeder.py --help       # Show help text
     python vinefeeder.py              # Launch VineFeeder GUI
+    In the GUI:-
+    	enter search text and select a service
+    or
+    	enter a video URL for direct download
+    	and select a service
+    or
+    	leave the seach box blank and select a service
+    	a further menu will appear in the terminal
+    After a download has finished and 'Ready!' appears
+    another service may be started.
+    
+    	 
 """
 
 
