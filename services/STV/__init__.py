@@ -4,6 +4,7 @@ import subprocess
 from rich.console import Console
 import sys, json
 import jmespath
+import re
 
 console = Console()
 
@@ -77,11 +78,6 @@ class StvLoader(BaseLoader):
         else:
             print(f"Unknown error when searching for {search_term}")
             
-        # prepare terminal for next run    
-    
-        print(f"[info] Finished downloading for {search_term}")
-        print("[info] Ready: waiting for service selection...")
-        #return self.clean_terminal()
         return
     	
     def fetch_videos(self, search_term):
@@ -301,6 +297,7 @@ class StvLoader(BaseLoader):
             # Extract brand items
            
             myjson = jmespath.search('props.pageProps.data.assets', init_data)
+        
 
             # jmespath is an efficient json parser that searches complex json
             # and, in this case, produces a simple dict from which
@@ -330,9 +327,21 @@ class StvLoader(BaseLoader):
         
         if found:
             ind = found.split(' ')[0]
-            url = f"https://playerstv.tv{res[int(ind)]['href']}"
+            url = f"https://player.stv.tv{res[int(ind)]['href']}"
             # url may be for series or single Film
             url = url.encode('utf-8', 'ignore').decode().strip()  # if has spaces!
+
+            # STV is unusual in that some urls from Documentary or Films are not valid
+            # for download but only for browsing.
+            # Check if url has an identifier,  
+            # if not, get it by calling receive() with index = 3 (greedy search)
+
+            test_id = url.split('/')[4]  # look for identifier ~4hgf
+            if re.match(r'[0-9]+', test_id) and len(test_id) == 4:
+                pass
+            else:
+                url = self.receive(3, url)
+            # if film/doc then process url and download
 
             # process short-cut download or do greedy search on url
             return self.process_received_url_from_category(url)
