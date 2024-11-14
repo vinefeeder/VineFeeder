@@ -78,12 +78,7 @@ class All4Loader(BaseLoader):
             
         else:
             print(f"Unknown error when searching for {search_term}")
-            
-        # prepare terminal for next run    
-    
-        print(f"[info] Finished downloading for {search_term}")
-        print("[info] Ready: waiting for service selection...")
-        #return self.clean_terminal()
+
         return
         
 

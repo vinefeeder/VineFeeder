@@ -340,7 +340,7 @@ class StvLoader(BaseLoader):
             if re.match(r'[0-9]+', test_id) and len(test_id) == 4:
                 pass
             else:
-                url = self.receive(3, url)
+                return self.receive(3, url)
             # if film/doc then process url and download
 
             # process short-cut download or do greedy search on url
