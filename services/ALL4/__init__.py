@@ -21,6 +21,7 @@ class All4Loader(BaseLoader):
         }
         super().__init__(headers)
 
+
     # entry point from Vinefeeder
     def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
    
