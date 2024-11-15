@@ -101,21 +101,43 @@ To add a new service:
         A config.yaml file with the media_dict. see examples in the existing services folder
         An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
         Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
-        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where video categories may be selected for view. Use some/all of these 
+        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where 
+        video categories may be selected for view. Use some/all of these 
         links to produce a media_dict of ( catergory: link, }
         There are 4 methods to implement
             receive
             fetch_videos
             second_fetch
             fetch_videos_by_category
-        Follow any channel as a model except BBC and U. Most sites provide json to describe their video content. Usually it is within a script.
+        Follow any channel as a model except BBC and U. Most sites provide json to describe their video content. 
+        Usually it is within a script.
         There are two methods to extract the json in parsing_utils depending on whether a script id is used or not.
-        Parsing utils uses XPATH as a locator syntax. ChatGPT will helpt to find the XPATH syntax if you give it the web page and tell it which javascript you need.
-        The BaseLoader class which your service must inherit, has methods to GET,  POST or return OPTIONS from the web. DO NOT USE OTHER METHODS THAN THESE PROVIDED.
-        **Receive**
+        Parsing utils uses XPATH as a locator syntax. ChatGPT will helpt to find the XPATH syntax if you give it 
+        the web page and tell it which javascript you need.
+        The BaseLoader class which your service must inherit, has methods to GET,  POST or return OPTIONS from the web. 
+        DO NOT USE OTHER METHODS THAN THESE PROVIDED.
+        RECEIVE
         I find it easier to start off implementing a keywork search from the GUI text box. Very few changes to an existing service receive method will be needed.
-        **Fetch_videos**
-        Fetch_videos is very service specific and will need to send data to a web-site and processs the response to provide an 'episode' list for display. Here 'episode' is a container for a web site's response of suggestion of a single video or series that match the search-word.
+        FETCH_VIDEOS
+        Fetch_videos is very service specific and will need to send data to a web-site and processs the response to provide an 'episode' list for display. 
+        Here 'episode' is a container for a web site's response of suggestion of a single video or series that match the search-word.
+        In the example below the parsed_data contains json from which we extract to add to BaseLoader's episode list via self.add_episode(series_name, episode)
+        if parsed_data and 'results' in parsed_data:
+            for item in parsed_data['results']:
+                series_name = item.get('brand', {}).get('websafeTitle', 'Unknown Series')
+                episode = {
+                    'title': item.get('brand', {}).get('title', 'Unknown Title'),
+                    'url': f"{item.get('brand', {}).get('href', '')}",
+                    'synopsis': item.get('brand', {}).get('description', 'No synopsis available.')
+                }
+                self.add_episode(series_name, episode)
+        SECOND_FETCH
+        Again the process is much the same as in fetch_videos() a web site has its html harvested, 
+        a script is extracted from which json is pulled using the facility methods in BaseLoader and parsing _utils.
+        FETCH_VIDEO_BY_CATEGORY
+        Displays the media_dict from congig.yaml - so put any category heading andn links in the new service config.
+        One a category is selected again parse json and follow an existing service for a model answer adjusting to suite the 
+        syntax required by our new service.  
 
 VineFeeder will dynamically detect and load the new services on the next start.
 
@@ -124,7 +146,8 @@ VineFeeder will dynamically detect and load the new services on the next start.
 If your use requirements are such that each video you download using Devine needs many different parameters to be passed to the downloader this tool may not meet your needs:
 see https://github.com/billybanana80/DevineGUI
 
-If however you are happy to set your download parameters once, variable for each service, the service's config.yaml, then this project may work well for you, and provide the front-end Devine has always lacked.
+If however you are happy to set your download parameters once, variable for each service, the service's config.yaml, 
+then this project may work well for you, and provide the front-end Devine has always lacked.
 
 **Contributing**
 
