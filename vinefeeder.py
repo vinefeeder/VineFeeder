@@ -15,6 +15,7 @@ from rich.console import Console
 from beaupy import select
 from parsing_utils import prettify
 import click
+import subprocess
 
 PAGE_SIZE = 8  # size of beaupy pagination
 
@@ -297,16 +298,77 @@ class VineFeeder(QWidget):
     def clear_search_box(self):
         self.search_url_entry.clear()
 
+@click.command()
+@click.option('--service-folder', type=str, default='services', help="Specify a service folder for adding **Devine** download options.")
+@click.option('--list-services', is_flag=True, help="List available services in the specified service folder.")
+def cli(service_folder, list_services):
+    """
+    python vinefeeder.py --help to show help\n
+    python vinefeeder.py --list-services  to list available services\n
+    python vinefeeder.py --service-folder <folder_name> to edit config.yaml\n\n
+    In the GUI:-
+    The text box will take  keyword(s) or a URL for single download for a selected service.
+    Or leave the text box blank for further options when the service button is clicked.\n
+    
+    """
+    # Ensure service-folder paths are handled correctly
+    if os.path.isabs(service_folder):
+        base_path = os.path.abspath(service_folder)
+    else:
+        base_path = os.path.abspath(os.path.join('services', service_folder)) if service_folder != 'services' else os.path.abspath('services')
 
-@click.command(help='VineFeeder: A tool to download videos from various streaming services.\
-\n\nExample usage:\n\n    python vinefeeder.py --help       # Show help text\n\n    python vinefeeder.py              # Launch VineFeeder GUI')
+    # Handle --list-services option
+    if list_services:
+        if not os.path.exists(base_path):
+            print(f"Error: The service folder '{base_path}' does not exist!")
+            return
+
+        print(f"Available services in '{base_path}':")
+        for service in os.listdir(base_path):
+            service_dir = os.path.join(base_path, service)
+            config_path = os.path.join(service_dir, 'config.yaml')
+            if os.path.isdir(service_dir) and os.path.exists(config_path):
+                print(f" - {service}")
+        return
+
+    # Default behavior: Open config.yaml
+    config_path = os.path.join(base_path, 'config.yaml')
+
+    # Check if the services folder exists
+    if not os.path.exists(base_path):
+        print(f"Error: The service folder '{base_path}' does not exist!")
+        return
+
+    # Check if config.yaml exists
+    if not os.path.exists(config_path):
+        print(f"Error: The file '{config_path}' does not exist! Please create it or specify a valid service folder.")
+        return
+
+    # Open the file in the system's default text editor
+    try:
+        if os.name == 'nt':  # For Windows
+            os.startfile(config_path)
+        elif os.name == 'posix':  # For Linux/Mac
+            subprocess.run(['xdg-open', config_path], check=True)
+        else:
+            print("Unsupported operating system.")
+    except Exception as e:
+        print(f"Failed to open the file: {e}")
+
 def main():
-    # say hello nicely
-    pretty_print()
-    app = QApplication(sys.argv)
-    window = VineFeeder()
-    window.show()
-    sys.exit(app.exec())
+    """
+    Entry point for the script. Decides between GUI launch and CLI behavior.
+    """
+    if len(sys.argv) == 1:
+        # say hello nicely
+        pretty_print()
+        app = QApplication(sys.argv)
+        window = VineFeeder()
+        window.show()
+        sys.exit(app.exec())
+    else:
+        # CLI arguments passed, handle them with click
+        cli()
 
 
 if __name__ == "__main__":

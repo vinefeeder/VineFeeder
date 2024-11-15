@@ -39,11 +39,7 @@ def pretty_print():
 
     # 
     instructions = (
-        f"[{catppuccin_mocha['gray']}]Search will take keyword(s), " "\n"
-        "or a URL for direct download, " "\n"
-        "or leave Search empty and select \na service to show an action menu." "\n"
-        
-    )
+        f"[{catppuccin_mocha['gray']}]python vinefeeder.py --help for options[/]\n")
 
     # Display the panel
     panel = Panel(
