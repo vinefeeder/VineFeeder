@@ -176,9 +176,9 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            console.print(create_clean_panel((f"There are {max_series} series within this title.\nYou may choose from 1 to {max_series}.")))
+            console.print(create_clean_panel((f"There are {max_series} series for {series_name.replace('-', ' ').title()}.\nYou may choose from 1 to {max_series}.")))
         else:  # Non-contiguous series
-            console.print(create_clean_panel(("Series are non-contiguous:")))
+            console.print(create_clean_panel((f"Data for {series_name.replace('-', ' ').title()}\nSeries are non-contiguous:")))
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         
