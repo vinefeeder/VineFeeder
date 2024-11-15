@@ -117,11 +117,16 @@ To add a new service:
         The BaseLoader class which your service must inherit, has methods to GET,  POST or return OPTIONS from the web. 
         DO NOT USE OTHER METHODS THAN THESE PROVIDED.
         RECEIVE
-        I find it easier to start off implementing a keywork search from the GUI text box. Very few changes to an existing service receive method will be needed.
+        I find it easier to start off implementing a keywork search from the GUI text box. Very few changes to an existing 
+        service receive method will be needed.
         FETCH_VIDEOS
-        Fetch_videos is very service specific and will need to send data to a web-site and processs the response to provide an 'episode' list for display. 
-        Here 'episode' is a container for a web site's response of suggestion of a single video or series that match the search-word.
-        In the example below the parsed_data contains json from which we extract to add to BaseLoader's episode list via self.add_episode(series_name, episode)
+        Fetch_videos is very service specific and will need to send data to a web-site and processs the response to provide 
+        an 'episode' list for display. 
+        Here 'episode' is a container for a web site's response of suggestion of a single video or series that match the 
+        search-word.
+        In the example below the parsed_data contains json from which we extract to add to BaseLoader's episode list via 
+        self.add_episode(series_name, episode)
+        
         if parsed_data and 'results' in parsed_data:
             for item in parsed_data['results']:
                 series_name = item.get('brand', {}).get('websafeTitle', 'Unknown Series')
@@ -131,6 +136,7 @@ To add a new service:
                     'synopsis': item.get('brand', {}).get('description', 'No synopsis available.')
                 }
                 self.add_episode(series_name, episode)
+                
         SECOND_FETCH
         Again the process is much the same as in fetch_videos() a web site has its html harvested, 
         a script is extracted from which json is pulled using the facility methods in BaseLoader and parsing _utils.
