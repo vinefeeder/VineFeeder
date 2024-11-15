@@ -111,16 +111,21 @@ To add a new service:
             fetch_videos_by_category
         Follow any channel as a model except BBC and U. Most sites provide json to describe their video content. 
         Usually it is within a script.
-        There are two methods to extract the json in parsing_utils depending on whether a script id is used or not.
-        Parsing utils uses XPATH as a locator syntax. ChatGPT will helpt to find the XPATH syntax if you give it 
-        the web page and tell it which javascript you need.
-        The BaseLoader class which your service must inherit, has methods to GET,  POST or return OPTIONS from the web. 
+        There are two methods to extract the json in parsing_utils depending on whether a script id
+        is used or not.
+        Parsing utils uses XPATH as a locator syntax. 
+        ChatGPT will helpt to find the XPATH syntax if you give it the web page and tell it 
+        which javascript you need.
+        The BaseLoader class which your service must inherit, has methods to GET,  POST or 
+        return OPTIONS from the web. 
         DO NOT USE OTHER METHODS THAN THESE PROVIDED.
         
         RECEIVE
-        I find it easier to start off implementing a keyword search from the GUI text box. Very few changes to an existing 
-        service receive method will be needed. Copy one and adjust. Note the use of inx (index) to help specify action. 
-        Vinefeeder's GUI calls the service, passing parameters in the process such as a service's Devine download options. 
+        I find it easier to start off implementing a keyword search from the GUI text box. 
+        Very few changes to an existing service receive method will be needed. 
+        Copy one and adjust. Note the use of inx (index) to help specify action. 
+        Vinefeeder's GUI calls the service, passing parameters in the process such as a 
+        service's Devine download options. 
         By definiton some receive() parameters may be empty.
         
         FETCH_VIDEOS
