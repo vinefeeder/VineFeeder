@@ -4,6 +4,10 @@ from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
 import os, sys, time
+from rich.console import Console
+from pretty import create_clean_panel  # Adjust the path as needed
+
+console = Console()       
 
 class BaseLoader:
     def __init__(self, headers):
@@ -25,7 +29,7 @@ class BaseLoader:
         self.series_data = {}  
         self.final_episode_data = [] 
         self.browse_video_list = []
-        self.console = Console()
+        
         self.category = None
 
     def clear_series_data(self):
@@ -139,6 +143,8 @@ class BaseLoader:
                 idx = row * num_columns + col 
                 if idx < len(episode_series_numbers): 
                     print(f"{episode_series_numbers[idx]:<3}", end=' ')
+                    #console.print(create_clean_panel(f"{episode_series_numbers[idx]:<3}"))
+                    
             print() 
 
 
@@ -170,9 +176,9 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            print(f"There are {max_series} series within this title.\nYou may choose from 1 to {max_series}.")
+            console.print(create_clean_panel((f"There are {max_series} series within this title.\nYou may choose from 1 to {max_series}.")))
         else:  # Non-contiguous series
-            print("Series are non-contiguous:")
+            console.print(create_clean_panel(("Series are non-contiguous:")))
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         
@@ -245,6 +251,7 @@ class BaseLoader:
             # greedy search
             self.receive(0, url)
             return
+        
 
     def clean_terminal(self):
         # clear for next use

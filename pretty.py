@@ -52,5 +52,16 @@ def pretty_print():
     )
 
     console.print(panel)
-
+    
+def create_clean_panel(content, title=""):
+    """Create and return a clean panel with specified content and optional title."""
+    panel = Panel(
+        content,
+        title=title,
+        border_style=catppuccin_mocha["blue"],
+        padding=(1, 1, 1, 1),
+        style=f"on {catppuccin_mocha['bg']}",
+        expand=False
+    )
+    return panel
 
