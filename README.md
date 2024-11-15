@@ -118,7 +118,7 @@ To add a new service:
         DO NOT USE OTHER METHODS THAN THESE PROVIDED.
         
         RECEIVE
-        I find it easier to start off implementing a keywork search from the GUI text box. Very few changes to an existing 
+        I find it easier to start off implementing a keyword search from the GUI text box. Very few changes to an existing 
         service receive method will be needed. Copy one and adjust. Note the use of inx (index) to help specify action. 
         Vinefeeder's GUI calls the service, passing parameters in the process such as a service's Devine download options. 
         By definiton some receive() parameters may be empty.
