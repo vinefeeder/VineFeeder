@@ -116,9 +116,13 @@ To add a new service:
         the web page and tell it which javascript you need.
         The BaseLoader class which your service must inherit, has methods to GET,  POST or return OPTIONS from the web. 
         DO NOT USE OTHER METHODS THAN THESE PROVIDED.
+        
         RECEIVE
         I find it easier to start off implementing a keywork search from the GUI text box. Very few changes to an existing 
-        service receive method will be needed.
+        service receive method will be needed. Copy one and adjust. Note the use of inx (index) to help specify action. 
+        Vinefeeder's GUI calls the service, passing parameters in the process such as a service's Devine download options. 
+        By definiton some receive() parameters may be empty.
+        
         FETCH_VIDEOS
         Fetch_videos is very service specific and will need to send data to a web-site and processs the response to provide 
         an 'episode' list for display. 
@@ -140,6 +144,7 @@ To add a new service:
         SECOND_FETCH
         Again the process is much the same as in fetch_videos() a web site has its html harvested, 
         a script is extracted from which json is pulled using the facility methods in BaseLoader and parsing _utils.
+        
         FETCH_VIDEO_BY_CATEGORY
         Displays the media_dict from congig.yaml - so put any category heading andn links in the new service config.
         One a category is selected again parse json and follow an existing service for a model answer adjusting to suite the 
