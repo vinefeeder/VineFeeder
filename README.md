@@ -159,7 +159,8 @@ VineFeeder will dynamically detect and load the new services on the next start.
 
 **Special Devine Commands**
 
-If your use requirements are such that each video you download using Devine needs many different parameters to be passed to the downloader this tool may not meet your needs:
+If your use requirements are such that each video you download using Devine needs many different parameters to be passed 
+to the downloader, and set different each time, this tool may not meet your needs:
 see https://github.com/billybanana80/DevineGUI
 
 If however you are happy to set your download parameters once, variable for each service, the service's config.yaml, 
