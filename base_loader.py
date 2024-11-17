@@ -125,7 +125,11 @@ class BaseLoader:
         try:
             mysorted_list = sorted({int(ep['series_no']) for ep in self.series_data[series_name]})
         except Exception as e:
-            print(f"Error: {e}")    
+            # chars in series number cannot be parsed to an int
+            unsorted_list = [ep['series_no'] for ep in self.series_data[series_name]]
+            return unsorted_list
+            
+            
         return mysorted_list
     
     def display_non_contiguous_series(self, episode_series_numbers):
