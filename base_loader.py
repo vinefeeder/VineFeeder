@@ -29,8 +29,8 @@ class BaseLoader:
         self.series_data = {}  
         self.final_episode_data = [] 
         self.browse_video_list = []
-        
         self.category = None
+        
 
     def clear_series_data(self):
         self.series_data={}
@@ -134,23 +134,28 @@ class BaseLoader:
     
     def display_non_contiguous_series(self, episode_series_numbers):
         """
-        Display the non-contiguous series numbers in a grid format with 4 columns.
+        Display the non-contiguous series numbers in a grid format with 7 columns.
         This is used when the series numbers are not contiguous, so the user can
         easily see which series numbers are available.
         """
-        
         num_columns = 7
         num_rows = (len(episode_series_numbers) + num_columns - 1) // num_columns
 
+        # Create a grid-like string to display in the panel
+        grid_content = ""
         for row in range(num_rows):
             for col in range(num_columns):
-                idx = row * num_columns + col 
-                if idx < len(episode_series_numbers): 
-                    print(f"{episode_series_numbers[idx]:<3}", end=' ')
-                    #console.print(create_clean_panel(f"{episode_series_numbers[idx]:<3}"))
-                    
-            print() 
+                idx = row * num_columns + col
+                if idx < len(episode_series_numbers):
+                    grid_content += f"{episode_series_numbers[idx]:<3} "
+                else:
+                    grid_content += "    "  # Add spacing for alignment
+            grid_content += "\n"  # Add a newline after each row
 
+        # Create a panel with the grid content
+
+         
+        console.print(create_clean_panel(grid_content.strip(), title="Series Numbers"))
 
     def prepare_series_for_episode_selection(self, series_name):
         """
@@ -180,13 +185,13 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            console.print(create_clean_panel((f"There are {max_series} series for {series_name.replace('-', ' ').title()}.\nYou may choose from 1 to {max_series}.")))
+            console.print(create_clean_panel((f"There are {max_series} series for {series_name.replace('-', ' ').title()}.\nYou may choose from 1 to {max_series}."), title="info"))
         else:  # Non-contiguous series
-            console.print(create_clean_panel((f"Data for {series_name.replace('-', ' ').title()}\nSeries are non-contiguous:")))
+            console.print(create_clean_panel((f"Data for {series_name.replace('-', ' ').title()}\nSeries are non-contiguous:"), title="info"))
             self.display_non_contiguous_series(self.episode_series_numbers)
 
         
-        user_input = input("\nHint:- 2, 3, 5..13\n'all' or '0' for all-series: ? ")
+        user_input = input("Series to download? ")
         print('\n')
     
         selected_series = []

@@ -37,6 +37,9 @@ Example usage:
     	a further menu will appear in the terminal
     After a download has finished and 'Ready!' appears
     another service may be started.
+    In the terminal:-
+    	enter the number(s) of the service to download
+        see
     
     	 
 """
@@ -298,18 +301,22 @@ class VineFeeder(QWidget):
     def clear_search_box(self):
         self.search_url_entry.clear()
 
+
+
 @click.command()
 @click.option('--service-folder', type=str, default='services', help="Specify a service folder for adding **Devine** download options.")
 @click.option('--list-services', is_flag=True, help="List available services in the specified service folder.")
-def cli(service_folder, list_services):
+@click.option('--select-series', is_flag=True, help="How to select which series you need from those available")
+def cli(service_folder, list_services, select_series):
     """
     python vinefeeder.py --help to show help\n
     python vinefeeder.py --list-services  to list available services\n
     python vinefeeder.py --service-folder <folder_name> to edit config.yaml\n\n
     In the GUI:-
-    The text box will take  keyword(s) or a URL for single download for a selected service.
+    The text box will take keyword(s) or a URL for single download for a selected service.
     Or leave the text box blank for further options when the service button is clicked.\n
-    
+    Using the Terminal:-
+    python vinefeeder.py --select-series
     """
     # Ensure service-folder paths are handled correctly
     if os.path.isabs(service_folder):
@@ -329,6 +336,13 @@ def cli(service_folder, list_services):
             config_path = os.path.join(service_dir, 'config.yaml')
             if os.path.isdir(service_dir) and os.path.exists(config_path):
                 print(f" - {service}")
+        return
+
+    # Handle --select-series option
+    if select_series:
+        print("Series Selection:")
+        
+        print("Check the available series.\nUse, for example,\n1,3,7 or a range 3..8,\nor 'all' or 0 to show all series.") 
         return
 
     # Default behavior: Open config.yaml
@@ -354,6 +368,7 @@ def cli(service_folder, list_services):
             print("Unsupported operating system.")
     except Exception as e:
         print(f"Failed to open the file: {e}")
+
 
 def main():
     """
