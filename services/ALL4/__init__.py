@@ -131,7 +131,7 @@ class All4Loader(BaseLoader):
             url = self.get_selected_url(selected)
         try:
             myhtml = self.get_data(url=url)
-        except:
+        except Exception:
             print(f"No valid data at {url} found.\n Exiting")
             sys.exit(0)
 
@@ -144,6 +144,9 @@ class All4Loader(BaseLoader):
             
             # Go through each episode in the selected series
             episodes = parsed_data['initialData']['brand'].get('episodes', [])
+            if not episodes:
+                print(f"No episodes found for {series_name}\nThis is quite common with Channel 4. Exiting.")
+                return
             for item in episodes:
                 try:
                     episode = {
