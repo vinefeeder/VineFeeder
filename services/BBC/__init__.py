@@ -80,7 +80,7 @@ class BbcLoader(BaseLoader):
            
             search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
             options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', options_list,'iP', search_term])  # url
+            subprocess.run(['devine', 'dl', *options_list,'iP', search_term])  # url
             return
 
         # keyword search
@@ -129,12 +129,12 @@ class BbcLoader(BaseLoader):
         }
         try:
             html = self.get_data(url, self.headers, params)
-            if not 'new_search' in html:
+            if  'new_search' not in html:
                 print('Nothing found for that search; try again.')
                 sys.exit(0)
             else:
                 parsed_data = parse_json(html)  # to json
-        except:
+        except Exception:
             print(f'No valid data returned for {url}')
             return
         
@@ -207,7 +207,7 @@ class BbcLoader(BaseLoader):
             except KeyError:
                 print(f"No data found for {url}")
                 sys.exit(1)
-            except:
+            except Exception:
                 print(f"No episodes currently available for {url}")
                 print(f"Try again but be sure to use the series utmost top level url!")
                 sys.exit(1)
@@ -223,7 +223,7 @@ class BbcLoader(BaseLoader):
                         'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
                         'synopsis': item['synopses']['small']  or None,
                     }
-                except:
+                except Exception:
                     try:
                         episode = {
                             'series_no': 0,  # special or one-off'

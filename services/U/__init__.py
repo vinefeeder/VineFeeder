@@ -93,9 +93,12 @@ class ULoader(BaseLoader):
             title: name,
             slug: slug,
             synopsis: synopsis
+            type: type
             } """,  parsed_data)
 
         for item in res:
+            if item['type'] == 'COLLECTION':
+                continue  # Skip to the next iteration if type is COLLECTION 
             title = item['title']
             slug = item['slug']
             synopsis = item['synopsis']
@@ -128,19 +131,22 @@ class ULoader(BaseLoader):
             url = self.get_selected_url(selected)
         try: 
             myhtml = self.get_data(url)
-        except:
+        except Exception:
             print(f"No valid data at {url} found.\n Exiting")
             sys.exit(0)
         parsed_data = self.parse_data(myhtml)
         '''console.print_json(data=parsed_data)
         f = open('u.json', 'w')
         f.write(json.dumps(parsed_data))
-        f.close()'''
+        f.close()
         self.clear_series_data()  # Clear existing series data
-
+'''
         
         
         series_ids=[series['id'] for series in parsed_data['series']]
+        if not series_ids:
+            print(f"No series data found at {url}.\n Exiting")
+            return
 
         # Go through each episode in the selected series
         for series_id in series_ids:
