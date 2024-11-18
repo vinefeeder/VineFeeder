@@ -86,7 +86,10 @@ To open a config.yaml for a service:-
     python vinefeeder.py --service-folder ALL4
     
 Edit the line sarting options. Use exactly the same syntax as devine would require on its command line
-![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
+
+Image
+	![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
+
 Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
 
 Services are displayed in alphabetical order for easy access. From there, you can:
