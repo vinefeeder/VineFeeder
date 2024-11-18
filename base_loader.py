@@ -6,6 +6,7 @@ from abc import abstractmethod
 import os, sys, time
 from rich.console import Console
 from pretty import create_clean_panel  # Adjust the path as needed
+from pretty import catppuccin_mocha
 
 console = Console()       
 
@@ -152,11 +153,11 @@ class BaseLoader:
                     grid_content += "    "  # Add spacing for alignment
             grid_content += "\n"  # Add a newline after each row
 
-        # Create a panel with the grid content
-
-         
-        console.print(create_clean_panel(grid_content.strip(), title="Series Numbers"))
-
+        # Create a panel with the grid content 
+        #console.print(create_clean_panel(f"[{catppuccin_mocha['text2']}]{grid_content.strip()}", title="Series Numbers"))
+        
+        return grid_content.strip()
+    
     def prepare_series_for_episode_selection(self, series_name):
         """
         Prepare the series data for episode selection and display the final episode list.
@@ -175,7 +176,7 @@ class BaseLoader:
         try:
             self.episode_series_numbers = self.get_episodes_series_numbers(series_name)
             
-        except:
+        except Exception:
             print(f"No data found")
             self.clean_terminal()
             sys.exit(0)
@@ -185,10 +186,12 @@ class BaseLoader:
 
         if  episode_series_numbers_int == list(range(1, max(episode_series_numbers_int) + 1)):  # Contiguous series numbers
             max_series = max(episode_series_numbers_int)
-            console.print(create_clean_panel((f"There are {max_series} series for {series_name.replace('-', ' ').title()}.\nYou may choose from 1 to {max_series}."), title="info"))
+            console.print(create_clean_panel((f"[{catppuccin_mocha['text2']}]There are {max_series} series for {series_name.replace('-', ' ').title()}.\nYou may choose from 1 to {max_series}."), title="info"))
         else:  # Non-contiguous series
-            console.print(create_clean_panel((f"Data for {series_name.replace('-', ' ').title()}\nSeries are non-contiguous:"), title="info"))
-            self.display_non_contiguous_series(self.episode_series_numbers)
+            
+            grid_content = self.display_non_contiguous_series(self.episode_series_numbers)
+            console.print(create_clean_panel((f"[{catppuccin_mocha['text2']}]Data for {series_name.replace('-', ' ').title()}\nSeries are non-contiguous:\n{grid_content}"), title="info"))
+
 
         
         user_input = input("Series to download? ")

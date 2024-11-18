@@ -2,7 +2,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 
-
+# thanks rlaphoenix for catppuccin_mocha color scheme
 
 
 # Define the Catppuccin Mocha color scheme
