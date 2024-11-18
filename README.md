@@ -79,30 +79,40 @@ As set-up on start it will run with zero modification. There are six UK services
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
+
+Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
 Each service's config.yaml may have an 'options:' entry just add the string you would use with devine.
 
 To open a config.yaml for a service:-
 
     python vinefeeder.py --service-folder ALL4
     
-Edit the line sarting options. Use exactly the same syntax as devine would require on its command line
+Edit the line starting 'options'. Use exactly the same syntax as Devine would require on its command line
 
 Image
 	![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
 
-Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
 
 Services are displayed in alphabetical order for easy access. From there, you can:
 
     Browse Categories: Select a media category to view available content.
     Search by URL: Input a direct URL to download media content.
     Download Media: Select a media item to start the download process.
+    
 **Services**
 
 Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
 Other services: awaiting conributors!!
 
 **Custom Services**
+
+If you feel moderately confident with python, then writing a new service to allow Devine 
+to be run more interactively, is relatively straighforward. Most of the processes for
+downloading, parsing and displaying for selection form part of the base functions and
+are already written.
+
+Any new service will need an __init_.py to be written and to implement just four 
+methods. 
 
 To add a new service:
 
