@@ -5,7 +5,7 @@ from rich.console import Console
 from abc import abstractmethod
 import os, sys, time
 from rich.console import Console
-from pretty import create_clean_panel  # Adjust the path as needed
+from pretty import create_clean_panel  
 from pretty import catppuccin_mocha
 
 console = Console()       
@@ -79,7 +79,8 @@ class BaseLoader:
 
     def add_final_episode(self, episode):
         """build episode list for final selction for download"""
-        self.final_episode_data.append(episode)
+        if episode not in self.final_episode_data:  # Ensure no duplicates
+            self.final_episode_data.append(episode)    
 
     def get_series(self, series_name=None):
         """Return all episodes from a specific series or all series data."""
@@ -90,7 +91,7 @@ class BaseLoader:
     def display_series_list(self):
         """Use beaupy to list all series and allow user to select one."""
         series_list = list(self.series_data.keys())
-        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="pink1", page_size=12, pagination=True)
+        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="red", page_size=12, pagination=True)
         return selected_series
 
     def display_episode_list(self, series_name):
@@ -153,8 +154,6 @@ class BaseLoader:
                     grid_content += "    "  # Add spacing for alignment
             grid_content += "\n"  # Add a newline after each row
 
-        # Create a panel with the grid content 
-        #console.print(create_clean_panel(f"[{catppuccin_mocha['text2']}]{grid_content.strip()}", title="Series Numbers"))
         
         return grid_content.strip()
     
@@ -276,11 +275,6 @@ class BaseLoader:
             #os.system('cls')
             print("Ready!")
             return
-        
-            
-    
-              
-
         
 
     ### methods that must be implemented by a service
