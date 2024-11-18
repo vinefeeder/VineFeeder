@@ -53,20 +53,16 @@ First be sure Devine works correctly to your liking, then, for VineFeeder,
 
 
 **Setup**
+if you run Devine in a specific python environment, first start that environment before installing VineFeeder
 
 Clone the repository:
 With bash or a Window's Terminal
 
     git clone https://github.com/your-username/vinefeeder.git
-    cd vinefeeder
+    cd VineFeeder
+    pip install -r requirements.txt
 
-Each streaming service should be placed in the services folder, with each service having its own folder that contains:
 
-+ A config.yaml file with the service configuration.
-+ An __init__.py file defining the service's loader class (e.g., All4Loader).  Note All4 is fully implemented and should be used as a example.
-
-Modify the config.yaml file for each service to include its media_dict, which defines the categories and URLs used for browsing.
-Modify Devine's download options under the config.yaml sub-heading of options enter a string of options as you would use on the command line with Devine
 
 **Usage**
 
@@ -74,12 +70,21 @@ Run the application by executing the main script:
 
 With bash or a Window's Terminal
 
-    python vinefeeder.py
+    python vinefeeder.py  
+    or
+    python vinefeeder.py -help
+
+As set-up on start it will run with zero modification. There are six UK services active.
 
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
 Each service's config.yaml may have an 'options:' entry just add the string you would use with devine.
+
+To open a config.yaml for a service:-
+    python vinefeeder.py ----service-folder ALL4
+Edit the line sarting options. Use exactly the same syntax as devine would require on its command line
+![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
 Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
 
 Services are displayed in alphabetical order for easy access. From there, you can:
@@ -98,12 +103,14 @@ To add a new service:
 
     Create a new folder for the service inside the services directory.
     Add the following:
-        A config.yaml file with the media_dict. see examples in the existing services folder
+        A config.yaml file with the media_dict. see examples in the existing services folder.
+        
         An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
         Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
         Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where 
         video categories may be selected for view. Use some/all of these 
         links to produce a media_dict of ( catergory: link, }
+        
         There are 4 methods to implement
             receive
             fetch_videos
@@ -115,7 +122,7 @@ To add a new service:
         is used or not.
         Parsing utils uses XPATH as a locator syntax. 
         ChatGPT will helpt to find the XPATH syntax if you give it the web page and tell it 
-        which javascript you need.
+        which javascript you need.XPATH is considerably faster than alternates such as bs4.
         The BaseLoader class which your service must inherit, has methods to GET,  POST or 
         return OPTIONS from the web. 
         DO NOT USE OTHER METHODS THAN THESE PROVIDED.
@@ -180,7 +187,7 @@ Images
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder5.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder6.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder7.png)
-    ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
+    
 
 **License**
 
