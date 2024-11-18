@@ -83,7 +83,7 @@ Each service's config.yaml may have an 'options:' entry just add the string you 
 
 To open a config.yaml for a service:-
 
-    python vinefeeder.py ----service-folder ALL4
+    python vinefeeder.py --service-folder ALL4
     
 Edit the line sarting options. Use exactly the same syntax as devine would require on its command line
 ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder8.png)
