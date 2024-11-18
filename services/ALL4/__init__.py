@@ -12,7 +12,18 @@ console = Console()
 
 class All4Loader(BaseLoader):
     def __init__(self):
-        self.options = ''
+        """
+        Initialize the All4Loader class with the provided headers.
+
+        Parameters:
+            None
+
+        Attributes:
+            options (str): Global options; later taken from service config.yaml
+            headers (dict): Global headers; may be overridden
+        """
+        self.options = ''  
+        
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -48,10 +59,10 @@ class All4Loader(BaseLoader):
         self.options = options
         # direct download
         if 'http' in search_term and inx == 1:
-            #print(['devine', 'dl', 'ALL4', search_term])
+            
             options_list = split_options(self.options)
             subprocess.run(['devine', 'dl', *options_list, 'ALL4', search_term])  # url
-            #self.clean_terminal()
+            
             return
 
         # keyword search
@@ -59,7 +70,7 @@ class All4Loader(BaseLoader):
             print(f"Searching for {search_term}")
             return (self.fetch_videos(search_term))  
         
-        # ALTERNATIVES BELOW FROM POP-UP MENU  
+        #  POP-UP MENU alternates:  
         elif inx == 0:  
             # from greedy-search OR selecting Browse-category
             # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
@@ -70,6 +81,7 @@ class All4Loader(BaseLoader):
             # fetch_videos_by_category search_term may have other params to remove
             if '?' in search_term:  
                 search_term = search_term.split('?')[0].replace('-',' ')
+
             return (self.fetch_videos(search_term))
         
         elif 'http' in search_term and inx == 2:
@@ -84,7 +96,10 @@ class All4Loader(BaseLoader):
 
 
     def fetch_videos(self, search_term):
-        """Fetch videos from Channel 4 using a search term."""
+        """Fetch videos from Channel 4 using a search term.
+            Here the first search for series titles matches all or part of search_term.
+            The function will prepare the series data, matching the search term for display.
+        """
         # returns json as type String
         url = f"https://all4nav.channel4.com/v1/api/search?q={search_term}&limit=100"
         try:
@@ -94,7 +109,7 @@ class All4Loader(BaseLoader):
                 sys.exit(0)
             else:
                 parsed_data = self.parse_data(html)  # to json
-        except:
+        except Exception:
             print(f'No valid data returned for {url}')
             
             return
@@ -109,7 +124,9 @@ class All4Loader(BaseLoader):
                     'synopsis': item.get('brand', {}).get('description', 'No synopsis available.')
                 }
                 self.add_episode(series_name, episode)
-
+        else:
+            print(f'No valid data returned for {url}')
+            return None
         # List series and episodes using beaupy
         selected_series = self.display_series_list()
         if selected_series:

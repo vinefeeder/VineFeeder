@@ -12,7 +12,6 @@ from beaupy import select
 import threading
 from pretty import pretty_print
 from rich.console import Console
-from beaupy import select
 from parsing_utils import prettify
 import click
 import subprocess
@@ -311,12 +310,12 @@ def cli(service_folder, list_services, select_series):
     """
     python vinefeeder.py --help to show help\n
     python vinefeeder.py --list-services  to list available services\n
-    python vinefeeder.py --service-folder <folder_name> to edit config.yaml\n\n
+    python vinefeeder.py --service-folder <folder_name> to edit config.yaml
+    python vinefeeder.py --select-series  list, range or 'all'\n\n
     In the GUI:-
-    The text box will take keyword(s) or a URL for single download for a selected service.
+    The text box will take keyword(s) or a URL for download from a button selected service.
     Or leave the text box blank for further options when the service button is clicked.\n
-    Using the Terminal:-
-    python vinefeeder.py --select-series
+   
     """
     # Ensure service-folder paths are handled correctly
     if os.path.isabs(service_folder):
