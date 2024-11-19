@@ -72,7 +72,7 @@ class All4Loader(BaseLoader):
         
         #  POP-UP MENU alternates:  
         elif inx == 0:  
-            # from greedy-search OR selecting Browse-category
+            # entry from greedy-search OR selecting Browse-category
             # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
 
             # need a search keyword(s) from url 
@@ -97,7 +97,7 @@ class All4Loader(BaseLoader):
 
     def fetch_videos(self, search_term):
         """Fetch videos from Channel 4 using a search term.
-            Here the first search for series titles matches all or part of search_term.
+            Here the first search for series titles that match all or part of search_term.
             The function will prepare the series data, matching the search term for display.
         """
         # returns json as type String
@@ -106,7 +106,7 @@ class All4Loader(BaseLoader):
             html = self.get_data(url)
             if 'No Matches' in html:
                 print('Nothing found for that search; try again.')
-                sys.exit(0)
+                return
             else:
                 parsed_data = self.parse_data(html)  # to json
         except Exception:
@@ -150,7 +150,7 @@ class All4Loader(BaseLoader):
             myhtml = self.get_data(url=url)
         except Exception:
             print(f"No valid data at {url} found.\n Exiting")
-            sys.exit(0)
+            return
 
         parsed_data = extract_params_json(myhtml)
         self.clear_series_data()  # Clear existing series data

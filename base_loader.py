@@ -69,7 +69,7 @@ class BaseLoader:
         """Parse HTML data into JSON format."""
         return parse_json(html)
     
-    def normalize_episode(self,episode):
+    def normalize_episode(self, episode):
         """
         Normalize the episode dictionary for comparison.
         Focus on series_no, title, and synopsis.
@@ -79,8 +79,6 @@ class BaseLoader:
             episode.get('title', '').strip().lower(),
             episode.get('synopsis', '').strip().lower()
         )
-
-
 
     def add_episode_remove_duplicates(self, series_name, episode):
         """Add an episode to the series in memory.
@@ -97,8 +95,7 @@ class BaseLoader:
         if all(self.normalize_episode(existing) != normalized_episode for existing in self.series_data[series_name]):
             self.series_data[series_name].append(episode)
 
-
-
+        return
 
     def add_episode(self, series_name, episode):
         """Add an episode to the series in memory.
@@ -126,7 +123,7 @@ class BaseLoader:
     def display_series_list(self):
         """Use beaupy to list all series and allow user to select one."""
         series_list = list(self.series_data.keys())
-        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="red", page_size=12, pagination=True)
+        selected_series = select(series_list,  preprocessor=lambda val: prettify(val),  cursor="🢧", cursor_style="pink1", page_size=12, pagination=True)
         return selected_series
 
     def display_episode_list(self, series_name):

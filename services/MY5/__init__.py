@@ -4,6 +4,7 @@ from rich.console import Console
 import sys  
 from parsing_utils import parse_json, split_options
 import subprocess
+import re
 
 console = Console()
 
@@ -61,7 +62,17 @@ class My5Loader(BaseLoader):
 
             # need a search keyword(s) from url 
             # split and select series name
-            search_term = search_term.split('/')[3].replace('-',' ') 
+            if 'show' in search_term:
+
+                match = re.search(r'\/show\/([a-z-]+)', search_term)
+
+                if match:
+                    search_term = str(match.group(1))
+                    search_term = search_term.split('-')[:-1]
+                    search_term = str(' '.join(search_term)).replace('-',' ')
+               
+            else:
+                search_term = search_term.split('/')[3].replace('-',' ')
             # fetch_videos_by_category search_term may have other params to remove
             if '/' in search_term:  
                 search_term = search_term.split('/')[0].replace('-',' ')

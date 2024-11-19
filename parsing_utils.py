@@ -35,11 +35,10 @@ def extract_params_json(html, discriminator="__PARAMS__", index=0):
               was found, or if the JSON could not be parsed.
     """
     try:
-        # Use Scrapy's Selector to locate the script tag containing "__PARAMS__"
+        # Using Scrapy Selector to locate the script tag containing "__PARAMS__"
         sel = Selector(text=html)
 
         # Extract the script content that contains 'window.__PARAMS__'
-        #selected_script = sel.xpath(f'//script[contains(text(), "{discriminator}")]/text()').extract_first()
 
         scripts = sel.xpath(f'//script[contains(text(), "{discriminator}")]/text()')
         
@@ -88,11 +87,11 @@ def extract_script_with_id_json(html:str, discriminator:str, index:int=0):
               was found, or if the JSON could not be parsed.
     """
     try:
-        # Use Scrapy's Selector to locate the script tag containing "__PARAMS__"
+        
         sel = Selector(text=html)
 
-        # Extract the script content that contains 'window.__PARAMS__'
-        #selected_script = sel.xpath(f'//script[contains(text(), "{discriminator}")]/text()').extract_first()
+        # Extract the script content that contains discriminator
+       
         # xpath = '//script[@id="__NEXT_DATA__" and @type="application/json"]/text()'
         scripts = sel.xpath(f'//script[@id="{discriminator}" and @type="application/json"]/text()')
         
@@ -133,13 +132,16 @@ def extract_with_xpath(html, pattern, delete_pattern=None, index=0):
 
     Args:
         html (str): The HTML content from which to extract the JSON data.
+        pattern (str): The XPath pattern to use to locate the script tag.
+        delete_pattern (str): The pattern to use to remove the content of the script tag.
+        index (int): The index of the script tag to use.
 
     Returns:
         dict: The parsed JSON data, or None if no __PARAMS__ variable 
               was found, or if the JSON could not be parsed.
     """
     try:
-        # Use Scrapy's Selector to locate the script tag containing "__PARAMS__"
+        # Use Scrapy Selector to locate the script tag containing "__PARAMS__"
         sel = Selector(text=html)
 
         # Extract the script content that contains 'window.__PARAMS__'
