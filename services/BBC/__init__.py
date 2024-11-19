@@ -14,9 +14,8 @@ from scrapy.selector import Selector
 console = Console()
 
 """
-Note: The BBC is outrageously difficult. Do not use this as a template for other services!
+Note: The BBC is outrageously awkward. Do not use this as a template for other services!
 """
-
 
 
 class BbcLoader(BaseLoader):
@@ -311,12 +310,19 @@ class BbcLoader(BaseLoader):
             myjson
         )
         #console.print_json(data=res)
+        
+        seen_titles = set()  # To track seen titles
+        beaupylist = list()
 
-        # Build the beaupylist for display
+        # Build the beaupylist for display but check for duplicates
         for i, item in enumerate(res):
-                label = item['label']
-                overlaytext = item['overlaytext']
-                beaupylist.append(f"{i} {label}\n\t{overlaytext}") # \n\t used to split text later
+            label = item['label']  # Title of the programme
+            overlaytext = item['overlaytext']  # Synopsis of the programme
+            formatted_item = f"{i} {label}\n\t{overlaytext}"
+            
+            if label not in seen_titles:  # Check if the title has already been processed
+                seen_titles.add(label)
+                beaupylist.append(formatted_item)
 
         found = self.display_beaupylist(beaupylist)
         if found:
@@ -336,6 +342,6 @@ class BbcLoader(BaseLoader):
             
         else:
             print("No video selected.")
-            sys.exit(0)
+            return
 
 

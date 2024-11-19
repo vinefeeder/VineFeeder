@@ -223,7 +223,7 @@ class StvLoader(BaseLoader):
                         'url': url,  
                         'synopsis': synopsis
                     }
-                    self.add_episode(series_data, episode)
+                    self.add_episode_remove_duplicates(series_data, episode)
 
                 except KeyError as e:
                     print(f"Error: {e}")   
@@ -260,12 +260,14 @@ class StvLoader(BaseLoader):
                             'url': url,  # 
                             'synopsis': synopsis
                         }
-                        self.add_episode(series_data, episode)
+                        
+                        self.add_episode_remove_duplicates(series_data, episode)
 
                     except KeyError as e:
                         print(f"Error: {e}")    
             
-
+        # remove duplicates
+        #self.final_episode_data = list(dict.fromkeys(self.final_episode_data))
 
         self.prepare_series_for_episode_selection(series_data) # creates list of series;
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)

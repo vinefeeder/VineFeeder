@@ -68,12 +68,47 @@ class BaseLoader:
     def parse_data(self, html):
         """Parse HTML data into JSON format."""
         return parse_json(html)
+    
+    def normalize_episode(self,episode):
+        """
+        Normalize the episode dictionary for comparison.
+        Focus on series_no, title, and synopsis.
+        """
+        return (
+            str(episode.get('series_no', '')).strip().lower(),
+            episode.get('title', '').strip().lower(),
+            episode.get('synopsis', '').strip().lower()
+        )
+
+
+
+    def add_episode_remove_duplicates(self, series_name, episode):
+        """Add an episode to the series in memory.
+        Remove duplicates in episode stream
+
+        Expects episode to be a dict with series_no, title, and synopsis keys."""
+        if series_name not in self.series_data:
+            self.series_data[series_name] = []
+        
+        # Normalize the current episode
+        normalized_episode = self.normalize_episode(episode)
+        
+        # Check for duplicates using normalized episodes
+        if all(self.normalize_episode(existing) != normalized_episode for existing in self.series_data[series_name]):
+            self.series_data[series_name].append(episode)
+
+
+
 
     def add_episode(self, series_name, episode):
-        """Add an episode to the series in memory."""
+        """Add an episode to the series in memory.
+        Episode may be Any"""
         if series_name not in self.series_data:
             self.series_data[series_name] = []
         self.series_data[series_name].append(episode)
+        return
+     
+
     def get_number_of_episodes(self, series_name):
         return len(self.series_data.get(series_name, []))   
 
