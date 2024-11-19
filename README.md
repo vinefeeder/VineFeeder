@@ -1,6 +1,6 @@
 # VineFeeder
 
-VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
+VineFeeder is a dynamic Python-based application and framework that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
 Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a configuration which will work out of the box, but Devine download options may be set on a service by service basis.
 
@@ -107,14 +107,17 @@ Services are displayed in alphabetical order for easy access. From there, you ca
 **Services**
 
 Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
-Other services: awaiting conributors!!
+Other services: awaiting contributors!!
 
 **Custom Services**
 
+Vinefeeder is a *framework* too. It has been written in such a way that by sub-classing
+many features needed to scape and parse a website are already written and available.
+
 If you feel moderately confident with python, then writing a new service to allow Devine 
-to be run more interactively, is relatively straighforward. Most of the processes for
+to be run more interactively, is relatively straightforward. Most of the processes for
 downloading, parsing and displaying for selection form part of the base functions and
-are already written.
+are already written in this framework.
 
 Any new service will need an __init_.py to be written and to implement just four 
 methods. 
