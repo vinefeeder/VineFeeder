@@ -2,7 +2,7 @@
 
 VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
-Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a confuration which will work out of the box, but Devine download options may be set on a service by service basis.
+Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a configuration which will work out of the box, but Devine download options may be set on a service by service basis.
 
 Features:
 
@@ -76,12 +76,17 @@ With bash or a Window's Terminal
 
 As set-up on start it will run with zero modification. There are six UK services active.
 
+It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select a dark background
+for better contrast with the colours used in Vinefeeder.
+
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
-The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
+The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or mit may be left empty. 
+If left empty a menu is offered.
 
-Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
-Each service's config.yaml may have an 'options:' entry just add the string you would use with devine.
+Starting VineFeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
+Each service's config.yaml may have an 'options:' entry just add the string you would use with devine e.g -q 720  to
+ensure only 720p resolution videos are selected.
 
 To open a config.yaml for a service:-
 
