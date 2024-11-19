@@ -125,7 +125,10 @@ To add a new service:
     Add the following:
         A config.yaml file with the media_dict. see examples in the existing services folder.
         
-        An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
+        An __init__.py file defining the loader class for the service.
+        The name of the loader class is constrained. It must take the service tag name, e.g. TVNZ
+        and use that to create the class-name TvnzLoader. This allows vinefeeder.py discover and
+        to call its use later.
         Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
         Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where 
         video categories may be selected for view. Use some/all of these 
@@ -180,7 +183,9 @@ To add a new service:
         FETCH_VIDEO_BY_CATEGORY
         Displays the media_dict from congig.yaml - so put any category heading andn links in the new service config.
         One a category is selected again parse json and follow an existing service for a model answer adjusting to suite the 
-        syntax required by our new service.  
+        syntax required by our new service. 
+        Potentially, you may not implement this if the site does not provide a worthwhile browse by category list,
+        or the data cannot be parsed readily. U falls into this category. 
 
 VineFeeder will dynamically detect and load the new services on the next start.
 
