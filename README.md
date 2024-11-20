@@ -30,7 +30,7 @@ Features:
 hlg_status in config.yaml may be set to False to not do this.
 
 *Precision Episode Selection*:  Vinefeeder handles the selection of episodes and 'feeds' 
-	Devine one-by-one, making Devine's -s and -w switches defunct.
+	Devine one-by-one, making Devine's -w switch defunct.
 
 
 **Installation**
