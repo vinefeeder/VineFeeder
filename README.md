@@ -82,18 +82,29 @@ As set-up on start it will run with zero modification. There are six UK services
 It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
 preferences, a dark background for better contrast with the colours used in Vinefeeder.
 
-*Interacting with Services*
-Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
+**Interacting with Services**
+
+Once the GUI is launched, you mau interact with various streaming services by clicking on their corresponding buttons.
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or mit may be left empty. 
 If left empty a menu is offered.
 
+**Help**
+
 Starting VineFeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
-Each service's config.yaml may have an 'options:' entry just add the string you would use with devine e.g -q 720  to
+
+**Service Configuration**
+
+Most users will not need alter any configuration to download videos!
+
+However, if you have, in your past use of Devine resorted to setting Devine-download options other than -w etc.
+You may continue to do with VineFeeder only you do so just once, in the config.yaml for each service.
+Each service's config.yaml has an 'options:' entry just add the string you would use with devine e.g -q 720  to
 ensure only 720p resolution videos are selected.
 
 To open a config.yaml for a service:-
 
-    python vinefeeder.py --service-folder ALL4
+    python vinefeeder.py --service-folder <SERVICE-NAME>
+    python vinefeeder.py --service-folder ALL4, for example
     
 Edit the line starting 'options'. Use exactly the same syntax as Devine would require on its command line
 
