@@ -1,6 +1,6 @@
 # VineFeeder
 
-VineFeeder is a dynamic Python-based application and framework that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
+VineFeeder is a dynamic Python-based application and **framework** that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
 Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a configuration which will work out of the box, but Devine download options may be set on a service by service basis.
 
@@ -56,7 +56,7 @@ First be sure Devine works correctly to your liking, then, for VineFeeder,
 
 
 **Setup**
-if you run Devine in a specific python environment  (virual environment - venv) , first start that environment before installing VineFeeder
+if you run Devine in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder
 
 Clone the repository:
 With bash or a Window's Terminal
@@ -139,7 +139,7 @@ the screen displays 'Ready!' and waits for further entry.
 **Closing Down**
 
 The GUI should first be shutdown by mouse-clicking the top right X. The GUI then should
-release control of the Terminal. ctrl-C in the Terminal may be required if shuting down 
+release control of the Terminal. ctrl-C in the Terminal may be required if shutting down 
 following an error.
 
 **Custom Services**
@@ -152,7 +152,7 @@ to be run more interactively, is relatively straightforward. Most of the process
 downloading, parsing and displaying for selection form part of the base functions and
 are already written in this framework.
 
-Any new service will need an __init_.py to be written and to implement just four 
+Any new service will need an __init__.py to be written and to implement just four 
 methods. 
 
 To add a new service:
