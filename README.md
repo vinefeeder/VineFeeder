@@ -29,6 +29,9 @@ Features:
 *Ultra-High-definition*:  Videos in UHD are automatically requested from sites that provide such quality.
 hlg_status in config.yaml may be set to False to not do this.
 
+**Precision Episode Selection**:  Vinefeeder handles the selection of episodes and 'feeds' 
+	Devine one-by-one. No more juggling with -s and -w switches
+
 
 **Installation**
 
