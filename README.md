@@ -29,8 +29,8 @@ Features:
 *Ultra-High-definition*:  Videos in UHD are automatically requested from sites that provide such quality.
 hlg_status in config.yaml may be set to False to not do this.
 
-**Precision Episode Selection**:  Vinefeeder handles the selection of episodes and 'feeds' 
-	Devine one-by-one. No more juggling with -s and -w switches
+*Precision Episode Selection*:  Vinefeeder handles the selection of episodes and 'feeds' 
+	Devine one-by-one, making Devine's -s and -w switches defunct.
 
 
 **Installation**
@@ -56,7 +56,7 @@ First be sure Devine works correctly to your liking, then, for VineFeeder,
 
 
 **Setup**
-if you run Devine in a specific python environment, first start that environment before installing VineFeeder
+if you run Devine in a specific python environment  (virual environment - venv) , first start that environment before installing VineFeeder
 
 Clone the repository:
 With bash or a Window's Terminal
@@ -79,8 +79,8 @@ With bash or a Window's Terminal
 
 As set-up on start it will run with zero modification. There are six UK services active.
 
-It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select a dark background
-for better contrast with the colours used in Vinefeeder.
+It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
+preferences, a dark background for better contrast with the colours used in Vinefeeder.
 
 *Interacting with Services*
 Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
@@ -112,10 +112,29 @@ Services are displayed in alphabetical order for easy access. From there, you ca
 Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
 Other services: awaiting contributors!!
 
+**Text Entry Box**
+
+This will be the predominant method of using VineFeeder. Search on a keyword to locate a
+programme series and click on its title when search finishes, to select any combination of
+episodes for download.
+
+Additionlly the search box will take a URL for direct download. The URL may be for a single
+episode and it will download directly. If you feed a URL for a *series of episode* i.e a 
+series-link then Devine will download the series.
+
+The text-entry-box is cleared automatically after use. Once a download successfully finishes
+the screen displays 'Ready!' and waits for further entry.
+
+**Closing Down**
+
+The GUI should first be shutdown by mouse-clicking the top right X. The GUI then should
+release control of the Terminal. ctrl-C in the Terminal may be required if shuting down 
+following an error.
+
 **Custom Services**
 
-Vinefeeder is a *framework* too. It has been written in such a way that by sub-classing
-many features needed to scape and parse a website are already written and available.
+Vinefeeder is a *framework* too. It has been written in such a way that most features 
+needed to scape and parse a website are already written and available.
 
 If you feel moderately confident with python, then writing a new service to allow Devine 
 to be run more interactively, is relatively straightforward. Most of the processes for
@@ -135,10 +154,11 @@ To add a new service:
         The name of the loader class is constrained. It must take the service tag name, e.g. TVNZ
         and use that to create the class-name TvnzLoader. This allows vinefeeder.py discover and
         to call its use later.
-        Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
-        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where 
-        video categories may be selected for view. Use some/all of these 
-        links to produce a media_dict of ( catergory: link, }
+        Note: the loader class file MUST inherit (or sub-class) BaseLoader see ALL4/__init__.py  
+        as an example.
+        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' 
+        page where video categories may be selected for view. Use some/all of these links to 
+        produce a media_dict of ( catergory: link, }
         
         There are 4 methods to implement
             receive
