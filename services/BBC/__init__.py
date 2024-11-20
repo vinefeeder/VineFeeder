@@ -57,6 +57,8 @@ class BbcLoader(BaseLoader):
         self.options_list = split_options(BbcLoader.options)
          #prepare in UHD list
         self.uhd_list = self.check_uhd()
+
+        
         
         
         """
@@ -82,17 +84,19 @@ class BbcLoader(BaseLoader):
         # TWO ALTERNATES FROM GUI-TEXT ENTRY; POULATED WITH KEYWORD OR URL
         # direct download from url
         if 'http' in search_term and inx == 1:
+            # 'https://www.bbc.co.uk/iplayer/episode/m0021yyt'
             # https://www.bbc.co.uk/iplayer/episode/m0023h9f/asia-series-1-1-beneath-the-waves
             series_name = split(search_term, '/', 6)[1].split('-series')[0]
-
-            for hlg_item in self.uhd_list:
-                if series_name.lower() in hlg_item:
-                    self.AVAILABLE_HLG = True
-                    break 
-    
-           
-            search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
-            options_list = split_options(self.options)
+            if series_name:
+                for hlg_item in self.uhd_list:
+                    if series_name and series_name.lower() in hlg_item:
+                        self.AVAILABLE_HLG = True
+                        break 
+                search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode') 
+            else:
+                self.AVAILABLE_HLG = False
+            
+            options_list = split_options(BbcLoader.options)
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
                 subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', search_term])
@@ -103,6 +107,10 @@ class BbcLoader(BaseLoader):
         # keyword search
         elif inx == 3:
             print(f"Searching for {search_term}")
+            for hlg_item in self.uhd_list:
+                if search_term.lower() in hlg_item:
+                    self.AVAILABLE_HLG = True
+                    break 
             return (self.fetch_videos(search_term))  
         
         # ALTERNATIVES BELOW FROM POP-UP MENU  
@@ -344,7 +352,7 @@ class BbcLoader(BaseLoader):
 
         found = self.display_beaupylist(beaupylist)
         if found:
-            if not 'film' in category:
+            if category not in ['films','featured-category-films','featured-films', 'film', 'movie']:
                 #extract search_term for greedy search
                 search_term = found.split('\n\t')[0][2:]
                 return self.process_received_url_from_category(search_term)

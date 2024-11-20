@@ -76,12 +76,16 @@ class VineFeeder(QWidget):
         self.search_url_label = QLabel("URL or search word")
         layout.addWidget(self.search_url_label)
         self.search_url_entry = QLineEdit()
+        self.search_url_entry.setStyleSheet("""
+            border: 2px solid pink;
+                                                                        
+        """)
         layout.addWidget(self.search_url_entry)
 
         highlighted_frame = QFrame()
         self.highlighted_layout = QVBoxLayout()
         highlighted_frame.setLayout(self.highlighted_layout)
-        highlighted_frame.setStyleSheet("border: 1px solid blue;")  # Remove the border initially
+        highlighted_frame.setStyleSheet("border: 1px solid pink;")  # Remove the border initially
         layout.addWidget(highlighted_frame)
 
         self.dark_mode_checkbox = QCheckBox("Dark Mode")
@@ -119,7 +123,7 @@ class VineFeeder(QWidget):
             palette = QPalette()
             palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
             palette.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.white)
-            palette.setColor(QPalette.ColorRole.Base, QColor(35, 35, 35))
+            palette.setColor(QPalette.ColorRole.Base, QColor(30, 30, 54))  #QColor(35, 35, 35))
             palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.white)
             self.setPalette(palette)
             self.search_url_label.setStyleSheet("color: white;")
@@ -131,7 +135,7 @@ class VineFeeder(QWidget):
                 if isinstance(button, QPushButton):
                     button.setStyleSheet("""
                         color: white;
-                        background-color: #4e4e4e;
+                        background-color:#1E1E2E;
                         border: none;
                         padding: 5px;
                     """)
