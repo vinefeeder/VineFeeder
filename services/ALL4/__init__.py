@@ -10,7 +10,13 @@ import jmespath
 console = Console()
 
 
-class All4Loader(BaseLoader):
+class All4Loader(BaseLoader):  
+
+    # global options 
+    options = ''
+
+
+
     def __init__(self):
         """
         Initialize the All4Loader class with the provided headers.
@@ -22,7 +28,7 @@ class All4Loader(BaseLoader):
             options (str): Global options; later taken from service config.yaml
             headers (dict): Global headers; may be overridden
         """
-        self.options = ''  
+        #self.options = ''  
         
         headers = {
             'Accept': '*/*',
@@ -34,7 +40,7 @@ class All4Loader(BaseLoader):
 
 
     # entry point from Vinefeeder
-    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, opts=None): 
    
         """
         First fetch for series titles matching all or part of search_term.
@@ -56,12 +62,17 @@ class All4Loader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
-        self.options = options
+
+        # re-entry here for second time loses options settings
+        # so reset
+        
+        if opts:
+            All4Loader.options = opts
+        self.options_list = split_options(All4Loader.options)
         # direct download
         if 'http' in search_term and inx == 1:
-            
-            options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *options_list, 'ALL4', search_term])  # url
+            command = ['devine', 'dl', *self.options_list, 'ALL4', search_term]
+            subprocess.run(command)  # url
             
             return
 
@@ -72,7 +83,7 @@ class All4Loader(BaseLoader):
         
         #  POP-UP MENU alternates:  
         elif inx == 0:  
-            # entry from greedy-search OR selecting Browse-category
+            # from greedy-search OR selecting Browse-category
             # example: https://www.channel4.com/programmes/the-great-british-bake-off/on-demand/75228-001
 
             # need a search keyword(s) from url 
@@ -97,7 +108,7 @@ class All4Loader(BaseLoader):
 
     def fetch_videos(self, search_term):
         """Fetch videos from Channel 4 using a search term.
-            Here the first search for series titles that match all or part of search_term.
+            Here the first search for series titles matches all or part of search_term.
             The function will prepare the series data, matching the search term for display.
         """
         # returns json as type String
@@ -106,7 +117,7 @@ class All4Loader(BaseLoader):
             html = self.get_data(url)
             if 'No Matches' in html:
                 print('Nothing found for that search; try again.')
-                return
+                sys.exit(0)
             else:
                 parsed_data = self.parse_data(html)  # to json
         except Exception:
@@ -176,13 +187,15 @@ class All4Loader(BaseLoader):
                     continue  # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
 
-        options_list = split_options(self.options)
+        self.options_list = split_options(self.options)
 
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
             url = "https://www.channel4.com" + item['url']
             
-            subprocess.run(['devine', 'dl' ,*options_list, 'ALL4', url])
+            command = ['devine', 'dl', *self.options_list, 'ALL4', url]
+            
+            subprocess.run(command)
             return None
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
@@ -197,7 +210,8 @@ class All4Loader(BaseLoader):
             url = "https://www.channel4.com" + url
             
          
-            subprocess.run(['devine', 'dl', *options_list, 'ALL4', url])
+            command = ['devine', 'dl', *self.options_list, 'ALL4', url]
+            subprocess.run(command)
         
             return
 
@@ -254,4 +268,4 @@ class All4Loader(BaseLoader):
             
         else:
             print("No video selected.")
-            sys.exit(0)
+            return

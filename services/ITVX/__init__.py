@@ -9,8 +9,9 @@ import json
 console = Console()
 
 class ItvxLoader(BaseLoader):
+
+    options = ''
     def __init__(self):
-        self.options = ''
         headers = {
             'Accept': '*/*',
             'user-agent': 'Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)',
@@ -19,8 +20,8 @@ class ItvxLoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
-        self.options = options
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, opts=None): 
+       
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -41,6 +42,9 @@ class ItvxLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+        if opts:
+            ItvxLoader.options = opts
+        self.options_list = split_options(ItvxLoader.options)
         # direct download
         if 'http' in search_term and inx == 1:
             options_list = split_options(self.options)

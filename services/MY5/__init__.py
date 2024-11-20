@@ -9,8 +9,10 @@ import re
 console = Console()
 
 class My5Loader(BaseLoader):
+
+    options = ''
     def __init__(self):
-        self.options = ''
+        
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -19,8 +21,8 @@ class My5Loader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None): 
-        self.options = options
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, opts=None): 
+        
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -41,12 +43,16 @@ class My5Loader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+        if opts:
+            My5Loader.options = opts
+        self.options_list = split_options(My5Loader.options)
+
         # direct download
 
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'MY5', search_term])
-            options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *options_list, 'MY5', search_term])  # url
+            #options_list = split_options(self.options)
+            subprocess.run(['devine', 'dl', *self.options_list, 'MY5', search_term])  # url
             
             return
 

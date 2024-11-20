@@ -19,11 +19,15 @@ Note: The BBC is outrageously awkward. Do not use this as a template for other s
 
 
 class BbcLoader(BaseLoader):
+
+    HLG = None
+    options = None
+
     def __init__(self):
-        self.HLG = None
+        #self.HLG = None
         self.AVAILABLE_HLG = False
         self.uhd_list = []
-        self.options = ""
+       
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko',
@@ -45,11 +49,13 @@ class BbcLoader(BaseLoader):
         uhd_list = sel.xpath('(//ul)[8]//a/@href').getall()
         return uhd_list    
 
-    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None):  
-        self.HLG = hlg_status 
-        self.options = options
-
-         #preapare in UHD list
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, opts=None): 
+        if  hlg_status:
+            BbcLoader.HLG = hlg_status
+        if opts:
+            BbcLoader.options = opts
+        self.options_list = split_options(BbcLoader.options)
+         #prepare in UHD list
         self.uhd_list = self.check_uhd()
         
         
@@ -76,10 +82,22 @@ class BbcLoader(BaseLoader):
         # TWO ALTERNATES FROM GUI-TEXT ENTRY; POULATED WITH KEYWORD OR URL
         # direct download from url
         if 'http' in search_term and inx == 1:
+            # https://www.bbc.co.uk/iplayer/episode/m0023h9f/asia-series-1-1-beneath-the-waves
+            series_name = split(search_term, '/', 6)[1].split('-series')[0]
+
+            for hlg_item in self.uhd_list:
+                if series_name.lower() in hlg_item:
+                    self.AVAILABLE_HLG = True
+                    break 
+    
            
             search_term = split(search_term, '?', 1)[0].replace('episodes', 'episode')
             options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *options_list,'iP', search_term])  # url
+
+            if BbcLoader.HLG and self.AVAILABLE_HLG:
+                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', search_term])
+            else:
+                subprocess.run(['devine', 'dl', *options_list, 'iP', search_term])         
             return
 
         # keyword search
@@ -245,7 +263,7 @@ class BbcLoader(BaseLoader):
                     self.AVAILABLE_HLG = True
                     break 
             options_list = split_options(self.options)
-            if self.HLG and self.AVAILABLE_HLG:
+            if BbcLoader.HLG and self.AVAILABLE_HLG:
                 subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
             else:
                 subprocess.run(['devine', 'dl', *options_list, 'iP', url])
@@ -266,7 +284,7 @@ class BbcLoader(BaseLoader):
             mlist = item.split(',')
             url = mlist[2].strip()
             
-            if self.HLG and self.AVAILABLE_HLG:
+            if BbcLoader.HLG and self.AVAILABLE_HLG:
                 subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
             else:
                 subprocess.run(['devine', 'dl', *options_list, 'iP', url])

@@ -9,8 +9,10 @@ import re
 console = Console()
 
 class StvLoader(BaseLoader):
+
+    options = ''
     def __init__(self):
-        self.options = ''
+        
         headers = {
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)',
@@ -19,10 +21,7 @@ class StvLoader(BaseLoader):
         }
         super().__init__(headers)
         
-    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, options=None):  
-        self.options = options  
-
-   
+    def receive(self, inx: None, search_term: None, category=None, hlg_status=False, opts=None):   
         """
         First fetch for series titles matching all or part of search_term.
         
@@ -43,13 +42,17 @@ class StvLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+
+        if opts:
+            StvLoader.options = opts
+        self.options_list = split_options(StvLoader.options)
         # direct download
 
         if 'http' in search_term and inx == 1:
-            #print(['devine', 'dl', 'STV', search_term])
-            options_list = split_options(self.options)
+            
+            options_list = split_options(StvLoader.options)
             subprocess.run(['devine', 'dl',*options_list,'STV', search_term])  # url
-            #self.clean_terminal()
+            
             return
 
         # keyword search
@@ -260,12 +263,14 @@ class StvLoader(BaseLoader):
                             'url': url,  # 
                             'synopsis': synopsis
                         }
-                        # special call to remove duplicate episodes - problem with STV
+                        
                         self.add_episode_remove_duplicates(series_data, episode)
 
                     except KeyError as e:
                         print(f"Error: {e}")    
             
+        # remove duplicates
+        #self.final_episode_data = list(dict.fromkeys(self.final_episode_data))
 
         self.prepare_series_for_episode_selection(series_data) # creates list of series;
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
