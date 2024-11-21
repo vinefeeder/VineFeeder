@@ -51,7 +51,11 @@ class StvLoader(BaseLoader):
         if 'http' in search_term and inx == 1:
             
             options_list = split_options(StvLoader.options)
-            subprocess.run(['devine', 'dl',*options_list,'STV', search_term])  # url
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'STV', search_term]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'STV', search_term]
+            subprocess.run(command) # url
             
             return
 
@@ -274,10 +278,14 @@ class StvLoader(BaseLoader):
 
         self.prepare_series_for_episode_selection(series_data) # creates list of series;
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
-        options_list = split_options(self.options)
+        self.options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            subprocess.run(['devine', 'dl', *options_list, 'STV', url])  
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'STV', url]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'STV', url]
+            subprocess.run(command)  
         return None	
     
     def fetch_videos_by_category(self, browse_url):

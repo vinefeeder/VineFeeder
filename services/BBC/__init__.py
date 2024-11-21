@@ -99,9 +99,15 @@ class BbcLoader(BaseLoader):
             options_list = split_options(BbcLoader.options)
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
-                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', search_term])
+                command = ['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', search_term] \
+                    if self.options_list else ['devine', 'dl', 'iP', search_term]
+                subprocess.run(command)
+
             else:
-                subprocess.run(['devine', 'dl', *options_list, 'iP', search_term])         
+                command = ['devine', 'dl', *self.options_list, 'iP', search_term] \
+                    if self.options_list else ['devine', 'dl', 'iP', search_term]
+                subprocess.run(command)
+         
             return
 
         # keyword search

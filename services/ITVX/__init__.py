@@ -42,14 +42,19 @@ class ItvxLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+
         if opts:
             ItvxLoader.options = opts
         self.options_list = split_options(ItvxLoader.options)
         # direct download
         if 'http' in search_term and inx == 1:
             options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *options_list, 'ITVX', search_term])  # url
-            
+            if options_list[0] == '':
+                command = ['devine', 'dl', 'ITVX', url]
+            else:
+                command = ['devine', 'dl', *options_list, 'ITVX', url]
+            subprocess.run(command)
+
             return
 
         # keyword search
@@ -199,7 +204,12 @@ class ItvxLoader(BaseLoader):
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
             
-            subprocess.run(['devine', 'dl', *options_list, 'ITVX', url])
+            if options_list[0] == '':
+                command = ['devine', 'dl', 'ITVX', url]
+            else:
+                command = ['devine', 'dl', *options_list, 'ITVX', url]
+            subprocess.run(command)
+
             
         return None
 

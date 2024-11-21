@@ -49,7 +49,11 @@ class ULoader(BaseLoader):
         # direct download
         if 'http' in search_term and inx == 1:
             #options_list = split_options(ULoader.options)
-            subprocess.run(['devine', 'dl', *self.options_list, 'UKTV', search_term])  # url
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'U', search_term]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'U', search_term]
+            subprocess.run(command)  # url
             
             return
 
@@ -189,7 +193,11 @@ class ULoader(BaseLoader):
         options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            subprocess.run(['devine', 'dl', *options_list, 'UKTV', url])
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'U', url]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'U', url]
+            subprocess.run(command)
             
         return None
     

@@ -52,7 +52,11 @@ class My5Loader(BaseLoader):
         if 'http' in search_term and inx == 1:
             #print(['devine', 'dl', 'MY5', search_term])
             #options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *self.options_list, 'MY5', search_term])  # url
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'MY5', url]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'MY5', url]
+            subprocess.run(command)
             
             return
 
@@ -128,7 +132,12 @@ class My5Loader(BaseLoader):
         if 'https' in selected:  # direct url: not sure how this may happen with My5??
             url = selected
             options_list = split_options(self.options)
-            subprocess.run(['devine', 'dl', *options_list, 'MY5', url])
+
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'MY5', url]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'MY5', url]
+            subprocess.run(command)
             return
         else:
             url = self.get_selected_url(selected)
@@ -193,7 +202,11 @@ class My5Loader(BaseLoader):
 
             # finally fetch video
             
-            subprocess.run(['devine', 'dl', *options_list, 'MY5', url])
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'MY5', url]
+            else:
+                command = ['devine', 'dl', *self.options_list, 'MY5', url]
+            subprocess.run(command)
             #self.clean_terminal()
             return
         
