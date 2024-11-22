@@ -183,7 +183,7 @@ Each episode has
                     }
         
 Note 'title' may be an episode number or descriptive text. It varies with provider
-The dict is added to the Vinefeeder storage list by
+The dict is added to the Vinefeeder storage list by:-
 
                     self.add_episode(brand_slug, episode)
 
