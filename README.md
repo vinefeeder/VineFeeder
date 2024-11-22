@@ -73,7 +73,7 @@ Run the application by executing the main script:
 
 With bash or a Window's Terminal
 
-    python vinefeeder.py  
+    python vinefeeder.py 
     or
     python vinefeeder.py -help
 
@@ -85,7 +85,7 @@ preferences, a dark background for better contrast with the colours used in Vine
 **Interacting with Services**
 
 Once the GUI is launched, you mau interact with various streaming services by clicking on their corresponding buttons.
-The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or mit may be left empty. 
+The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or it may be left empty. 
 If left empty a menu is offered.
 
 **Help**
@@ -136,6 +136,20 @@ series-link then Devine will download the series.
 The text-entry-box is cleared automatically after use. Once a download successfully finishes
 the screen displays 'Ready!' and waits for further entry.
 
+**Series numbers**
+
+Normally services will provide enough data to collect a series number.
+When series numbers are not available, Vinfeeder sets a default number of 100.
+This is for housekeeping reasons. Devine labelling defaults to 00 for any saved
+videos without a specified series number.
+
+**Backing out**
+
+If you have followed a path to a selection and do not wish to continue then,
+in most  circumstances, depending on operating system, ctrl-C will return you
+to a 'Ready!' status display on the screen within a second or two, and await
+further operations.
+
 **Closing Down**
 
 The GUI should first be shutdown by mouse-clicking the top right X. The GUI then should
@@ -154,6 +168,28 @@ are already written in this framework.
 
 Any new service will need an __init__.py to be written and to implement just four 
 methods. 
+
+The ultimate aim of a services's __init__.py is to extract a list of video-data from  a content 
+provide and store it a numerous dict items in a list container. The video-data is collected in 
+dict objects labelled 'episode'.
+
+Each episode has
+
+		    episode = {
+                        'series_no': ser_number,
+                        'title': ep_number,
+                        'url': url,
+                        'synopsis': synopsis
+                    }
+        
+Note 'title' may be an episode number or descriptive text. It varies with provider
+The dict is added to the Vinefeeder storage list by
+
+                    self.add_episode(brand_slug, episode)
+
+Note brand_slug is a series-name.  self.add_episode creates a lists of episode dicts
+This happens in the __init__.py super-class of BaseLoader
+
 
 To add a new service:
 
