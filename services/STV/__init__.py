@@ -50,7 +50,7 @@ class StvLoader(BaseLoader):
 
         if 'http' in search_term and inx == 1:
             
-            options_list = split_options(StvLoader.options)
+            self.options_list = split_options(StvLoader.options)
             if self.options_list[0] == '':
                 command = ['devine', 'dl', 'STV', search_term]
             else:
@@ -219,7 +219,7 @@ class StvLoader(BaseLoader):
 
             for item in parsed_data['props']['pageProps']['data']['tabs'][0]['data']:
                 try:
-                    series_no = int('0')
+                    series_no = int('100')
                     title = item['title']
                     url = f"https://player.stv.tv{item['link']}"  #https://player.stv.tv/episode/4nlk/loose-women
                     synopsis = item['summary']

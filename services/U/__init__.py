@@ -142,7 +142,7 @@ class ULoader(BaseLoader):
             myhtml = self.get_data(url)
         except Exception:
             print(f"No valid data at {url} found.\n Exiting")
-            sys.exit(0)
+            return
         parsed_data = self.parse_data(myhtml)
         '''console.print_json(data=parsed_data)
         f = open('u.json', 'w')
@@ -171,7 +171,7 @@ class ULoader(BaseLoader):
                 for item in parsed_data['episodes']:
                     #series_id = item['series_id']
                     ep_number = item['episode_number']
-                    ser_number = item['series_number']
+                    ser_number = item.get('series_number', '100')
                     video_id = item['video_id']
                     brand_slug = item['brand_slug']
                     url = f"https://u.co.uk/shows/{brand_slug}/series-{ser_number}/episode-{ep_number}/{video_id}"

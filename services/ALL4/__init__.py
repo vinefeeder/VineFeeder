@@ -27,8 +27,7 @@ class All4Loader(BaseLoader):
         Attributes:
             options (str): Global options; later taken from service config.yaml
             headers (dict): Global headers; may be overridden
-        """
-        #self.options = ''  
+        """ 
         
         headers = {
             'Accept': '*/*',
@@ -181,9 +180,10 @@ class All4Loader(BaseLoader):
                 print(f"No episodes found for {series_name}\nThis is quite common with Channel 4. Exiting.")
                 return
             for item in episodes:
+
                 try:
                     episode = {
-                        'series_no': item.get('seriesNumber', '00'),  # number exists or '00'
+                        'series_no': item.get('seriesNumber', '100'),  # number exists or '100'
                         'title': item.get('title', 'Title unknown'),
                         'url': item.get('hrefLink'),
                         'synopsis': item['summary'] or None,

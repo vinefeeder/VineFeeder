@@ -48,11 +48,11 @@ class ItvxLoader(BaseLoader):
         self.options_list = split_options(ItvxLoader.options)
         # direct download
         if 'http' in search_term and inx == 1:
-            options_list = split_options(self.options)
-            if options_list[0] == '':
-                command = ['devine', 'dl', 'ITVX', url]
+            self.options_list = split_options(self.options)
+            if self.options_list[0] == '':
+                command = ['devine', 'dl', 'ITVX', search_term]
             else:
-                command = ['devine', 'dl', *options_list, 'ITVX', url]
+                command = ['devine', 'dl', *self.options_list, 'ITVX', search_term]
             subprocess.run(command)
 
             return
@@ -181,33 +181,42 @@ class ItvxLoader(BaseLoader):
         letterA: encodedEpisodeId.letterA
         contentInfo: contentInfo
         channel: channel
-
+  
         } """,  mytitles) 
-
+        
         for item in res:
             try:
+                # ITVX sometimes has a word in place of a series number, correct for this.
+                series_no = 100  # set default
+                if item['series']: #check it is a digir
+                    try:
+                        series_no = int(item['series'])  # Try to cast to int
+                    except ValueError:
+                        pass  # Leave series_no as 100 if casting fails
+
                 episode = {
-                    'series_no': item['series'] or None,
-                    'title': f"{item['episode'] or ''}:{item['eptitle'] or ''}",  # concatenate episode and title to fit with BaseLoader format of 4 elements
+                    'series_no': series_no,
+                    'title': f"{item['episode'] or ''}:{item['eptitle'] or ''}",
                     'url': f"https://www.itv.com/watch/{programmeSlug}/{programmeId}/{item['letterA']}",
-                    'synopsis': rinse(item['description']) or None   # remove non printable
-            }
+                    'synopsis': rinse(item['description']) or None
+                }
             except KeyError:
                 continue  # Skip any episode that doesn't have the required information
 
             self.add_episode(programmeSlug, episode)
 
 
+
         self.prepare_series_for_episode_selection(programmeSlug) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
-        options_list = split_options(self.options)
+        self.options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
             
-            if options_list[0] == '':
+            if self.options_list[0] == '':
                 command = ['devine', 'dl', 'ITVX', url]
             else:
-                command = ['devine', 'dl', *options_list, 'ITVX', url]
+                command = ['devine', 'dl', *self.options_list, 'ITVX', url]
             subprocess.run(command)
 
             
@@ -279,4 +288,4 @@ class ItvxLoader(BaseLoader):
             
         else:
             print("No video selected.")
-            sys.exit(0)
+            return

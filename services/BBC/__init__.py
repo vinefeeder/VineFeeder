@@ -230,6 +230,7 @@ class BbcLoader(BaseLoader):
         #console.print_json(data=parsed_data)
 
         self.clear_series_data()  # Clear existing series data
+        self.options_list = split_options(self.options)
 
         # Extract the episodes from the parsed data of the selected series
         if parsed_data and 'programme_episodes' in parsed_data and not SINGLE :
@@ -257,7 +258,7 @@ class BbcLoader(BaseLoader):
                 except Exception:
                     try:
                         episode = {
-                            'series_no': 0,  # special or one-off'
+                            'series_no': 100,  # special or one-off'
                             # 'title' is episode number here, some services use descriptive text
                             'title': item['subtitle'],  # could be date
                             'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
@@ -276,18 +277,18 @@ class BbcLoader(BaseLoader):
                 if series_name.lower() in hlg_item:
                     self.AVAILABLE_HLG = True
                     break 
-            options_list = split_options(self.options)
+            #self.options_list = split_options(self.options)
             if BbcLoader.HLG and self.AVAILABLE_HLG:
-                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
+                subprocess.run(['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', url])
             else:
-                subprocess.run(['devine', 'dl', *options_list, 'iP', url])
+                subprocess.run(['devine', 'dl', *self.options_list, 'iP', url])
             return  
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
 
         # specific to BBC
-        options_list = split_options(self.options)
+        #self.options_list = split_options(self.options)
         for item in selected_final_episodes:
             #check for UHD content
             for hlg_item in self.uhd_list:
@@ -299,9 +300,9 @@ class BbcLoader(BaseLoader):
             url = mlist[2].strip()
             
             if BbcLoader.HLG and self.AVAILABLE_HLG:
-                subprocess.run(['devine', 'dl', *options_list, '--range', 'HLG', 'iP', url])
+                subprocess.run(['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', url])
             else:
-                subprocess.run(['devine', 'dl', *options_list, 'iP', url])
+                subprocess.run(['devine', 'dl', *self.options_list, 'iP', url])
               
         return
     

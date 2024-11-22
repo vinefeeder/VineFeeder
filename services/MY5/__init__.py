@@ -69,7 +69,6 @@ class My5Loader(BaseLoader):
         elif inx == 0:  
             # from greedy-search OR selecting Browse-category
             # example: https://www.channel5.com/the-teacher/season-2/episode-2
-
             # need a search keyword(s) from url 
             # split and select series name
             if 'show' in search_term:
@@ -175,7 +174,7 @@ class My5Loader(BaseLoader):
                     for item in parsed_data['episodes']:
                         
                         episode = {
-                            'series_no': f"{item['sea_num'] or '00'}",
+                            'series_no': f"{item['sea_num'] or '100'}",
                             'title': f"{item['ep_num'] or ''}:{item['title'] or ''}",
                             'url': f"https://www.channel5.com/{item['sh_f_name']}/{item['sea_f_name']}/{item['f_name']}",
                             'synopsis': item['s_desc'] or None,
