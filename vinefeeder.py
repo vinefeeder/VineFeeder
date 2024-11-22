@@ -73,7 +73,7 @@ class VineFeeder(QWidget):
         self.setWindowTitle("VineFeeder")
         layout = QVBoxLayout()
 
-        self.search_url_label = QLabel("URL or search word")
+        self.search_url_label = QLabel("URL or Search")
         layout.addWidget(self.search_url_label)
         self.search_url_entry = QLineEdit()
         self.search_url_entry.setStyleSheet("""
