@@ -167,7 +167,6 @@ class StvLoader(BaseLoader):
         selected_series = self.display_series_list()
         
         if selected_series:
-            #selected_series = self.display_episode_list(selected_series) # 
             # one series selected
             return self.second_fetch(selected_series)
         return None
@@ -179,7 +178,7 @@ class StvLoader(BaseLoader):
         The function will prepare the series data for episode selection and display the final episode list.
         It will return the URLs for the selected episodes.
         """
-        if 'https' in selected:  # direct url provided skip url preparation
+        if 'https' in selected:  # direct url provided so skip url preparation
             url = selected
         else:
             url = self.get_selected_url(selected)
@@ -188,11 +187,11 @@ class StvLoader(BaseLoader):
             myhtml = self.get_data(url=url)
         except:
             print(f"No valid data at {url} found.\n Exiting")
-            sys.exit(0)
+            return
         parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__', 0)
         self.clear_series_data()  # Clear existing series data
 
-        '''console.print_json(data=parsed_data)
+        '''console.print_json(data=parsed_data) # for debugging
         f = open("1stv.json",'w')
         f.write(json.dumps(parsed_data))
         f.close()'''
@@ -273,8 +272,6 @@ class StvLoader(BaseLoader):
                     except KeyError as e:
                         print(f"Error: {e}")    
             
-        # remove duplicates
-        #self.final_episode_data = list(dict.fromkeys(self.final_episode_data))
 
         self.prepare_series_for_episode_selection(series_data) # creates list of series;
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
@@ -333,7 +330,7 @@ class StvLoader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            sys.exit(0)
+            return
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)
@@ -361,6 +358,6 @@ class StvLoader(BaseLoader):
             
         else:
             print("No video selected.")
-            sys.exit(0)
+            return
 
 

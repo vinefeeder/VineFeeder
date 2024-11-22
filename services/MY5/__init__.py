@@ -53,9 +53,9 @@ class My5Loader(BaseLoader):
             #print(['devine', 'dl', 'MY5', search_term])
             #options_list = split_options(self.options)
             if self.options_list[0] == '':
-                command = ['devine', 'dl', 'MY5', url]
+                command = ['devine', 'dl', 'MY5', search_term]
             else:
-                command = ['devine', 'dl', *self.options_list, 'MY5', url]
+                command = ['devine', 'dl', *self.options_list, 'MY5', search_term]
             subprocess.run(command)
             
             return
@@ -130,7 +130,7 @@ class My5Loader(BaseLoader):
         """
         if 'https' in selected:  # direct url: not sure how this may happen with My5??
             url = selected
-            options_list = split_options(self.options)
+            self.options_list = split_options(self.options)
 
             if self.options_list[0] == '':
                 command = ['devine', 'dl', 'MY5', url]
@@ -144,7 +144,7 @@ class My5Loader(BaseLoader):
             myhtml = self.get_data(url=url)
         except:
             print(f"No valid data at {url} found.\n Exiting")
-            sys.exit(0)
+            return
 
         parsed_data = parse_json(myhtml)
         #console.print_json(data=parsed_data)
@@ -181,7 +181,6 @@ class My5Loader(BaseLoader):
                         }
                         self.add_episode(series_name, episode)
                 except KeyError as e:
-                    print(f"Error: {e}")
                     continue  # Skip any episode that doesn't have the required information   
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
@@ -195,18 +194,13 @@ class My5Loader(BaseLoader):
             if url  == 'None':
                 print(f"No valid URL for {item.split(',')[1]}")
                 continue
-    
-            # debug uncomment
-            #print(url)
-
-            # finally fetch video
+ 
             
             if self.options_list[0] == '':
                 command = ['devine', 'dl', 'MY5', url]
             else:
                 command = ['devine', 'dl', *self.options_list, 'MY5', url]
             subprocess.run(command)
-            #self.clean_terminal()
             return
         
     def fetch_videos_by_category(self, browse_url):
@@ -223,7 +217,6 @@ class My5Loader(BaseLoader):
             
             # Parse the json data 
             init_data = parse_json(req)
-            #console.print_json(data=init_data)
             # Extract brand items
             myjson = init_data['shows']
 
@@ -246,7 +239,7 @@ class My5Loader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            sys.exit(0)
+            return
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)
@@ -262,7 +255,7 @@ class My5Loader(BaseLoader):
             
         else:
             print("No video selected.")
-            sys.exit(0)
+            return
 
             
     	

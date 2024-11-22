@@ -244,7 +244,7 @@ class VineFeeder(QWidget):
         
         else:
             print("No valid data entered!")
-            sys.exit()
+            sys.exit(0)
 
 
     def run_load_service_thread(self, service_name):
@@ -298,9 +298,13 @@ class VineFeeder(QWidget):
                 else:
                     print(f"No class {loader_class_name} found in {service_name}")
             except Exception as e:
-                print(f"Error loading service: {service_name}, {e}")
+                print(f"Error loading service: {service_name}")
+                print("Try again")
+                sys.exit(0)
         else:
             print(f"Service {service_name} not found!")
+            print('Try again')
+            sys.exit(0)
     def clear_search_box(self):
         self.search_url_entry.clear()
 

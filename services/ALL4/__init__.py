@@ -121,7 +121,7 @@ class All4Loader(BaseLoader):
             html = self.get_data(url)
             if 'No Matches' in html:
                 print('Nothing found for that search; try again.')
-                sys.exit(0)
+                return
             else:
                 parsed_data = self.parse_data(html)  # to json
         except Exception:
@@ -264,7 +264,7 @@ class All4Loader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            sys.exit(0)
+            return
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)

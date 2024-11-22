@@ -276,12 +276,7 @@ class BaseLoader:
 
         if not category:  # no category
             category = self.category
-        if 'Film' in category or 'Movie' in category:  # by defintion - single
-            # direct download
-            self.receive(1, url)
-            return
-
-        if 'film' in url or 'movie' in url:  # by defintion - single
+        if category.lower() in ['films', 'featured-category-films','movies','film', 'movie']:  # by defintion - single
             # direct download
             self.receive(1, url)
             return

@@ -96,7 +96,7 @@ class ItvxLoader(BaseLoader):
         url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,widevine,fairplay,bbts,progressive,hd,rtmpe&onlyFree=true&platform=dotcom&query={search_term}&size=24"
         html = self.get_data(url, headers)
         parsed_data = self.parse_data(html)
-        #console.print_json(data=parsed_data)#
+        
     
         # select only from FREE tier
         res = jmespath.search("""
@@ -112,8 +112,7 @@ class ItvxLoader(BaseLoader):
             title = next((value for value in item['title'] if value is not None), '')
             title = title.replace(' ', '-')
             url = f"https://www.itv.com/watch/{title}/{api1}"
-            #url = rinseurl(url)
-            synopsis = item['synopsis']
+    
             episode = {
                     'title': item.get('title', 'Unknown Title'),
                     'url': url,
@@ -126,7 +125,6 @@ class ItvxLoader(BaseLoader):
         selected_series = self.display_series_list()
         
         if selected_series:
-            #selected_series = self.display_episode_list(selected_series) # 
             # one series selected
             return self.second_fetch(selected_series)
         return None
@@ -150,7 +148,7 @@ class ItvxLoader(BaseLoader):
             myhtml = self.get_data(url=url, headers=headers)
         except:
             print(f"No valid data at {url} found.\n Exiting")
-            sys.exit(0)
+            return
         parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__', 0)
         self.clear_series_data()  # Clear existing series data
 
@@ -240,7 +238,7 @@ class ItvxLoader(BaseLoader):
             
         
             parsed_data = extract_script_with_id_json(myhtml, '__NEXT_DATA__', 0)
-            #console.print_json(data=parsed_data)
+    
 
             # jmespath is an efficient json parser that searches complex json
             # and, in this case, produces a simple dict from which
@@ -261,7 +259,7 @@ class ItvxLoader(BaseLoader):
             for entry in res:
                 entry['url'] = f"https://www.itv.com/watch/{entry['title']}/{entry['programmeId']}/{entry['episodeId']}"
 
-            #console.print_json(data=res)
+
 
             # Build the beaupylist for display
             for i, item in enumerate(res):
@@ -272,7 +270,7 @@ class ItvxLoader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            sys.exit(0)
+            return
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)

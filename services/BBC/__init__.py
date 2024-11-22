@@ -137,7 +137,7 @@ class BbcLoader(BaseLoader):
                  
             else:
                 print(f"No search term found  in {search_term}\nTry again with a series name in the url.")
-                sys.exit(0)
+                return
                 
         elif 'http' in search_term and inx == 2:
             self.category = category
@@ -162,7 +162,7 @@ class BbcLoader(BaseLoader):
             html = self.get_data(url, self.headers, params)
             if  'new_search' not in html:
                 print('Nothing found for that search; try again.')
-                sys.exit(0)
+                return
             else:
                 parsed_data = parse_json(html)  # to json
         except Exception:
@@ -238,11 +238,11 @@ class BbcLoader(BaseLoader):
                 series_name = parsed_data['programme_episodes']['programme']['title'] or 'unknownTitle'
             except KeyError:
                 print(f"No data found for {url}")
-                sys.exit(1)
+                return
             except Exception:
                 print(f"No episodes currently available for {url}")
                 print(f"Try again but be sure to use the series utmost top level url!")
-                sys.exit(1)
+                return
         
             # Go through each episode in the selected series and add it to the series data
             episodes = parsed_data.get('programme_episodes').get('elements')
