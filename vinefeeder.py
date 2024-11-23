@@ -77,9 +77,16 @@ class VineFeeder(QWidget):
         layout.addWidget(self.search_url_label)
         self.search_url_entry = QLineEdit()
         self.search_url_entry.setStyleSheet("""
-            border: 2px solid pink;
-                                                                        
+            QLineEdit {
+                border: 2px solid pink;
+            }
+            QLineEdit:focus {
+                border: 2px solid hotpink;
+                outline: none;
+            }
         """)
+
+    
         layout.addWidget(self.search_url_entry)
 
         highlighted_frame = QFrame()

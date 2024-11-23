@@ -1,8 +1,8 @@
 # VineFeeder
 
-VineFeeder is a dynamic Python-based application and **framework** that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
+VineFeeder is a dynamic Python-based application that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
 
-Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a configuration which will work out of the box, but Devine download options may be set on a service by service basis.
+Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a confuration which will work out of the box, but Devine download options may be set on a service by service basis.
 
 Features:
 
@@ -29,9 +29,6 @@ Features:
 *Ultra-High-definition*:  Videos in UHD are automatically requested from sites that provide such quality.
 hlg_status in config.yaml may be set to False to not do this.
 
-*Precision Episode Selection*:  Vinefeeder handles the selection of episodes and 'feeds' 
-	Devine one-by-one, making Devine's -w switch defunct.
-
 
 **Installation**
 
@@ -56,7 +53,7 @@ First be sure Devine works correctly to your liking, then, for VineFeeder,
 
 
 **Setup**
-if you run Devine in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder
+if you run Devine in a specific python environment, first start that environment before installing VineFeeder
 
 Clone the repository:
 With bash or a Window's Terminal
@@ -73,38 +70,22 @@ Run the application by executing the main script:
 
 With bash or a Window's Terminal
 
-    python vinefeeder.py 
+    python vinefeeder.py  
     or
     python vinefeeder.py -help
 
 As set-up on start it will run with zero modification. There are six UK services active.
 
-It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
-preferences, a dark background for better contrast with the colours used in Vinefeeder.
+*Interacting with Services*
+Once the GUI is launched, you can interact with various streaming services by clicking on their corresponding buttons.
+The 'URL or search' box MAY be used for an immediate search entry or direct-download URL. If left empty a menu is offered.
 
-**Interacting with Services**
-
-Once the GUI is launched, you mau interact with various streaming services by clicking on their corresponding buttons.
-The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or it may be left empty. 
-If left empty a menu is offered.
-
-**Help**
-
-Starting VineFeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
-
-**Service Configuration**
-
-Most users will not need alter any configuration to download videos!
-
-However, if you have, in your past use of Devine resorted to setting Devine-download options other than -w etc.
-You may continue to do with VineFeeder only you do so just once, in the config.yaml for each service.
-Each service's config.yaml has an 'options:' entry just add the string you would use with devine e.g -q 720  to
-ensure only 720p resolution videos are selected.
+Starting vinefeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
+Each service's config.yaml may have an 'options:' entry just add the string you would use with devine.
 
 To open a config.yaml for a service:-
 
-    python vinefeeder.py --service-folder <SERVICE-NAME>
-    python vinefeeder.py --service-folder ALL4, for example
+    python vinefeeder.py --service-folder ALL4
     
 Edit the line starting 'options'. Use exactly the same syntax as Devine would require on its command line
 
@@ -121,75 +102,17 @@ Services are displayed in alphabetical order for easy access. From there, you ca
 **Services**
 
 Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
-Other services: awaiting contributors!!
-
-**Text Entry Box**
-
-This will be the predominant method of using VineFeeder. Search on a keyword to locate a
-programme series and click on its title when search finishes, to select any combination of
-episodes for download.
-
-Additionlly the search box will take a URL for direct download. The URL may be for a single
-episode and it will download directly. If you feed a URL for a *series of episode* i.e a 
-series-link then Devine will download the series.
-
-The text-entry-box is cleared automatically after use. Once a download successfully finishes
-the screen displays 'Ready!' and waits for further entry.
-
-**Series numbers**
-
-Normally services will provide enough data to collect a series number.
-When series numbers are not available, Vinfeeder sets a default number of 100.
-This is for housekeeping reasons. Devine labelling defaults to 00 for any saved
-videos without a specified series number.
-
-**Backing out**
-
-If you have followed a path to a selection and do not wish to continue then,
-in most  circumstances, depending on operating system, ctrl-C will return you
-to a 'Ready!' status display on the screen within a second or two, and await
-further operations.
-
-**Closing Down**
-
-The GUI should first be shutdown by mouse-clicking the top right X. The GUI then should
-release control of the Terminal. ctrl-C in the Terminal may be required if shutting down 
-following an error.
+Other services: awaiting conributors!!
 
 **Custom Services**
 
-Vinefeeder is a *framework* too. It has been written in such a way that most features 
-needed to scape and parse a website are already written and available.
-
 If you feel moderately confident with python, then writing a new service to allow Devine 
-to be run more interactively, is relatively straightforward. Most of the processes for
+to be run more interactively, is relatively straighforward. Most of the processes for
 downloading, parsing and displaying for selection form part of the base functions and
-are already written in this framework.
+are already written.
 
-Any new service will need an __init__.py to be written and to implement just four 
+Any new service will need an __init_.py to be written and to implement just four 
 methods. 
-
-The ultimate aim of a services's __init__.py is to extract a list of video-data from  a content 
-provide and store it a numerous dict items in a list container. The video-data is collected in 
-dict objects labelled 'episode'.
-
-Each episode has
-
-		    episode = {
-                        'series_no': ser_number,
-                        'title': ep_number,
-                        'url': url,
-                        'synopsis': synopsis
-                    }
-        
-Note 'title' may be an episode number or descriptive text. It varies with provider
-The dict is added to the Vinefeeder storage list by:-
-
-                    self.add_episode(brand_slug, episode)
-
-Note brand_slug is a series-name.  self.add_episode creates a lists of episode dicts
-This happens in the __init__.py super-class of BaseLoader
-
 
 To add a new service:
 
@@ -197,15 +120,11 @@ To add a new service:
     Add the following:
         A config.yaml file with the media_dict. see examples in the existing services folder.
         
-        An __init__.py file defining the loader class for the service.
-        The name of the loader class is constrained. It must take the service tag name, e.g. TVNZ
-        and use that to create the class-name TvnzLoader. This allows vinefeeder.py discover and
-        to call its use later.
-        Note: the loader class file MUST inherit (or sub-class) BaseLoader see ALL4/__init__.py  
-        as an example.
-        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' 
-        page where video categories may be selected for view. Use some/all of these links to 
-        produce a media_dict of ( catergory: link, }
+        An __init__.py file defining the loader class for the service (e.g., TvnzLoader).
+        Note: the loader class file MUST inherit BaseLoader see ALL4/__init__.py  as an example.
+        Note: Most web-sites that provide on-demand streaming have a 'browse' or 'category' page where 
+        video categories may be selected for view. Use some/all of these 
+        links to produce a media_dict of ( catergory: link, }
         
         There are 4 methods to implement
             receive
@@ -256,9 +175,7 @@ To add a new service:
         FETCH_VIDEO_BY_CATEGORY
         Displays the media_dict from congig.yaml - so put any category heading andn links in the new service config.
         One a category is selected again parse json and follow an existing service for a model answer adjusting to suite the 
-        syntax required by our new service. 
-        Potentially, you may not implement this if the site does not provide a worthwhile browse by category list,
-        or the data cannot be parsed readily. U falls into this category. 
+        syntax required by our new service.  
 
 VineFeeder will dynamically detect and load the new services on the next start.
 
@@ -290,5 +207,3 @@ Images
 **License**
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
-
-
