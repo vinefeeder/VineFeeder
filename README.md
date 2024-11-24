@@ -61,7 +61,7 @@ if you run Devine in a specific python environment  (virtual environment - venv)
 Clone the repository:
 With bash or a Window's Terminal
 
-    git clone https://github.com/your-username/vinefeeder.git
+    git clone https://github.com/vinefeeder/VineFeeder.git
     cd VineFeeder
     pip install -r requirements.txt
 
@@ -290,5 +290,3 @@ Images
 **License**
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
-
-
