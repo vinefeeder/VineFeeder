@@ -291,6 +291,7 @@ class VineFeeder(QWidget):
                                 loader_instance.clean_terminal()
                                 sys.exit(0)
                             else:
+
                                 loader_instance.receive(3, text_to_pass, None, hlg_status, options) # inx 3 for keyword search
                                 self.clear_search_box()
                                 loader_instance.clean_terminal()

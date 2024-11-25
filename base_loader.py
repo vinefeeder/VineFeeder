@@ -46,7 +46,7 @@ class BaseLoader:
             headers = self.headers
         response = self.client.get(url, headers=headers, params=params, follow_redirects=True)
         if response.status_code != 200:
-            raise Exception("Failed to retrieve data.")
+            raise Exception
         return response.text
     
     def get_options(self, url, headers=None):

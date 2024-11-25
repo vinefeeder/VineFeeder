@@ -27,7 +27,8 @@ class All4Loader(BaseLoader):
         Attributes:
             options (str): Global options; later taken from service config.yaml
             headers (dict): Global headers; may be overridden
-        """ 
+        """
+        #self.options = ''  
         
         headers = {
             'Accept': '*/*',
@@ -72,9 +73,9 @@ class All4Loader(BaseLoader):
         if 'http' in search_term and inx == 1:
 
             if self.options_list[0] == '':
-                command = ['devine', 'dl', 'ALL4', url]
+                command = ['devine', 'dl', 'ALL4', search_term]
             else:
-                command = ['devine', 'dl', *self.options_list, 'ALL4', url]
+                command = ['devine', 'dl', *self.options_list, 'ALL4', search_term]
             subprocess.run(command)
             
             
@@ -121,7 +122,7 @@ class All4Loader(BaseLoader):
             html = self.get_data(url)
             if 'No Matches' in html:
                 print('Nothing found for that search; try again.')
-                return
+                sys.exit(0)
             else:
                 parsed_data = self.parse_data(html)  # to json
         except Exception:
@@ -180,10 +181,9 @@ class All4Loader(BaseLoader):
                 print(f"No episodes found for {series_name}\nThis is quite common with Channel 4. Exiting.")
                 return
             for item in episodes:
-
                 try:
                     episode = {
-                        'series_no': item.get('seriesNumber', '100'),  # number exists or '100'
+                        'series_no': item.get('seriesNumber', '00'),  # number exists or '00'
                         'title': item.get('title', 'Title unknown'),
                         'url': item.get('hrefLink'),
                         'synopsis': item['summary'] or None,
@@ -264,7 +264,7 @@ class All4Loader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            return
+            sys.exit(0)
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)
