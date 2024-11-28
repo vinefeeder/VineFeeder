@@ -126,9 +126,9 @@ class TvnzLoader(BaseLoader):
             print(f'No valid data returned for {url}')
             return
         #console.print_json(data=parsed_data)
-        f = open('tvnz.json', 'w')
+        '''f = open('tvnz.json', 'w')
         f.write(json.dumps(parsed_data))  # parsed_data)
-        f.close()
+        f.close()'''
         if parsed_data and 'results' in parsed_data:
             for item in parsed_data['results']:
                 series_name = item.get('title', 'Unknown Series')
@@ -305,7 +305,7 @@ class TvnzLoader(BaseLoader):
             linkList = []
            
             for item_key, item in parsed_data['_embedded'].items():
-                print(item_key)
+                #print(item_key)
                 try:
                     if item.get('type') == 'category':
                         continue
