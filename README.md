@@ -79,7 +79,8 @@ With bash or a Window's Terminal
 
 As set-up on start it will run with zero modification. There are six UK services and TVNZ active.
 Regard TVNZ as experimental for the time being. For one thing Devine's TVNZ service fails on some
-titles and the VineFeeder service is still in testing.
+Sports titles and the VineFeeder service is still in testing. If Devine fails use the URL with Ozivine -
+there are reports it works. This Ozivine fork has a downloader https://github.com/liam8888999/ozivine
 
 It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
 preferences, a dark background for better contrast with the colours used in Vinefeeder.
