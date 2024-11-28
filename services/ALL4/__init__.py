@@ -264,7 +264,7 @@ class All4Loader(BaseLoader):
 
         except Exception as e:
             print(f"Error fetching category data: {e}")
-            sys.exit(0)
+            return
         
         # call function in BaseLoader 
         found = self.display_beaupylist(beaupylist)

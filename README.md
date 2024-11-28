@@ -77,7 +77,9 @@ With bash or a Window's Terminal
     or
     python vinefeeder.py -help
 
-As set-up on start it will run with zero modification. There are six UK services active.
+As set-up on start it will run with zero modification. There are six UK services and TVNZ active.
+Regard TVNZ as experimental for the time being. For one thing Devine's TVNZ service fails on some
+titles and the VineFeeder service is still in testing.
 
 It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
 preferences, a dark background for better contrast with the colours used in Vinefeeder.
@@ -120,7 +122,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     
 **Services**
 
-Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services. 
+Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services and now TVNZ. 
 Other services: awaiting contributors!!
 
 **Text Entry Box**

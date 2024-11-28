@@ -112,7 +112,21 @@ class BaseLoader:
     def add_final_episode(self, episode):
         """build episode list for final selction for download"""
         if episode not in self.final_episode_data:  # Ensure no duplicates
-            self.final_episode_data.append(episode)    
+            self.final_episode_data.append(episode) 
+
+    def sort_episodes(self, data): # sort final episode data
+        # ONLY for some services
+        # Sort the list by series_no and episode_no (title: will fail if title is free string)
+        try:
+            sorted_data = sorted(
+                data,
+                key=lambda x: (int(x["series_no"]), int(x["title"])),
+            )
+
+            return sorted_data
+        except Exception:
+            return data
+   
 
     def get_series(self, series_name=None):
         """Return all episodes from a specific series or all series data."""
@@ -162,8 +176,7 @@ class BaseLoader:
             # chars in series number cannot be parsed to an int
             unsorted_list = [ep['series_no'] for ep in self.series_data[series_name]]
             return unsorted_list
-            
-            
+             
         return mysorted_list
     
     def display_non_contiguous_series(self, episode_series_numbers):
