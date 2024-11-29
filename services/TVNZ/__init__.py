@@ -139,7 +139,7 @@ class TvnzLoader(BaseLoader):
                     'url': url,
                     'synopsis': item.get('synopsis','No synopsis available.')
                 }
-                self.add_episode_remove_duplicates(series_name, episode)
+                self.add_episode(series_name, episode)
         else:
             print(f'No valid data returned for {url}')
             return None
@@ -238,7 +238,7 @@ class TvnzLoader(BaseLoader):
                                 'url': myurl,
                                 'synopsis': synopsis
                             }
-                            self.add_episode_remove_duplicates(series_name, episode)
+                            self.add_episode(series_name, episode)
                     except Exception:
                         pass  
 
