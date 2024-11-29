@@ -341,12 +341,6 @@ class TvnzLoader(BaseLoader):
             if showType == 'Movie':
                 # direct download
                 return self.receive(inx=1, search_term=url)
-            elif showType == 'sportVideo':
-                self.showType = showType
-                # tring to catch sports videos
-                #
-                #
-                #
 
             else:
                 # greedy search
