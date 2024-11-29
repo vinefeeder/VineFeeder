@@ -1,10 +1,8 @@
 # TVNZ __init__.py
 from base_loader import BaseLoader
-from parsing_utils import extract_params_json, split_options, prettify
+from parsing_utils import  split_options, prettify
 from rich.console import Console
 import subprocess
-import sys
-import jmespath
 import json
 from beaupy import select_multiple
 
@@ -109,7 +107,7 @@ class TvnzLoader(BaseLoader):
 
         return
     def fetch_videos(self, search_term):
-        """Fetch videos from Channel 4 using a search term.
+        """Fetch videos from TVNZ using a search term.
             Here the first search for series titles matches all or part of search_term.
             The function will prepare the series data, matching the search term for display.
         """
@@ -207,10 +205,7 @@ class TvnzLoader(BaseLoader):
                     except Exception:
                         print(f'No valid data returned for {url}')
                         return
-                try:  
-                    #html = self.get_data(url)
-                    #parsed_data = self.parse_data(html)
-                    
+                try:    
                     href_list = []
                     
                     # iterate over all seasons and capture url for each
@@ -240,7 +235,7 @@ class TvnzLoader(BaseLoader):
                             }
                             self.add_episode(series_name, episode)
                     except Exception:
-                        pass  
+                        pass  # throw away any episode that does not fit the scheme
 
                 else:
                     print(f"No valid data at {url} found.\n Exiting")
@@ -250,7 +245,7 @@ class TvnzLoader(BaseLoader):
             return
         
         self.options_list = split_options(self.options)
-
+        # direct download single items
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
             url = "https://tvnz.co.nz" + item['url']
@@ -261,7 +256,7 @@ class TvnzLoader(BaseLoader):
                 command = ['devine', 'dl', *self.options_list, 'TVNZ', url]
             subprocess.run(command)
             return None
-        
+        # else present list of series and display for multiple selection
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         self.final_episode_data = self.sort_episodes(self.get_final_episode_list())
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
@@ -293,19 +288,20 @@ class TvnzLoader(BaseLoader):
         try:
             req = self.get_data(browse_url, headers=self.headers)
             
-            # Parse the __PARAMS__ data 
+            # Parse the json returned
             parsed_data = self.parse_data(req)
 
+            # for development only
             '''console.print_json(data=parsed_data)
             f = open("cat_tvnz.json",'w')
             f.write(json.dumps(parsed_data))
             f.close()'''
+
             i = 1
             beaupylist = []
             linkList = []
            
             for item_key, item in parsed_data['_embedded'].items():
-                #print(item_key)
                 try:
                     if item.get('type') == 'category':
                         continue
@@ -319,14 +315,20 @@ class TvnzLoader(BaseLoader):
                         showType = item.get('showType', 'unknown')
                         myurl = 'https://tvnz.co.nz' + item.get('page', {}).get('url', '')
                     title = item.get('title', 'Unknown Title')
+                    # we are adding an episode to the series data using title as series name
+                    # There will be some episodes with the same series name.
+                    # in the context of category browsing TVNZ allows duplicates.
+                    # below we only take the fist item with a series name
+                    # and add that to our beaupylist for display.
                     episode = {
                         'index': i, 
                         'title': item.get('title', 'Unknown Title'),
                         'synopsis': item.get('synopsis', 'No synopsis available'),
                         
                         }
-                    self.add_episode_remove_duplicates(title, episode)
-                    #beaupylist.append(f"{i} {title.replace('_',' ')}\n\t{synopsis}") 
+                    self.add_episode(title, episode)
+                    # linked list allows keeping the url away from beaupy list
+                    # we pull the url from selected by using index
                     linkList.append([myurl, showType])  
                     i += 1
                 except:
@@ -335,9 +337,10 @@ class TvnzLoader(BaseLoader):
                 print(f"Error fetching category data: {e}")
                 return      
         
-        #found = self.display_beaupylist(beaupylist)
         data = self.get_series_data()
-
+        # unique to TVNZ
+        # get first item in each list to create a beaupylist
+        # without duplicates
         for key, items in data.items():
             if items:  # Check if the list is not empty
                 first_item = items[0]  # Get the first dictionary
