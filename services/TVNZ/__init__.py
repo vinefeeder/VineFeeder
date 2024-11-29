@@ -139,7 +139,7 @@ class TvnzLoader(BaseLoader):
                     'url': url,
                     'synopsis': item.get('synopsis','No synopsis available.')
                 }
-                self.add_episode(series_name, episode)
+                self.add_episode_remove_duplicates(series_name, episode)
         else:
             print(f'No valid data returned for {url}')
             return None
@@ -238,7 +238,7 @@ class TvnzLoader(BaseLoader):
                                 'url': myurl,
                                 'synopsis': synopsis
                             }
-                            self.add_episode(series_name, episode)
+                            self.add_episode_remove_duplicates(series_name, episode)
                     except Exception:
                         pass  
 
@@ -318,11 +318,15 @@ class TvnzLoader(BaseLoader):
                     elif item.get('type') == 'sportVideo':
                         showType = item.get('showType', 'unknown')
                         myurl = 'https://tvnz.co.nz' + item.get('page', {}).get('url', '')
-                        print(myurl)
-
-                    synopsis = item.get('synopsis', 'No synopsis available')
-                    title = item.get('title', 'unknown')
-                    beaupylist.append(f"{i} {title.replace('_',' ')}\n\t{synopsis}") 
+                    title = item.get('title', 'Unknown Title')
+                    episode = {
+                        'index': i, 
+                        'title': item.get('title', 'Unknown Title'),
+                        'synopsis': item.get('synopsis', 'No synopsis available'),
+                        
+                        }
+                    self.add_episode_remove_duplicates(title, episode)
+                    #beaupylist.append(f"{i} {title.replace('_',' ')}\n\t{synopsis}") 
                     linkList.append([myurl, showType])  
                     i += 1
                 except:
@@ -330,18 +334,26 @@ class TvnzLoader(BaseLoader):
         except Exception as e:
                 print(f"Error fetching category data: {e}")
                 return      
-               
-        # call function in BaseLoader
+        
+        #found = self.display_beaupylist(beaupylist)
+        data = self.get_series_data()
+
+        for key, items in data.items():
+            if items:  # Check if the list is not empty
+                first_item = items[0]  # Get the first dictionary
+                index = first_item['index']
+                title = first_item['title']
+                synopsis = first_item['synopsis']
+                beaupylist.append(f"{index}  {title}\n\t{synopsis}")
 
         found = self.display_beaupylist(beaupylist)
-        
+        self.clear_series_data()
         if found:
             ind = found.split(' ')[0]
             url, showType = linkList[int(ind)-1]
-            if showType == 'Movie':
+            if showType == 'Movie' or showType == 'NonEpisodic':
                 # direct download
                 return self.receive(inx=1, search_term=url)
-
             else:
                 # greedy search
                 search_term = url.split('/')[4].replace('-',' ')
