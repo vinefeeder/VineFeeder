@@ -224,7 +224,7 @@ class TvnzLoader(BaseLoader):
                     try:
                         for item_key, item in parsed_data['_embedded'].items():
                             series_no = item.get('seasonNumber', '100')
-                            myurl = 'https://tvnz.co.nz' + item.get('page', {}).get('url', '')
+                            myurl = 'https://www.tvnz.co.nz' + item.get('page', {}).get('url', '')
                             episode_no = item.get('episodeNumber', None)
                             synopsis = item.get('synopsis', 'No synopsis available')
                             episode = {
@@ -235,7 +235,7 @@ class TvnzLoader(BaseLoader):
                             }
                             self.add_episode(series_name, episode)
                     except Exception:
-                        pass  # throw away any episode that does not fit the scheme
+                        pass  # disregard any episode that does not fit the scheme
 
                 else:
                     print(f"No valid data at {url} found.\n Exiting")
@@ -248,8 +248,11 @@ class TvnzLoader(BaseLoader):
         # direct download single items
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
-            url = "https://tvnz.co.nz" + item['url']
-            
+            #check if has https://www.tvnz.co.nz
+            if 'https://www.tvnz.co.nz' in item['url']:    
+                url =  item['url']
+            else:
+                url = f'https://www.tvnz.co.nz{item["url"]}'
             if self.options_list[0] == '':
                 command = ['devine', 'dl', 'TVNZ', url]
             else:
@@ -278,7 +281,7 @@ class TvnzLoader(BaseLoader):
         
     def fetch_videos_by_category(self, browse_url):
         """
-        Fetches videos from a category (Channel 4 specific).
+        Fetches videos from a category (VERY TVNZ specific).
         Args:
             browse_url (str): URL of the category page.
         Returns:
@@ -306,20 +309,20 @@ class TvnzLoader(BaseLoader):
                     if item.get('type') == 'category':
                         continue
                     elif item.get('type') == 'showVideo': 
-                        myurl = 'https://tvnz.co.nz' + item.get('page', {}).get('url', '')
+                        myurl = 'https://www.tvnz.co.nz' + item.get('page', {}).get('url', '')
                         showType = item.get('showType', 'unknown')
                     elif item.get('type') == 'show':
                         showType = item.get('showType', 'unknown')
-                        myurl = 'https://tvnz.co.nz' + item.get('watchAction', {}).get('link', '')
+                        myurl = 'https://www.tvnz.co.nz' + item.get('watchAction', {}).get('link', '')
                     elif item.get('type') == 'sportVideo':
                         showType = item.get('showType', 'unknown')
-                        myurl = 'https://tvnz.co.nz' + item.get('page', {}).get('url', '')
+                        myurl = 'https://www.tvnz.co.nz' + item.get('page', {}).get('url', '')
                     title = item.get('title', 'Unknown Title')
                     # we are adding an episode to the series data using title as series name
                     # There will be some episodes with the same series name.
                     # in the context of category browsing TVNZ allows duplicates.
-                    # below we only take the fist item with a series name
-                    # and add that to our beaupylist for display.
+                    # Below we only take the fist item with a series name
+                    # and add that to our beaupylist for display. Thus duplicates are not added.
                     episode = {
                         'index': i, 
                         'title': item.get('title', 'Unknown Title'),
@@ -328,7 +331,7 @@ class TvnzLoader(BaseLoader):
                         }
                     self.add_episode(title, episode)
                     # linked list allows keeping the url away from beaupy list
-                    # we pull the url from selected by using index
+                    # we pull the url from selected by referencing the index  in linkList
                     linkList.append([myurl, showType])  
                     i += 1
                 except:
@@ -343,7 +346,7 @@ class TvnzLoader(BaseLoader):
         # without duplicates
         for key, items in data.items():
             if items:  # Check if the list is not empty
-                first_item = items[0]  # Get the first dictionary
+                first_item = items[0]  # Get the first dictionary, any more may be duplicates
                 index = first_item['index']
                 title = first_item['title']
                 synopsis = first_item['synopsis']
