@@ -352,7 +352,7 @@ class TvnzLoader(BaseLoader):
         found = self.list_display_beaupylist(beaupylist)
         self.clear_series_data()
         if found:
-            ind = found.split(' ')[0]
+            ind = found[0]
             url, showType = linkList[int(ind)-1]
             if showType == 'Movie' or showType == 'NonEpisodic':
                 # direct download
