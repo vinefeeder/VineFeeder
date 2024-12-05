@@ -266,12 +266,23 @@ class BaseLoader:
 
     def list_display_beaupylist(self, beaupylist):
 
+        """
+        List all the episodes in the beaupylist, and allow the user to select an episode.
+        The function will return the selected episode.
+        This version takes a list of LISTS which is more in keeping with beaupy's intentions
+        And is the preferred method for future services.
+        """
         found = select(beaupylist, preprocessor=lambda val: list_prettify(val),\
                         cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
     
     def display_beaupylist(self, beaupylist):
 
+        """
+        List all the episodes in the beaupylist, and allow the user to select an episode.
+        The function will return the selected episode.
+        This function takes a list of STRINGS and is now deprecated
+        """
         found = select(beaupylist, preprocessor=lambda val: prettify(val),\
                         cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
