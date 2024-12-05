@@ -264,9 +264,15 @@ class BaseLoader:
                     self.add_final_episode(episode)
                     
 
-    def display_beaupylist(self, beaupylist):
+    def list_display_beaupylist(self, beaupylist):
 
         found = select(beaupylist, preprocessor=lambda val: list_prettify(val),\
+                        cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
+        return found
+    
+    def display_beaupylist(self, beaupylist):
+
+        found = select(beaupylist, preprocessor=lambda val: prettify(val),\
                         cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
         

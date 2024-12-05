@@ -349,7 +349,7 @@ class TvnzLoader(BaseLoader):
                 synopsis = first_item['synopsis']
                 beaupylist.append([index,title,synopsis])
 
-        found = self.display_beaupylist(beaupylist)
+        found = self.list_display_beaupylist(beaupylist)
         self.clear_series_data()
         if found:
             ind = found.split(' ')[0]
