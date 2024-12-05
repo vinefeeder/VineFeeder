@@ -203,6 +203,26 @@ def prettify(val, splitchar: str = '\t'):
         return f"{title}\t{synopsis}"
     except:
         return f"[#89B4FA]{val}[/]"   
+    
+def list_prettify(my_list):
+    """
+    Formats a list of three elements into a styled string using rich text formatting.
+
+    Parameters:
+    my_list (list): A list containing three elements to be formatted.
+
+    Returns:
+    str: A formatted string where the first two elements are displayed in green
+         and the third element is displayed in cyan on a new line with indentation.
+    """
+    my_beaupystring = []
+    one = my_list[0]
+    two = my_list[1]
+    three = my_list[2]
+
+    my_beaupystring = f"[green]{one}, {two}[/green][cyan]\n\t{three}[/cyan]"
+    return my_beaupystring
+
 def split(strng, sep, pos):
 
     """

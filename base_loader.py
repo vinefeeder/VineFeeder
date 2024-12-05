@@ -1,5 +1,5 @@
 from httpx import Client
-from parsing_utils import parse_json, prettify
+from parsing_utils import parse_json, prettify, list_prettify
 from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
@@ -266,7 +266,7 @@ class BaseLoader:
 
     def display_beaupylist(self, beaupylist):
 
-        found = select(beaupylist, preprocessor=lambda val: prettify(val),\
+        found = select(beaupylist, preprocessor=lambda val: list_prettify(val),\
                         cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
         return found
         
