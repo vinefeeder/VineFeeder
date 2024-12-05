@@ -1,6 +1,6 @@
 # TVNZ __init__.py
 from base_loader import BaseLoader
-from parsing_utils import  split_options, prettify
+from parsing_utils import  split_options, prettify, list_prettify
 from rich.console import Console
 import subprocess
 import json
@@ -67,7 +67,6 @@ class TvnzLoader(BaseLoader):
 
         # re-entry here for second time loses options settings
         # so reset
-        
         if opts:
             TvnzLoader.options = opts
         self.options_list = split_options(TvnzLoader.options)
@@ -80,8 +79,6 @@ class TvnzLoader(BaseLoader):
             else:
                 command = ['devine', 'dl', *self.options_list, 'TVNZ', search_term]    
             subprocess.run(command)
-            
-            
             return
 
         # keyword search
@@ -171,9 +168,9 @@ class TvnzLoader(BaseLoader):
             if type == 'sportVideo':
                 for item in episodes[selected]:  # existing data
                     url = 'https://www.tvnz.co.nz/' + item.get('url').split('/page/')[1]
-                    beaupylist.append(f"{item.get('title')} {url}\n\t{item.get('synopsis', 'No synopsis available.')}")
+                    beaupylist.append([item.get('title'), url, item.get('synopsis', 'No synopsis available.')])
 
-                selected = select_multiple(beaupylist, preprocessor=lambda val: prettify(val),  minimal_count=1, cursor_style="pink1" ,pagination=True, page_size = 8)
+                selected = select_multiple(beaupylist, preprocessor=lambda val: list_prettify(val),  minimal_count=1, cursor_style="pink1" ,pagination=True, page_size = 8)
 
                 for item in selected:
                     url = item.split(' ')[-1].split('\n\t')[0]
@@ -350,7 +347,7 @@ class TvnzLoader(BaseLoader):
                 index = first_item['index']
                 title = first_item['title']
                 synopsis = first_item['synopsis']
-                beaupylist.append(f"{index}  {title}\n\t{synopsis}")
+                beaupylist.append([index,title,synopsis])
 
         found = self.display_beaupylist(beaupylist)
         self.clear_series_data()
