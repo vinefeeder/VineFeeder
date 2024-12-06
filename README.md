@@ -50,13 +50,17 @@ Requirements
         Scrapy
 
 You can install the necessary VineFeeder packages with bash or a Window's Terminal. Make sure to install python modules to the same python environment (env) as Devine
-First be sure to follow Devine's install and set-up procedure and ensure it all works correctly to your liking. **If you have installed Devine by any other way than via a 'pip install devine' then do so before running VineFeeder!  Make absolutely sure devine can be called from any folder on your system.**  Then, for VineFeeder,
+First be sure to follow Devine's install and set-up procedure and ensure it all works correctly to your liking.
+
+**If you have installed Devine by any other way than via a 'pip install devine' then remove it and re-install using the correct method before running VineFeeder!  The re-install should pick-up the last configuration. if not re-configure evine. Make absolutely sure devine can be called from any folder on your system.**  
+
+Then, for VineFeeder,
 
     pip install -r requirements.txt
 
 
 **Setup**
-if you run Devine in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder
+if you've installed Devine, via pip, in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder to the same environment.
 
 Clone the repository:
 With bash or a Window's Terminal
