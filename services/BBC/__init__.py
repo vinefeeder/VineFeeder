@@ -99,14 +99,21 @@ class BbcLoader(BaseLoader):
             options_list = split_options(BbcLoader.options)
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
-                command = ['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', search_term] \
-                    if self.options_list else ['devine', 'dl', 'iP', search_term]
-                subprocess.run(command)
+                try:
+                    command = ['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', search_term] \
+                        if self.options_list else ['devine', 'dl', 'iP', search_term]
+                    subprocess.run(command)
+                except Exception as e:
+                    print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+
 
             else:
-                command = ['devine', 'dl', *self.options_list, 'iP', search_term] \
-                    if self.options_list else ['devine', 'dl', 'iP', search_term]
-                subprocess.run(command)
+                try:
+                    command = ['devine', 'dl', *self.options_list, 'iP', search_term] \
+                        if self.options_list else ['devine', 'dl', 'iP', search_term]
+                    subprocess.run(command)
+                except Exception as e:
+                    print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
          
             return
 
@@ -278,10 +285,13 @@ class BbcLoader(BaseLoader):
                     self.AVAILABLE_HLG = True
                     break 
             #self.options_list = split_options(self.options)
-            if BbcLoader.HLG and self.AVAILABLE_HLG:
-                subprocess.run(['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', url])
-            else:
-                subprocess.run(['devine', 'dl', *self.options_list, 'iP', url])
+            try:
+                if BbcLoader.HLG and self.AVAILABLE_HLG:
+                    subprocess.run(['devine', 'dl', *self.options_list, '--range', 'HLG', 'iP', url])
+                else:
+                    subprocess.run(['devine', 'dl', *self.options_list, 'iP', url])
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             return  
   
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series

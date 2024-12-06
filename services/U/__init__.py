@@ -49,11 +49,14 @@ class ULoader(BaseLoader):
         # direct download
         if 'http' in search_term and inx == 1:
             #options_list = split_options(ULoader.options)
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'U', search_term]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'U', search_term]
-            subprocess.run(command)  # url
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'U', search_term]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'U', search_term]
+                subprocess.run(command)  # url
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             
             return
 
@@ -193,11 +196,14 @@ class ULoader(BaseLoader):
         options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'U', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'U', url]
-            subprocess.run(command)
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'U', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'U', url]
+                subprocess.run(command)
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             
         return None
     

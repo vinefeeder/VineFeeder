@@ -71,15 +71,16 @@ class All4Loader(BaseLoader):
         self.options_list = split_options(All4Loader.options)
         # direct download
         if 'http' in search_term and inx == 1:
-
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'ALL4', search_term]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'ALL4', search_term]
-            subprocess.run(command)
-            
-            
-            return
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'ALL4', search_term]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'ALL4', search_term]
+                subprocess.run(command)
+                return
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+                return
 
         # keyword search
         elif inx == 3:
@@ -197,15 +198,16 @@ class All4Loader(BaseLoader):
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
             url = "https://www.channel4.com" + item['url']
-            
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'ALL4', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'ALL4', url]
-            subprocess.run(command)
-            
-    
-            return None
+            try:    
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'ALL4', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'ALL4', url]
+                subprocess.run(command)
+                return None
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+                return
         
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         selected_final_episodes = self.display_final_episode_list(self.final_episode_data)
@@ -217,15 +219,16 @@ class All4Loader(BaseLoader):
                 print(f"No valid URL for {item.split(',')[1]}")
                 continue
             url = "https://www.channel4.com" + url
-            
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'ALL4', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'ALL4', url]
-            subprocess.run(command)
-            
-        
-            return
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'ALL4', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'ALL4', url]
+                subprocess.run(command)
+                return
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+                return
 
 
     def fetch_videos_by_category(self, browse_url):

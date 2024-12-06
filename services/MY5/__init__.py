@@ -131,12 +131,14 @@ class My5Loader(BaseLoader):
         if 'https' in selected:  # direct url: not sure how this may happen with My5??
             url = selected
             self.options_list = split_options(self.options)
-
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'MY5', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'MY5', url]
-            subprocess.run(command)
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'MY5', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'MY5', url]
+                subprocess.run(command)
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             return
         else:
             url = self.get_selected_url(selected)
@@ -195,12 +197,14 @@ class My5Loader(BaseLoader):
                 print(f"No valid URL for {item.split(',')[1]}")
                 continue
  
-            
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'MY5', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'MY5', url]
-            subprocess.run(command)
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'MY5', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'MY5', url]
+                subprocess.run(command)
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             return
         
     def fetch_videos_by_category(self, browse_url):

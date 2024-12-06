@@ -73,13 +73,16 @@ class TvnzLoader(BaseLoader):
         # direct download
 
         if 'http' in search_term and inx == 1:
-
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'TVNZ', search_term]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'TVNZ', search_term]    
-            subprocess.run(command)
-            return
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'TVNZ', search_term]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'TVNZ', search_term]    
+                subprocess.run(command)
+                return
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+                return
 
         # keyword search
         elif inx == 3:
@@ -199,8 +202,8 @@ class TvnzLoader(BaseLoader):
                         subprocess.run(command) 
                         return
                     
-                    except Exception:
-                        print(f'No valid data returned for {url}')
+                    except Exception as e:
+                        print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
                         return
                 try:    
                     href_list = []
@@ -246,16 +249,21 @@ class TvnzLoader(BaseLoader):
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
             #check if has https://www.tvnz.co.nz
+
             if 'https://www.tvnz.co.nz' in item['url']:    
                 url =  item['url']
             else:
                 url = f'https://www.tvnz.co.nz{item["url"]}'
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'TVNZ', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'TVNZ', url]
-            subprocess.run(command)
-            return None
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'TVNZ', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'TVNZ', url]
+                subprocess.run(command)
+                return None
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
+                return
         # else present list of series and display for multiple selection
         self.prepare_series_for_episode_selection(series_name) # creates list of series; allows user selection of wanted series prepares an episode list over chosen series
         self.final_episode_data = self.sort_episodes(self.get_final_episode_list())

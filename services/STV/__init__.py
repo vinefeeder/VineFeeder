@@ -49,13 +49,15 @@ class StvLoader(BaseLoader):
         # direct download
 
         if 'http' in search_term and inx == 1:
-            
-            self.options_list = split_options(StvLoader.options)
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'STV', search_term]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'STV', search_term]
-            subprocess.run(command) # url
+            try:
+                self.options_list = split_options(StvLoader.options)
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'STV', search_term]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'STV', search_term]
+                subprocess.run(command) # url
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
             
             return
 
@@ -278,11 +280,14 @@ class StvLoader(BaseLoader):
         self.options_list = split_options(self.options)
         for item in selected_final_episodes:
             url = item.split(',')[2].lstrip()
-            if self.options_list[0] == '':
-                command = ['devine', 'dl', 'STV', url]
-            else:
-                command = ['devine', 'dl', *self.options_list, 'STV', url]
-            subprocess.run(command)  
+            try:
+                if self.options_list[0] == '':
+                    command = ['devine', 'dl', 'STV', url]
+                else:
+                    command = ['devine', 'dl', *self.options_list, 'STV', url]
+                subprocess.run(command) 
+            except Exception as e:
+                print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?") 
         return None	
     
     def fetch_videos_by_category(self, browse_url):
