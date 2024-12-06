@@ -49,8 +49,8 @@ Requirements
         rich
         Scrapy
 
-You can install the necessary VineFeedder packages with bash or a Window's Terminal. Make sure to install python modules to the same python environment (env) as Devine
-First be sure to follow Devine's install and set-up procedure and ensure it all works correctly to your liking. If you have installed Devine in any other way that via a 'pip install devine' then do so before running VineFeeder!  Make absolutely sure devine can be called from any folder on your system.  Then, for VineFeeder,
+You can install the necessary VineFeeder packages with bash or a Window's Terminal. Make sure to install python modules to the same python environment (env) as Devine
+First be sure to follow Devine's install and set-up procedure and ensure it all works correctly to your liking. **If you have installed Devine by any other way than via a 'pip install devine' then do so before running VineFeeder!  Make absolutely sure devine can be called from any folder on your system.**  Then, for VineFeeder,
 
     pip install -r requirements.txt
 
@@ -77,7 +77,7 @@ With bash or a Window's Terminal
     or
     python vinefeeder.py -help
 
-As set-up on start it will run with zero modification. There are six UK services and TVNZ active.
+As set-up on start it will run with zero modification if Devine is correctly installed. There are six UK services and TVNZ active.
 Regard TVNZ as experimental for the time being. For one thing Devine's TVNZ service fails on some
 Sports titles and the VineFeeder service is still in testing. If Devine fails use the URL with Ozivine -
 there are reports it works. This Ozivine fork has a downloader https://github.com/liam8888999/ozivine

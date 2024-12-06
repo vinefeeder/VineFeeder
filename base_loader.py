@@ -281,7 +281,7 @@ class BaseLoader:
         """
         List all the episodes in the beaupylist, and allow the user to select an episode.
         The function will return the selected episode.
-        This function takes a list of STRINGS and is now deprecated
+        This function takes a list item containing a single STRING and is now deprecated
         """
         found = select(beaupylist, preprocessor=lambda val: prettify(val),\
                         cursor="🢧", cursor_style="pink1", page_size=8, pagination=True)
