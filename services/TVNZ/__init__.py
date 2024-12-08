@@ -166,7 +166,7 @@ class TvnzLoader(BaseLoader):
             episode_test = episodes[selected][0]
             type = episode_test.get('type')
             beaupylist = []
-            # if sport video - assume no episodes
+            # if sport video / news video - assume no episodes
             # use data from first fetch directly
             if type == 'sportVideo' or type == 'newsVideo':
                 for item in episodes[selected]:  # existing data
