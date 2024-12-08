@@ -168,7 +168,7 @@ class TvnzLoader(BaseLoader):
             beaupylist = []
             # if sport video - assume no episodes
             # use data from first fetch directly
-            if type == 'sportVideo':
+            if type == 'sportVideo' or type == 'newsVideo':
                 for item in episodes[selected]:  # existing data
                     url = 'https://www.tvnz.co.nz/' + item.get('url').split('/page/')[1]
                     beaupylist.append([item.get('title'), url, item.get('synopsis', 'No synopsis available.')])
@@ -176,7 +176,7 @@ class TvnzLoader(BaseLoader):
                 selected = select_multiple(beaupylist, preprocessor=lambda val: list_prettify(val),  minimal_count=1, cursor_style="pink1" ,pagination=True, page_size = 8)
 
                 for item in selected:
-                    url = item.split(' ')[-1].split('\n\t')[0]
+                    url = item[1]
                     if self.options_list[0] == '':
                         command = ['devine', 'dl', 'TVNZ', url]
                     else:
@@ -207,12 +207,22 @@ class TvnzLoader(BaseLoader):
                         return
                 try:    
                     href_list = []
+                    console.print_json(data=parsed_data)
+                    f = open('tvnz.json', 'w')
+                    f.write(json.dumps(parsed_data))  # parsed_data)
+                    f.close()
+                    exit(0)
                     
                     # iterate over all seasons and capture url for each
                     for item in parsed_data['layout']['slots']['main']['modules'][0]['lists']:
                         href_list.append(item['href'])
                 except Exception:
-                    print(f'No valid data returned for {url}')
+                    #object►layout►slots►main►modules►0►mobiledoc►sections►0►2►0►3
+                    try:
+                        message = parsed_data['layout']['slots']['main']['modules'][0]['mobiledoc']['sections'][0][2][0][3]
+                        print("There is no content for this series. TVNZ says ..." + message)
+                    except Exception as e:
+                        print(f'No valid data returned for {url}')
                     return
         # with season url, iterate over each season and capture episodes   
         try:
@@ -282,7 +292,7 @@ class TvnzLoader(BaseLoader):
                 command = ['devine', 'dl', *self.options_list, 'TVNZ', url]
             subprocess.run(command)
             
-            return
+        return
         
     def fetch_videos_by_category(self, browse_url):
         """

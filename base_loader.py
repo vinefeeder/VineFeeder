@@ -25,7 +25,7 @@ class BaseLoader:
             console: An instance of the Console class for displaying output.
 
         """
-        self.client = Client()
+        self.client = Client(timeout=20)
         self.headers = headers
         self.series_data = {}  
         self.final_episode_data = [] 

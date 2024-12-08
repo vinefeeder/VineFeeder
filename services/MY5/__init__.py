@@ -205,7 +205,7 @@ class My5Loader(BaseLoader):
                 subprocess.run(command)
             except Exception as e:
                 print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
-            return
+        return
         
     def fetch_videos_by_category(self, browse_url):
         """
