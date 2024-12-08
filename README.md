@@ -55,9 +55,10 @@ First be sure to follow Devine's install and set-up procedure and ensure it all 
 **If you have installed Devine by any other way than via a 'pip install devine' then remove it and re-install using the correct method before running VineFeeder!  The re-install should pick-up the last configuration. if not re-configure Devine. Make absolutely sure devine can be called from any folder on your system.**  
 
 **Setup**
+
 if you've installed Devine, via pip, in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder to the same environment.
 
-For all users, after devine is sull configured
+For all users, after devine is configured
 
 Clone the repository:
 With bash or a Window's Terminal
@@ -70,6 +71,7 @@ will install a VineFeeder folder with all files. Change directory, move into Vin
 
 
 **Usage**
+
 From the VineFeeder folder run the application by executing the main script:
 
 With bash or a Window's Terminal
