@@ -225,11 +225,11 @@ class All4Loader(BaseLoader):
                 else:
                     command = ['devine', 'dl', *self.options_list, 'ALL4', url]
                 subprocess.run(command)
-                return
             except Exception as e:
                 print("Error downloading video:", e, "Is devine installed correctly via 'pip install devine?")
                 return
 
+        return
 
     def fetch_videos_by_category(self, browse_url):
         """
