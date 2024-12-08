@@ -275,7 +275,7 @@ class VineFeeder(QWidget):
                 
 
                 # Dynamically instantiate the loader class
-                loader_class_name = f"{service_name.capitalize()}Loader"  # Assuming class name is based on service name (e.g., Chan4Loader)
+                loader_class_name = f"{service_name.capitalize()}Loader"  # Assuming class name is based on service name (e.g., All4Loader)
                 
                 if hasattr(module, loader_class_name):
                     loader_class = getattr(module, loader_class_name)
@@ -306,7 +306,7 @@ class VineFeeder(QWidget):
                 else:
                     print(f"No class {loader_class_name} found in {service_name}")
             except Exception as e:
-                print(f"Error loading service: {service_name}")
+                print(f"Error loading service: {service_name}  {e}")
                 print("Try again")
                 sys.exit(0)
         else:
@@ -356,7 +356,6 @@ def cli(service_folder, list_services, select_series):
     # Handle --select-series option
     if select_series:
         print("Series Selection:")
-        
         print("Check the available series.\nUse, for example,\n1,3,7 or a range 3..8,\nor 'all' or 0 to show all series.") 
         return
 

@@ -216,12 +216,15 @@ def list_prettify(my_list):
          and the third element is displayed in cyan on a new line with indentation.
     """
     my_beaupystring = []
-    one = my_list[0]
-    two = my_list[1]
-    three = my_list[2]
+    try:
+        one = my_list[0]
+        two = my_list[1]
+        three = my_list[2]
 
-    my_beaupystring = f"[green]{one}, {two}[/green][cyan]\n\t{three}[/cyan]"
-    return my_beaupystring
+        my_beaupystring = f"[#89B4FA]{one}, {two}[/][cyan]\n\t{three}[/cyan]"
+        return my_beaupystring
+    except:
+        return my_list
 
 def split(strng, sep, pos):
 
