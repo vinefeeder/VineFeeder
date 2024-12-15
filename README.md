@@ -280,7 +280,7 @@ then this project may work well for you, and provide the front-end Devine has al
 **Contributing**
 
 Contributors are welcomed to add services to front-end those services provided by Devine - see above.
-Presently six UK services are fully configured; contributions for other services welcome.
+Presently six UK services and New Zealand's TVNZ are fully configured; contributions for other services welcome.
 .
 
 Images

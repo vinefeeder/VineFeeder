@@ -119,9 +119,10 @@ def extract_script_with_id_json(html:str, discriminator:str, index:int=0):
     except Exception as e:
         print(f"Unexpected error: {e}")
         return None
-    
+     
     
 def extract_with_xpath(html, pattern, delete_pattern=None, index=0):
+    # Depreciated. Please use extract_script_with_id_json or extract_params_json
     """
     For scripts like <script id="__NEXT_DATA__" type="application/json">
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +143,7 @@ def extract_with_xpath(html, pattern, delete_pattern=None, index=0):
         # Use Scrapy's Selector to locate the script tag containing "__PARAMS__"
         sel = Selector(text=html)
 
-        # Extract the script content that contains 'window.__PARAMS__'
+        # Extract the script content that contains 'window.__PARAMS__'  
         #selected_script = sel.xpath(f'//script[contains(text(), "{discriminator}")]/text()').extract_first()
         # xpath = '//script[@id="__NEXT_DATA__" and @type="application/json"]/text()'
         scripts = sel.xpath(f'{pattern}/text()')

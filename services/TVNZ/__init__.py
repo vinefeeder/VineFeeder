@@ -207,12 +207,6 @@ class TvnzLoader(BaseLoader):
                         return
                 try:    
                     href_list = []
-                    console.print_json(data=parsed_data)
-                    f = open('tvnz.json', 'w')
-                    f.write(json.dumps(parsed_data))  # parsed_data)
-                    f.close()
-                    exit(0)
-                    
                     # iterate over all seasons and capture url for each
                     for item in parsed_data['layout']['slots']['main']['modules'][0]['lists']:
                         href_list.append(item['href'])
