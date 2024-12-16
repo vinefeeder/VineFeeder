@@ -255,8 +255,13 @@ class BbcLoader(BaseLoader):
             episodes = parsed_data.get('programme_episodes').get('elements')
             for item in episodes:
                 try:
+                    series_no = item['subtitle'].split(':')[0].split(' ')[1]
+                    if int(series_no):
+                        pass
+                    else:
+                        continue 
                     episode = {
-                        'series_no': item['subtitle'].split(':')[0].split(' ')[1] or '01',
+                        'series_no': series_no,
                         # 'title' is episode number here, some services use descriptive text
                         'title': item['subtitle'].split(':')[1] , #.split(' ')[-1] or '01',
                         'url': "https://www.bbc.co.uk/iplayer/episode/" + item['id'],
