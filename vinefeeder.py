@@ -1,13 +1,4 @@
-from PyQt6.QtWidgets import (
-    QApplication,
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QCheckBox,
-    QFrame,
-)
+from PyQt6.QtWidgets import (QApplication,QWidget,QVBoxLayout,QLabel,QLineEdit,QPushButton,QCheckBox,QFrame,)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import QTimer

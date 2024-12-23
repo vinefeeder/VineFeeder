@@ -50,7 +50,6 @@ class My5Loader(BaseLoader):
         # direct download
 
         if "http" in search_term and inx == 1:
-            # print(['devine', 'dl', 'MY5', search_term])
             # options_list = split_options(self.options)
             if self.options_list[0] == "":
                 command = ["devine", "dl", "MY5", search_term]
@@ -102,7 +101,6 @@ class My5Loader(BaseLoader):
         url = f"https://corona.channel5.com/shows/search.json?platform=my5desktop&friendly=1&query={search_term}"
         response = self.get_data(url, headers=self.headers)
         parsed_data = parse_json(response)
-        # console.print_json(data=parsed_data)
 
         if parsed_data and "shows" in parsed_data:
             for item in parsed_data["shows"]:
@@ -155,7 +153,6 @@ class My5Loader(BaseLoader):
             return
 
         parsed_data = parse_json(myhtml)
-        # console.print_json(data=parsed_data)
         self.clear_series_data()  # Clear existing series data
 
         # Extract the episodes from the parsed data of the selected series
@@ -165,7 +162,7 @@ class My5Loader(BaseLoader):
                 try:
                     # no season means single episode
                     # check and call self.receive for single episode
-                    if item["seasonNumber"] == None:
+                    if item["seasonNumber"] is None:
                         url = f"https://www.channel5.com/show/{brndslug}"
                         self.receive(1, url)
                         return
@@ -177,7 +174,6 @@ class My5Loader(BaseLoader):
                     if len(parsed_data["episodes"]) == 0:
                         continue
 
-                    # console.print_json(data=parsed_data)
                     series_name = parsed_data["episodes"][0]["sh_f_name"]
                     for item in parsed_data["episodes"]:
                         episode = {

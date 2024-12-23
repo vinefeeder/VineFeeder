@@ -37,7 +37,7 @@ hlg_status in config.yaml may be set to False to not do this.
 
 Requirements
 
-    Python 3.8 or higher
+    **Python 3.12 or higher  Note: PyQT6 needs PyQt6.QtWidgets**
     Required Python modules (install via pip):
         beaupy
         devine

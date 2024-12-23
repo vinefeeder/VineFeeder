@@ -168,7 +168,7 @@ class StvLoader(BaseLoader):
             url = self.get_selected_url(selected)
         try:
             myhtml = self.get_data(url=url)
-        except:
+        except Exception:
             print(f"No valid data at {url} found.\n Exiting")
             return
         parsed_data = extract_script_with_id_json(myhtml, "__NEXT_DATA__", 0)
