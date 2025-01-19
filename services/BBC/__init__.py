@@ -8,6 +8,7 @@ from rich.console import Console
 import subprocess
 import jmespath
 from scrapy.selector import Selector
+import json
 
 console = Console()
 
@@ -247,21 +248,22 @@ class BbcLoader(BaseLoader):
             url = url.split("/")[-1]
             # thanks to kenyard for help with url preparation
 
+            # https://www.bbc.co.uk/iplayer/episodes/b007y6k8/silent-witness           
             myurl = f"https://ibl.api.bbci.co.uk/ibl/v1/episodes/{url}?rights=mobile&availability=available&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
             myhtml = self.get_data(url=myurl, headers=self.headers)
             parsed_data = parse_json(myhtml)
             SINGLE = True
             if parsed_data["episodes"] == []:
                 SINGLE = False
-                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
+                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=2&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
                 myhtml = self.get_data(url=url, headers=self.headers)
                 parsed_data = parse_json(myhtml)
 
         # testing
-        # file = open("init_data.json", "w")
-        # file.write(json.dumps(parsed_data))
-        # file.close()
-        # console.print_json(data=parsed_data)
+        #file = open("init_data.json", "w")
+        #file.write(json.dumps(parsed_data))
+        #file.close()
+        #console.print_json(data=parsed_data)
 
         self.clear_series_data()  # Clear existing series data
         self.options_list = split_options(self.options)
@@ -309,7 +311,8 @@ class BbcLoader(BaseLoader):
                             + item["id"],
                             "synopsis": item["synopses"]["small"] or None,
                         }
-                    except KeyError:
+                    except KeyError as e:
+                        print(f"Error: {e}")
                         continue  # Skip any episode that doesn't have the required information
                 self.add_episode(series_name, episode)
 
@@ -361,9 +364,9 @@ class BbcLoader(BaseLoader):
                 if series_name.lower() in hlg_item:
                     self.AVAILABLE_HLG = True
                     break
-
-            mlist = item.split(",")
-            url = mlist[2].strip()
+            plist = item.split("\n\t")[0]
+            mlist = plist.split(",")[-2]  # correction for 'part 1' or 'part 2' in item data
+            url = mlist.strip()
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
                 subprocess.run(
