@@ -255,7 +255,7 @@ class BbcLoader(BaseLoader):
             SINGLE = True
             if parsed_data["episodes"] == []:
                 SINGLE = False
-                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=2&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
+                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
                 myhtml = self.get_data(url=url, headers=self.headers)
                 parsed_data = parse_json(myhtml)
 
@@ -364,9 +364,10 @@ class BbcLoader(BaseLoader):
                 if series_name.lower() in hlg_item:
                     self.AVAILABLE_HLG = True
                     break
-            plist = item.split("\n\t")[0]
-            mlist = plist.split(",")[-2]  # correction for 'part 1' or 'part 2' in item data
-            url = mlist.strip()
+            for part in item.split(","):
+                if "https" in part:
+                    url = part.strip()
+                    break
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
                 subprocess.run(
