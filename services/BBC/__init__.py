@@ -16,6 +16,11 @@ console = Console()
 Note: The BBC is outrageously awkward. Do not use this as a template for other services!
 """
 
+## BBC iPlayer sets a limit of 200 episodes per page
+## This is a global variable to keep track of the page number
+## if the number of episodes exceeds 200 set page to 2
+## and increment by 1 for each subsequent page
+PAGE = 1
 
 class BbcLoader(BaseLoader):
     HLG = None
@@ -255,7 +260,7 @@ class BbcLoader(BaseLoader):
             SINGLE = True
             if parsed_data["episodes"] == []:
                 SINGLE = False
-                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page=1&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
+                url = f"https://ibl.api.bbci.co.uk/ibl/v1/programmes/{url}/episodes?rights=mobile&availability=available&page={PAGE}&per_page=200&api_key=D2FgtcTxGqqIgLsfBWTJdrQh2tVdeaAp"
                 myhtml = self.get_data(url=url, headers=self.headers)
                 parsed_data = parse_json(myhtml)
 

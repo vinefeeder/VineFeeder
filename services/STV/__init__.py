@@ -4,6 +4,7 @@ import subprocess
 from rich.console import Console
 import jmespath
 import re
+import json
 
 console = Console()
 
@@ -43,6 +44,7 @@ class StvLoader(BaseLoader):
         If inx == 2, fetch videos from a category url.
         If an unknown error occurs, exit with code 0.
         """
+
 
         if opts:
             StvLoader.options = opts
@@ -174,10 +176,10 @@ class StvLoader(BaseLoader):
         parsed_data = extract_script_with_id_json(myhtml, "__NEXT_DATA__", 0)
         self.clear_series_data()  # Clear existing series data
 
-        """console.print_json(data=parsed_data) # for debugging
+        '''console.print_json(data=parsed_data) # for debugging
         f = open("1stv.json",'w')
         f.write(json.dumps(parsed_data))
-        f.close()"""
+        f.close()'''
 
         series_data = parsed_data["props"]["pageProps"]["data"]["programmeHeader"][
             "name"
@@ -193,10 +195,10 @@ class StvLoader(BaseLoader):
         # some tabs are not series and only have a programme.guid for example:-
         # props►pageProps►data►tabs►0►params►query►programme.guid
         # test here
+
+
         try:
-            PROGGUID = parsed_data["props"]["pageProps"]["data"]["tabs"][0]["params"][
-                "query"
-            ]["programme.guid"]
+            PROGGUID = parsed_data["props"]["pageProps"]["data"]["programmeData"]["guid"]
         except Exception:
             PROGGUID = None
 
