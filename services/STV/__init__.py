@@ -186,9 +186,20 @@ class StvLoader(BaseLoader):
         ]
         tabs = len(parsed_data["props"]["pageProps"]["data"]["tabs"])
         headers = {
-            "Accept": "*/*",
-            "Connection": "keep-alive",
-            "Origin": "https://player.stv.tv",
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0',
+            'Accept': '*/*',
+            'Accept-Language': 'en-GB,en;q=0.5',
+            # 'Accept-Encoding': 'gzip, deflate, br, zstd',
+            'Referer': 'https://player.stv.tv/',
+            'Stv-Drm': 'true',
+            'Stv-PremierSportsAware': 'true',
+            'Origin': 'https://player.stv.tv',
+            'Connection': 'keep-alive',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-site',
+            'Priority': 'u=4',
+            'Cache-Control': 'max-age=0',
         }
         # STV mostly provde one series' worth of episodes in one request
         # tabs are populated with series_guid to allow for multiple series calls
@@ -203,9 +214,14 @@ class StvLoader(BaseLoader):
             PROGGUID = None
 
         if PROGGUID:
+        
             for item in parsed_data["props"]["pageProps"]["data"]["tabs"][0]["data"]:
+                
                 try:
-                    series_no = int("100")
+                    # object►props►pageProps►data►tabs►0►title
+
+                    series_no = parsed_data["props"]["pageProps"]["data"]["tabs"][0]["title"]
+                    series_no = int(series_no.split(" ")[1])
                     title = item["title"]
                     url = f"https://player.stv.tv{item['link']}"  # https://player.stv.tv/episode/4nlk/loose-women
                     synopsis = item["summary"]
@@ -214,17 +230,18 @@ class StvLoader(BaseLoader):
                         "series_no": series_no,
                         "title": title.replace(
                             ", ", "-"
-                        ),  # date with comma messes up later when selecting url for devien
+                        ),  # data with comma messes up later when selecting url
                         "url": url,
                         "synopsis": synopsis,
                     }
                     self.add_episode_remove_duplicates(series_data, episode)
+                    
 
                 except KeyError as e:
                     print(f"Error: {e}")
 
-        else:
-            for index in range(0, tabs):
+        if tabs > 1:
+            for index in range(1, tabs):
                 # last few tabs may not contain series so check
                 if (
                     "Autoplay"
@@ -237,16 +254,17 @@ class StvLoader(BaseLoader):
                 series_guid = parsed_data["props"]["pageProps"]["data"]["tabs"][index][
                     "params"
                 ]["query"]["series.guid"]
+
                 response = self.get_data(
                     f"https://player.api.stv.tv/v1/episodes?series.guid={series_guid}&limit=100&groupToken=0071",
                     headers=headers,
                 )
                 next_parsed_data = parse_json(response)
 
-                """console.print_json(data=next_parsed_data)
+                '''console.print_json(data=next_parsed_data)
                 f = open("2stv.json",'w')
                 f.write(json.dumps(next_parsed_data))
-                f.close()"""
+                f.close()'''
 
                 for item in next_parsed_data["results"]:
                     try:
