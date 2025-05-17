@@ -218,10 +218,11 @@ class StvLoader(BaseLoader):
             for item in parsed_data["props"]["pageProps"]["data"]["tabs"][0]["data"]:
                 
                 try:
-                    # object►props►pageProps►data►tabs►0►title
-
                     series_no = parsed_data["props"]["pageProps"]["data"]["tabs"][0]["title"]
-                    series_no = int(series_no.split(" ")[1])
+                    if "Episode" in series_no:
+                        series_no = 100
+                    else:
+                        series_no = int(series_no.split(" ")[1])
                     title = item["title"]
                     url = f"https://player.stv.tv{item['link']}"  # https://player.stv.tv/episode/4nlk/loose-women
                     synopsis = item["summary"]
@@ -234,8 +235,7 @@ class StvLoader(BaseLoader):
                         "url": url,
                         "synopsis": synopsis,
                     }
-                    self.add_episode_remove_duplicates(series_data, episode)
-                    
+                    self.add_episode_remove_duplicates(series_data, episode)                    
 
                 except KeyError as e:
                     print(f"Error: {e}")
