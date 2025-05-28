@@ -106,7 +106,7 @@ class TPTV(Service):
             raise ConnectionError   
         else:
             session_id = r.json()['id']
-            self.session.headers.update({'session': '{}'.format( session_id)})
+            self.session.headers.update({'session': session_id})
         
 
         # login
@@ -117,7 +117,7 @@ class TPTV(Service):
         else:
             self.log.info(" + Logging in...")
             payload = {"email": credential.username, "password": credential.password}
-
+            
             r = self.session.post(
                 self.config["endpoints"]["login"],
                 headers=self.session.headers,
@@ -138,7 +138,7 @@ class TPTV(Service):
             tokens = res
             self.log.info(" + Refreshed")
   
-            r = self.session.options(self.config["endpoints"]["login"], headers=fc_headers)
+            r = self.session.options(self.config["endpoints"]["login"], headers=self.session.headers)
             r.raise_for_status()
 
             data = {
@@ -147,7 +147,7 @@ class TPTV(Service):
             }
             fc_headers['session'] = self.config['session']
 
-            r = self.session.post(self.config["endpoints"]["login"],headers=fc_headers, json=data)
+            r = self.session.post(self.config["endpoints"]["login"],headers=self.session.headers, json=data)
             try:
                 res = r.json()
             except json.JSONDecodeError:
