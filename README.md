@@ -129,7 +129,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     
 **Services**
 
-Currently six services are working  - All4, BBC, ITVX, My5 STV and U, all UK services and now TVNZ. 
+Currently seven services are working  - All4, BBC, ITVX, My5 STV, U and TPTV , all UK services plus TVNZ. 
 Other services: awaiting contributors!!
 
 **Text Entry Box**
