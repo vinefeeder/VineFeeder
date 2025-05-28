@@ -26,7 +26,8 @@ class TPTV(Service):
     Service code for TPTVencore streaming service (https://www.TPTVencore.co.uk/).
 
     \b
-    version 1.0.0  June 2025
+    version 1.0.1  
+    Date: June 2025
     Author: A_n_g_e_l_a
     Authorization: email/password for service in devine.yaml
     Robustness:
@@ -82,7 +83,7 @@ class TPTV(Service):
             raise EnvironmentError("Service requires Credentials for Authentication.")
 
         cache = self.cache.get(f"tokens_{credential.sha1}")
-        # first contact {}
+        # first contact
         fc_headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0',
             'Accept': '*/*',
@@ -108,7 +109,6 @@ class TPTV(Service):
             session_id = r.json()['id']
             self.session.headers.update({'session': session_id})
         
-
         # login
         if cache and not cache.expired:
             # cached
@@ -135,27 +135,7 @@ class TPTV(Service):
                 self.log.error(f"Failed to refresh tokens: {res['errorMessage']}")
                 sys.exit(1)
 
-            tokens = res
-            self.log.info(" + Refreshed")
-  
-            r = self.session.options(self.config["endpoints"]["login"], headers=self.session.headers)
-            r.raise_for_status()
 
-            data = {
-                "email":credential.username,
-                "password":credential.password,
-            }
-            fc_headers['session'] = self.config['session']
-
-            r = self.session.post(self.config["endpoints"]["login"],headers=self.session.headers, json=data)
-            try:
-                res = r.json()
-            except json.JSONDecodeError:
-                raise ValueError(f"Failed to log in: {r.text}")
-
-            if "error" in res:
-                self.log.error(f"Failed to log in: {res['errorMessage']}")
-                sys.exit(1)
 
             tokens = res
             self.log.info(" + Acquired tokens...")
