@@ -15,6 +15,24 @@ from devine.core.titles import Episode, Movie, Movies, Series
 from devine.core.tracks import Chapters, Subtitle, Tracks
 import requests
 
+def get_widevine_license_url(manifest_str):
+    # Try JSON first
+    try:
+        data = json.loads(manifest_str)
+        for source in data.get("sources", []):
+            widevine = source.get("key_systems", {}).get("com.widevine.alpha")
+            if widevine and "license_url" in widevine:
+                return widevine["license_url"]
+    except json.JSONDecodeError:
+        pass
+
+    # Fallback for XML style
+    match = re.search(r'bc:licenseAcquisitionUrl="([^"]+)"', manifest_str)
+    if match:
+        return match.group(1)
+
+    return None
+
 
 class TPTV(Service):
     """
@@ -275,12 +293,10 @@ class TPTV(Service):
         tracks.videos[0].data = data
         
         # odd couple of DRM vids found
-        pattern = re.compile(r'bc:licenseAcquisitionUrl="([^"]+)"')
-        m = pattern.search(r.text)
-        if m:
-            self.license = m.group(1)
-        else:                   
-            self.license = None
+
+        self.license = get_widevine_license_url(r.text)
+        
+
 
         # sub was picking up thumbnails
         subtitles_data = data['text_tracks']
