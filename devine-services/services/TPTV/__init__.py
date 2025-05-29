@@ -44,7 +44,7 @@ class TPTV(Service):
     Author: A_n_g_e_l_a
     Authorization: email/password for service in devine.yaml
     Robustness:
-        DRM free.
+        DRM free... with rare exceptions
 
     \b
     Note:
@@ -296,32 +296,7 @@ class TPTV(Service):
 
         self.license = get_widevine_license_url(r.text)
         
-
-
-        # sub was picking up thumbnails
-        subtitles_data = data['text_tracks']
-        for subs in subtitles_data:
-            if subs['label'] == 'thumbnails':
-                subtitles = None
-                continue
-            else:
-                subtitles = subs
-                break
-
-        if subtitles is not None:
-                # correction for None type error
-                lang = subtitles["srclang"]
-                if lang == None:
-                    lang = 'en'
-                
-                tracks.add(
-                    Subtitle(
-                        id_= subtitles.get("id"),
-                        url= subtitles.get("src", ""),
-                        codec= Subtitle.Codec.from_mime(subtitles.get("mime_type")[-3:]),
-                        language = lang,
-                        forced=False,)
-                    )   
+        
         return tracks
 
     def get_chapters(self, title: Union[Movie, Episode]) -> Chapters:
