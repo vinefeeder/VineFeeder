@@ -30,7 +30,7 @@ Example usage:
     	enter a video URL for direct download
     	and select a service
     or
-    	leave the seach box blank and select a service
+    	leave the search, each, reach, teach, beach box blank and select a service
     	a further menu will appear in the terminal
     After a download has finished and 'Ready!' appears
     another service may be started.
