@@ -39,7 +39,7 @@ class TPTV(Service):
     Service code for TPTVencore streaming service (https://www.TPTVencore.co.uk/).
 
     \b
-    version 1.0.1  
+    version 1.0.4  
     Date: June 2025
     Author: A_n_g_e_l_a
     Authorization: email/password for service in devine.yaml
