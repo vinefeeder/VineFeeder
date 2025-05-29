@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 from collections.abc import Generator
 from http.cookiejar import MozillaCookieJar
 from typing import Any, Optional, Union
@@ -13,12 +12,8 @@ from devine.core.manifests.dash import DASH
 from devine.core.search_result import SearchResult
 from devine.core.service import Service
 from devine.core.titles import Episode, Movie, Movies, Series
-from devine.core.tracks import Chapter, Chapters, Subtitle, Tracks
+from devine.core.tracks import Chapters, Subtitle, Tracks
 import requests
-
-from rich.console import Console
-
-console = Console()
 
 
 class TPTV(Service):
@@ -131,12 +126,6 @@ class TPTV(Service):
             except json.JSONDecodeError:
                 raise ValueError(f"Failed to refresh tokens: {r.text}")
 
-            if "error" in res:
-                self.log.error(f"Failed to refresh tokens: {res['errorMessage']}")
-                sys.exit(1)
-
-
-
             tokens = res
             self.log.info(" + Acquired tokens...")
 
@@ -171,17 +160,14 @@ class TPTV(Service):
         myitems = [] 
         if isinstance(results, list):
             for result in results:
-                # do lookup on list item product or collection
-                
-                
+                # do lookup on list item product or collection    
                 if  result.startswith('collection_'):
                     id = result.replace('collection_','')
                     collection_url = f"https://prod.suggestedtv.com/api/client/v1/collection/by-reference/{id}?extend=label"
                     response = self.session.get(collection_url, headers=headers)
                     if response.status_code == 200:
                         data = response.json()
-                        for item in data['children']:
-                            
+                        for item in data['children']:        
                             myitems.append(item['id'].replace('product_',''))
                     else:
                         print(f"Error: {response.status_code} - {response.text}")
@@ -282,15 +268,33 @@ class TPTV(Service):
             raise ConnectionError(r.text)
 
         data = r.json()
-        subtitles = data['text_tracks'][0]
+        
         self.manifest = data["sources"][2].get("src")
-        self.license = None
+
         tracks = DASH.from_url(self.manifest, self.session).to_tracks(title.language)
         tracks.videos[0].data = data
+        
+        # odd couple of DRM vids found
+        pattern = re.compile(r'bc:licenseAcquisitionUrl="([^"]+)"')
+        m = pattern.search(r.text)
+        if m:
+            self.license = m.group(1)
+        else:                   
+            self.license = None
+
+        # sub was picking up thumbnails
+        subtitles_data = data['text_tracks']
+        for subs in subtitles_data:
+            if subs['label'] == 'thumbnails':
+                subtitles = None
+                continue
+            else:
+                subtitles = subs
+                break
 
         if subtitles is not None:
                 # correction for None type error
-                lang = subtitles.get("srclang", 'en')
+                lang = subtitles["srclang"]
                 if lang == None:
                     lang = 'en'
                 
