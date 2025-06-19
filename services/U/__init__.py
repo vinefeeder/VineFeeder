@@ -1,7 +1,6 @@
 from base_loader import BaseLoader
 from parsing_utils import split_options
 import jmespath
-import subprocess
 from rich.console import Console
 
 console = Console()
@@ -54,7 +53,7 @@ class ULoader(BaseLoader):
                     command = ["devine", "dl", "U", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "U", search_term]
-                subprocess.run(command)  # url
+                self.runsubprocess(command)  # url
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -202,7 +201,7 @@ class ULoader(BaseLoader):
                     command = ["devine", "dl", "U", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "U", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -217,3 +216,5 @@ class ULoader(BaseLoader):
             "Method not implemented for fetching videos by category for this channel."
         )
         return None
+    
+

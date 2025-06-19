@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (QApplication,QWidget,QVBoxLayout,QLabel,QLineEdit,Q
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QHBoxLayout, QSlider
 import sys
 import os
 import importlib.util
@@ -67,7 +66,7 @@ class VineFeeder(QWidget):
         Initialize the UI components and layout.
 
         This method creates the necessary UI components and sets up the layout.
-        
+        It also connects the dark mode checkbox to the toggle_dark_mode method.
         """
         self.setWindowTitle("VineFeeder")
         layout = QVBoxLayout()
@@ -100,53 +99,13 @@ class VineFeeder(QWidget):
         sechighlighted_frame.setLayout(self.sechighlighted_layout)
         sechighlighted_frame.setStyleSheet(
             "border: 1px solid pink;"
-          
         )  # Remove the border initially
         layout.addWidget(sechighlighted_frame)
 
-        # Batch Mode Layout
-        batch_mode_layout = QHBoxLayout()
-        
-
-        self.batch_slider = QSlider(Qt.Orientation.Horizontal)
-        self.batch_slider.setMinimum(0)
-        self.batch_slider.setMaximum(1)
-        self.batch_slider.setTickPosition(QSlider.TickPosition.NoTicks)
-        self.batch_slider.setSingleStep(1)
-        self.batch_slider.setFixedWidth(80)
-        self.batch_slider.valueChanged.connect(self.toggle_batch_mode)
-        self.batch_slider.setStyleSheet("""QSlider::groove:horizontal {
-            border: 1px solid #999999;
-            height: 5px; 
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 hotpink, stop:1 #c4c4c4);
-            margin: 2px 0;
-            }
-            QSlider::handle:horizontal {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
-                border: 1px solid #5c5c5c;
-                width: 18px;
-                height: 18px;
-                margin: -12px 0; 
-                border-radius: 3px;
-            }
-            """)
-        
-        # Batch Mode Label
-        self.batch_label = QLabel("Batch Mode")
-        self.batch_label.setStyleSheet("color: white; padding-left: 5px; border: none;")
-
-        batch_mode_layout.addWidget(self.batch_label)
-        batch_mode_layout.addWidget(self.batch_slider)
-
-        batch_mode_frame = QFrame()
-        batch_mode_frame.setLayout(batch_mode_layout)
-        batch_mode_frame.setStyleSheet("border: none;")
-        self.sechighlighted_layout.addWidget(batch_mode_frame)
-
-        # Batch File Existence Indicator
-        self.batch_file_status = QLabel("")
-        self.sechighlighted_layout.addWidget(self.batch_file_status)
-
+        # Batch Mode Switch
+        self.batch_mode_checkbox = QCheckBox("Batch Mode")
+        self.batch_mode_checkbox.stateChanged.connect(self.toggle_batch_mode)
+        self.sechighlighted_layout.addWidget(self.batch_mode_checkbox)
 
         # Run Batch Button
         self.run_batch_button = QPushButton("Run Batch")
@@ -165,11 +124,6 @@ class VineFeeder(QWidget):
         layout.addWidget(self.dark_mode_checkbox, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(layout)
-        # Poll for batch.txt changes every 2 seconds
-        self.batch_poll_timer = QTimer(self)
-        self.batch_poll_timer.timeout.connect(self.update_batch_file_indicator)
-        self.batch_poll_timer.start(2000)  # 2000 ms = 2 seconds
-
 
         # Use a timer to delay the dark mode application slightly
         QTimer.singleShot(100, self.toggle_dark_mode)  # 100ms delay to ensure rendering
@@ -179,46 +133,16 @@ class VineFeeder(QWidget):
             with open("./config.yaml", "r") as f:
                 cfg = yaml.safe_load(f)
                 batch_on = cfg.get("BATCH_DOWNLOAD", False)
-                self.batch_slider.setValue(1 if batch_on else 0)
+                self.batch_mode_checkbox.setChecked(batch_on)
                 self.run_batch_button.setEnabled(batch_on)
         except Exception as e:
             print(f"[warning] Could not load batch mode config: {e}")
-            self.batch_slider.setValue(0)
+            self.batch_mode_checkbox.setChecked(False)
             self.run_batch_button.setEnabled(False)
 
-        self.update_batch_file_indicator()
-
-
     def toggle_batch_mode(self):
-        state = self.batch_slider.value() == 1
-
-        if state:
-            self.batch_label.setStyleSheet("color: lightgreen; padding-left: 5px; border: none;")
-        else:
-            # Let toggle_dark_mode handle the fallback color
-            self.toggle_dark_mode()  # Refresh dark/light mode colors
-
+        state = self.batch_mode_checkbox.isChecked()
         self.run_batch_button.setEnabled(state)
-        self.update_batch_file_indicator()
-
-        # Update config.yaml
-        config_path = "./config.yaml"
-        try:
-            if os.path.exists(config_path):
-                with open(config_path, "r") as f:
-                    cfg = yaml.safe_load(f) or {}
-            else:
-                cfg = {}
-
-            cfg["BATCH_DOWNLOAD"] = state
-
-            with open(config_path, "w") as f:
-                yaml.dump(cfg, f, default_flow_style=False)
-        except Exception as e:
-            print(f"[warning] Could not update config.yaml: {e}")
-
-
-
 
     def style_batch_button(self, button):
         button.setStyleSheet("""
@@ -228,20 +152,7 @@ class VineFeeder(QWidget):
             padding: 5px;
         """)
 
-    def update_batch_file_indicator(self):
-        exists = os.path.exists("./batch.txt")
-        if hasattr(self, "_batch_file_last_state") and self._batch_file_last_state == exists:
-            return  # no change
-        self._batch_file_last_state = exists
 
-        if exists:
-            self.batch_file_status.setText("✅ batch file exists")
-            self.batch_file_status.setStyleSheet("color: lightgreen; padding-left: 25px; border: none;")
-        else:
-            self.batch_file_status.setText("❌ batch file missing")
-            self.batch_file_status.setStyleSheet("color: hotpink; padding-left: 25px; border: none;")
-
-       
 
     def toggle_dark_mode(self):
         """
@@ -291,7 +202,6 @@ class VineFeeder(QWidget):
             self.setPalette(QApplication.palette())
             self.search_url_label.setStyleSheet("color: black;")
             self.dark_mode_checkbox.setStyleSheet("color: black;")
-            self.batch_label.setStyleSheet("color: black;")
 
             for i in range(self.highlighted_layout.count()):
                 button = self.highlighted_layout.itemAt(i).widget()
@@ -303,15 +213,6 @@ class VineFeeder(QWidget):
                         padding: 5px;
                     """)
                     button.repaint()  # Force update of the button's appearance
-        # Update batch_label based on dark mode and batch mode state
-        if self.batch_slider.value() == 1:
-            self.batch_label.setStyleSheet("color: pink; padding-left: 5px; border: none;")
-        else:
-            if self.dark_mode_checkbox.isChecked():
-                self.batch_label.setStyleSheet("color: white; padding-left: 5px; border: none;")
-            else:
-                self.batch_label.setStyleSheet("color: black; padding-left: 5px; border: none;")
-            
 
     def load_services(self):
         """Dynamically load services from the services folder."""
@@ -376,8 +277,6 @@ class VineFeeder(QWidget):
             "Browse by Category",
             "Search by keyword(s)",
         ]
-        # check for batch.txt
-        self.update_batch_file_indicator()
 
         action = select(
             fn, preprocessor=lambda val: prettify(val), cursor="🢧", cursor_style="pink1"
@@ -422,9 +321,6 @@ class VineFeeder(QWidget):
         ).start()
 
     def load_service(self, service_name):
-        
-        self.update_batch_file_indicator()
-        
         """Dynamically load the service's __init__.py when the button is clicked."""
         init_file = self.available_services.get(service_name)
         if init_file:
@@ -519,12 +415,6 @@ def cli(service_folder, list_services, select_series):
     In the GUI:-
     The text box will take keyword(s) or a URL for download from a button selected service.
     Or leave the text box blank for further options when the service button is clicked.\n
-    Batch Mode: slide the slider to the right to engage Batch Mode. 
-    All devine commands will be saved to a batch.txt file in the VineFeeder folder.
-    When a green 'batch file exists' notice is present the 'Run Batch' button will process
-    the batch.txt file.
-    At the end of download the option to delete the batch.txt file will appear.
-    It may be deleted manually at any time. 
 
     """
     # Ensure service-folder paths are handled correctly

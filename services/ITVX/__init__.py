@@ -1,6 +1,5 @@
 from base_loader import BaseLoader
 from parsing_utils import rinse, split_options, extract_script_with_id_json
-import subprocess
 from rich.console import Console
 import jmespath
 import re
@@ -56,7 +55,7 @@ class ItvxLoader(BaseLoader):
                     command = ["devine", "dl", "ITVX", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "ITVX", search_term]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -239,7 +238,7 @@ class ItvxLoader(BaseLoader):
                     command = ["devine", "dl", "ITVX", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "ITVX", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -319,3 +318,5 @@ class ItvxLoader(BaseLoader):
         else:
             print("No video selected.")
             return
+        
+    

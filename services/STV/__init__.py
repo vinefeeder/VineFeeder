@@ -1,10 +1,8 @@
 from base_loader import BaseLoader
 from parsing_utils import extract_script_with_id_json, parse_json, split_options
-import subprocess
 from rich.console import Console
 import jmespath
 import re
-import json
 
 console = Console()
 
@@ -58,7 +56,7 @@ class StvLoader(BaseLoader):
                     command = ["devine", "dl", "STV", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "STV", search_term]
-                subprocess.run(command)  # url
+                self.runsubprocess(command)  # url
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -299,7 +297,7 @@ class StvLoader(BaseLoader):
                     command = ["devine", "dl", "STV", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "STV", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -386,3 +384,4 @@ class StvLoader(BaseLoader):
         else:
             print("No video selected.")
             return
+    

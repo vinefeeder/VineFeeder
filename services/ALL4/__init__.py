@@ -2,9 +2,12 @@
 from base_loader import BaseLoader
 from parsing_utils import extract_params_json, split_options
 from rich.console import Console
-import subprocess
 import sys
 import jmespath
+from vinefeeder import VineFeeder
+
+
+
 
 
 console = Console()
@@ -35,6 +38,7 @@ class All4Loader(BaseLoader):
         }
         super().__init__(headers)
 
+
     # entry point from Vinefeeder
     def receive(
         self, inx: None, search_term: None, category=None, hlg_status=False, opts=None
@@ -62,7 +66,6 @@ class All4Loader(BaseLoader):
 
         # re-entry here for second time loses options settings
         # so reset
-
         if opts:
             All4Loader.options = opts
         self.options_list = split_options(All4Loader.options)
@@ -73,7 +76,7 @@ class All4Loader(BaseLoader):
                     command = ["devine", "dl", "ALL4", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "ALL4", search_term]
-                subprocess.run(command)
+                self.runsubprocess(command)
                 return
             except Exception as e:
                 print(
@@ -214,7 +217,7 @@ class All4Loader(BaseLoader):
                     command = ["devine", "dl", "ALL4", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "ALL4", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
                 return None
             except Exception as e:
                 print(
@@ -239,11 +242,12 @@ class All4Loader(BaseLoader):
                 continue
             url = "https://www.channel4.com" + url
             try:
+
                 if self.options_list[0] == "":
                     command = ["devine", "dl", "ALL4", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "ALL4", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -312,3 +316,6 @@ class All4Loader(BaseLoader):
         else:
             print("No video selected.")
             return
+        
+    
+

@@ -159,6 +159,26 @@ in most  circumstances, depending on operating system, ctrl-C will return you
 to a 'Ready!' status display on the screen within a second or two, and await
 further operations.
 
+**Batch Mode**
+
+To select Batch Mode, move the  GUI's batch-mode slider to the right.
+When batch-mode is selected all devine download commands will be saved to
+a file, batch.txt, created in the top level folder of VineFeeder.
+
+*BE SURE TO SELECT BATCH MODE BEFORE SELECTING A SERVICE!*
+
+The batch file will only be created once a service's video download is initiated.
+
+A banner in the GUI will then display the existence of batch.txt.
+Any service may be used to add to batch.txt for later batch download.
+
+Clicking the Run Batch button will then download all the selected videos.
+
+After devine's downloads are complete, the option to delete the batch file will 
+appear. The file may also be manually deleted.
+
+
+
 **Closing Down**
 
 The GUI should first be shutdown by mouse-clicking the top right X. The GUI then should
@@ -294,6 +314,7 @@ Images
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder5.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder6.png)
     ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder7.png)
+    ![Vinefeeder GUI](https://github.com/vinefeeder/VineFeeder/blob/main/images/vinefeeder9.png)
     
 
 **License**

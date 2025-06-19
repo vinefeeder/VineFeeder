@@ -2,7 +2,6 @@ from base_loader import BaseLoader
 import jmespath
 from rich.console import Console
 from parsing_utils import parse_json, split_options
-import subprocess
 import re
 
 console = Console()
@@ -55,7 +54,7 @@ class My5Loader(BaseLoader):
                 command = ["devine", "dl", "MY5", search_term]
             else:
                 command = ["devine", "dl", *self.options_list, "MY5", search_term]
-            subprocess.run(command)
+            self.runsubprocess(command)
 
             return
 
@@ -136,7 +135,7 @@ class My5Loader(BaseLoader):
                     command = ["devine", "dl", "MY5", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "MY5", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -212,7 +211,7 @@ class My5Loader(BaseLoader):
                     command = ["devine", "dl", "MY5", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "MY5", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -279,3 +278,4 @@ class My5Loader(BaseLoader):
         else:
             print("No video selected.")
             return
+

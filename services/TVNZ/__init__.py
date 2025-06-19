@@ -2,7 +2,6 @@
 from base_loader import BaseLoader
 from parsing_utils import split_options, list_prettify
 from rich.console import Console
-import subprocess
 from beaupy import select_multiple
 
 console = Console()
@@ -75,7 +74,7 @@ class TvnzLoader(BaseLoader):
                     command = ["devine", "dl", "TVNZ", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "TVNZ", search_term]
-                subprocess.run(command)
+                self.runsubprocess(command)
                 return
             except Exception as e:
                 print(
@@ -203,7 +202,7 @@ class TvnzLoader(BaseLoader):
                         command = ["devine", "dl", "TVNZ", url]
                     else:
                         command = ["devine", "dl", *self.options_list, "TVNZ", url]
-                    subprocess.run(command)
+                    self.runsubprocess(command)
                 return None
 
             elif type == "show" or type == "showVideo":
@@ -220,7 +219,7 @@ class TvnzLoader(BaseLoader):
                             command = ["devine", "dl", "TVNZ", url]
                         else:
                             command = ["devine", "dl", *self.options_list, "TVNZ", url]
-                        subprocess.run(command)
+                        self.runsubprocess(command)
                         return
 
                     except Exception as e:
@@ -297,7 +296,7 @@ class TvnzLoader(BaseLoader):
                     command = ["devine", "dl", "TVNZ", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "TVNZ", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
                 return None
             except Exception as e:
                 print(
@@ -326,7 +325,7 @@ class TvnzLoader(BaseLoader):
                 command = ["devine", "dl", "TVNZ", url]
             else:
                 command = ["devine", "dl", *self.options_list, "TVNZ", url]
-            subprocess.run(command)
+            self.runsubprocess(command)
 
         return
 
@@ -425,3 +424,5 @@ class TvnzLoader(BaseLoader):
         else:
             print("No video selected.")
             return
+        
+

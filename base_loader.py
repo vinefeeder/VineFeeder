@@ -8,6 +8,8 @@ import sys
 import time
 from pretty import create_clean_panel
 from pretty import catppuccin_mocha
+import yaml
+import subprocess
 
 console = Console()
 
@@ -33,6 +35,13 @@ class BaseLoader:
         self.final_episode_data = []
         self.browse_video_list = []
         self.category = None
+        
+        with open('./config.yaml', "r") as f:
+            myconfig = yaml.safe_load(f)
+            self.BATCH_DOWNLOAD = myconfig['BATCH_DOWNLOAD']
+            f.close()
+            
+
 
     def clear_series_data(self):
         self.series_data = {}
@@ -391,6 +400,29 @@ class BaseLoader:
             # os.system('cls')
             print("Ready!")
             return
+        
+    def runsubprocess(self, command):
+        """
+        Process the subprocess command for download by devine.
+        Either save to a batch file or run download directly
+        inherited by all __init__.py files for services
+
+        Parameters
+        ----------
+        command : list
+            The command to process.
+        Returns
+        -------
+        None
+        """
+        if self.BATCH_DOWNLOAD:
+            with open('./batch.txt', 'a') as f:
+                print(f'writing {command} to batch.txt')
+                f.write(' '.join(command) + '\n')
+            
+        else:
+            subprocess.run(command)
+        return
 
     ### methods that must be implemented by a service
     @abstractmethod

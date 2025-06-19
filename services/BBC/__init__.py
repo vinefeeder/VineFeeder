@@ -5,10 +5,8 @@ The BBC does not use  script = window.__PARAMS__ = ..."""
 from base_loader import BaseLoader
 from parsing_utils import extract_params_json, parse_json, split, split_options
 from rich.console import Console
-import subprocess
 import jmespath
 from scrapy.selector import Selector
-import json
 
 console = Console()
 
@@ -118,7 +116,7 @@ class BbcLoader(BaseLoader):
                         if self.options_list
                         else ["devine", "dl", "iP", search_term]
                     )
-                    subprocess.run(command)
+                    self.runsubprocess(command)
                 except Exception as e:
                     print(
                         "Error downloading video:",
@@ -133,7 +131,7 @@ class BbcLoader(BaseLoader):
                         if self.options_list
                         else ["devine", "dl", "iP", search_term]
                     )
-                    subprocess.run(command)
+                    self.runsubprocess(command)
                 except Exception as e:
                     print(
                         "Error downloading video:",
@@ -333,7 +331,7 @@ class BbcLoader(BaseLoader):
             # self.options_list = split_options(self.options)
             try:
                 if BbcLoader.HLG and self.AVAILABLE_HLG:
-                    subprocess.run(
+                    command = (
                         [
                             "devine",
                             "dl",
@@ -341,11 +339,14 @@ class BbcLoader(BaseLoader):
                             "--range",
                             "HLG",
                             "iP",
-                            url,
+                            url.replace(" ", "-"),
                         ]
                     )
                 else:
-                    subprocess.run(["devine", "dl", *self.options_list, "iP", url])
+                    command = (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
+
+                self.runsubprocess(command)
+            
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -375,12 +376,12 @@ class BbcLoader(BaseLoader):
                     break
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
-                subprocess.run(
-                    ["devine", "dl", *self.options_list, "--range", "HLG", "iP", url]
+                command = (
+                    ["devine", "dl", *self.options_list, "--range", "HLG", "iP", url.replace(" ", "-")]
                 )
             else:
-                subprocess.run(["devine", "dl", *self.options_list, "iP", url])
-
+                command (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
+            self.runsubprocess(command)
         return
 
     def fetch_videos_by_category(self, browse_url):
@@ -452,7 +453,8 @@ class BbcLoader(BaseLoader):
                 url = res[int(ind)]["href"]
                 # url may be for series or single Film
                 url = f"https://www.bbc.co.uk/iplayer/episode/{url}"
-                url = url.encode("utf-8", "ignore").decode().strip()  # has spaces!
+                #url = url.encode("utf-8", "ignore").decode().strip()  # has spaces!
+                
 
                 # process short-cut download or do greedy search on url
                 return self.process_received_url_from_category(url)
@@ -460,3 +462,5 @@ class BbcLoader(BaseLoader):
         else:
             print("No video selected.")
             return
+        
+    
