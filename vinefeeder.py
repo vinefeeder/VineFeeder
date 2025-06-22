@@ -92,7 +92,7 @@ class VineFeeder(QWidget):
         highlighted_frame.setLayout(self.highlighted_layout)
         highlighted_frame.setStyleSheet(
             "border: 1px solid pink;"
-        )  # Remove the border initially
+        )  
         layout.addWidget(highlighted_frame)
         #
         sechighlighted_frame = QFrame()
@@ -101,13 +101,11 @@ class VineFeeder(QWidget):
         sechighlighted_frame.setStyleSheet(
             "border: 1px solid pink;"
           
-        )  # Remove the border initially
+        )  
         layout.addWidget(sechighlighted_frame)
 
         # Batch Mode Layout
         batch_mode_layout = QHBoxLayout()
-        
-
         self.batch_slider = QSlider(Qt.Orientation.Horizontal)
         self.batch_slider.setMinimum(0)
         self.batch_slider.setMaximum(1)
@@ -158,7 +156,6 @@ class VineFeeder(QWidget):
         # Load batch mode from config
         self.load_batch_mode()
 
-
         self.dark_mode_checkbox = QCheckBox("Dark Mode")
         self.dark_mode_checkbox.setChecked(True)  # Set dark mode by default
         self.dark_mode_checkbox.stateChanged.connect(self.toggle_dark_mode)
@@ -169,7 +166,6 @@ class VineFeeder(QWidget):
         self.batch_poll_timer = QTimer(self)
         self.batch_poll_timer.timeout.connect(self.update_batch_file_indicator)
         self.batch_poll_timer.start(2000)  # 2000 ms = 2 seconds
-
 
         # Use a timer to delay the dark mode application slightly
         QTimer.singleShot(100, self.toggle_dark_mode)  # 100ms delay to ensure rendering
@@ -305,7 +301,7 @@ class VineFeeder(QWidget):
                     button.repaint()  # Force update of the button's appearance
         # Update batch_label based on dark mode and batch mode state
         if self.batch_slider.value() == 1:
-            self.batch_label.setStyleSheet("color: pink; padding-left: 5px; border: none;")
+            self.batch_label.setStyleSheet("color: lightgreen; padding-left: 5px; border: none;")
         else:
             if self.dark_mode_checkbox.isChecked():
                 self.batch_label.setStyleSheet("color: white; padding-left: 5px; border: none;")

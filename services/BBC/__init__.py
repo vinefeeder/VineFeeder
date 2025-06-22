@@ -380,7 +380,7 @@ class BbcLoader(BaseLoader):
                     ["devine", "dl", *self.options_list, "--range", "HLG", "iP", url.replace(" ", "-")]
                 )
             else:
-                command (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
+                command = (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
             self.runsubprocess(command)
         return
 

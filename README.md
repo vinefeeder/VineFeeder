@@ -177,6 +177,12 @@ Clicking the Run Batch button will then download all the selected videos.
 After devine's downloads are complete, the option to delete the batch file will 
 appear. The file may also be manually deleted.
 
+Note: While batch-run is downloading you may still add videos to batch.txt if you paste 
+the video link for a service into VineFeeder's text box. You may not interact with a service 
+if the service needs to use Terminal to display.
+
+
+
 
 
 **Closing Down**
