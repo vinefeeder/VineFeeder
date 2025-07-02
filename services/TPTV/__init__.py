@@ -1,5 +1,5 @@
 from base_loader import BaseLoader
-from parsing_utils import extract_script_with_id_json, parse_json, split_options
+from parsing_utils import  split_options
 from rich.console import Console
 import json
 from beaupy import select_multiple
