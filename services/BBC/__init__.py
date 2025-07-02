@@ -63,8 +63,12 @@ class BbcLoader(BaseLoader):
         self.options_list = split_options(BbcLoader.options)
         # prepare in UHD list
         self.uhd_list = self.check_uhd()
+        results = []
         for item in self.uhd_list:
-            print(item)
+            item = item.title()
+            results.append(item)
+        self.uhd_list = results
+
         
 
         # standardize
@@ -154,6 +158,7 @@ class BbcLoader(BaseLoader):
         elif inx == 3:
             print(f"Searching for {search_term}")
             for hlg_item in self.uhd_list:
+
                 if search_term in hlg_item:
                     self.AVAILABLE_HLG = True
                     break
