@@ -193,29 +193,74 @@ The BBC programme "The Gold"  will only be found with search terms 'the gold'; '
 or upper/lower-case  variations.
 The current BBC H.265 output:
 
-| A Good Girl's Guide to Murder          | His Dark Materials                     | The Americas                             |
-| A Perfect Planet                       | Industry, Series 2 and 3               | The Bombing of Pan Am 103                |
-| Asia                                   | Life After Life                        | The Boy, the Mole, the Fox and the Horse |
-| Attenborough and the Giant Sea Monster | Mammals                                | The English                              |
-| Attenborough's Wonder of Song          | Men Up                                 | The Gold                                 |
-| Blue Lights                            | Mood                                   | The Green Planet                         |
-| Blue Planet II                         | Mr Loverman                            | The Jetty                                |
-| Boarders                               | Murder is Easy                         | The Mating Game                          |
-| Boat Story                             | Nightsleeper                           | The Reckoning                            |
-| Boiling Point                          | Peaky Blinders, Series 6               | The Responder                            |
-| Champion                               | Planet Earth III                       | The Sixth Commandment                    |
-| Cunk on Life                           | Red Rose                               | The Tourist                              |
-| Doctor Who                             | Reunion                                | The Way                                  |
-| Doctor Who: 60th Anniversary Special   | SAS Rogue Heroes                       | The Woman in the Wall                    |
-| Doctor Who: Revolution of the Daleks   | Serengeti, Series 3                    | This City is Ours                        |
-| Doctor Who: The Power of the Doctor    | Seven Worlds, One Planet               | This Town                                |
-| Domino Day                             | Sherwood                               | Towards Zero                             |
-| Dynasties                              | Showtrial                              | Vigil                                    |
-| Everything I know about Love           | Squad Goals: Dorking 'Til I Die        | What It Feels Like for a Girl            |
-| Families Like Ours                     | Storyville: Your Fat Friend            | Wild Isles                               |
-| Frozen Planet II                       | Strike: The Ink Black Heart            | Wreck                                    |
-| Fungi: The Web of Life                 | Swan Lake from English National Ballet |                                          |
-| Glastonbury                            | Ten Pound Poms                         |                                          |
+1. A Good Girl's Guide to Murder
+2. A Perfect Planet
+3. Asia
+4. Attenborough and the Giant Sea Monster
+5. Attenborough's Wonder of Song
+6. Blue Lights
+7. Blue Planet II
+8. Boarders
+9. Boat Story
+10. Boiling Point
+11. Champion
+12. Cunk on Life
+13. Doctor Who
+14. Doctor Who: 60th Anniversary Special
+15. Doctor Who: Revolution of the Daleks
+16. Doctor Who: The Power of the Doctor
+17. Domino Day
+18. Dynasties
+19. Everything I know about Love
+20. Families Like Ours
+21. Frozen Planet II
+22. Fungi: The Web of Life
+23. Glastonbury
+24. His Dark Materials
+25. Industry, Series 2 and 3
+26. Life After Life
+27. Mammals
+28. Men Up
+29. Mood
+30. Mr Loverman
+31. Murder is Easy
+32. Nightsleeper
+33. Peaky Blinders, Series 6
+34. Planet Earth III
+35. Red Rose
+36. Reunion
+37. SAS Rogue Heroes
+38. Serengeti, Series 3
+39. Seven Worlds, One Planet
+40. Sherwood
+41. Showtrial
+42. Squad Goals: Dorking 'Til I Die
+43. Storyville: Your Fat Friend
+44. Strike: The Ink Black Heart
+45. Swan Lake from English National Ballet
+46. Ten Pound Poms
+47. The Americas
+48. The Bombing of Pan Am 103
+49. The Boy, the Mole, the Fox and the Horse
+50. The English
+51. The Gold
+52. The Green Planet
+53. The Jetty
+54. The Mating Game
+55. The Reckoning
+56. The Responder
+57. The Sixth Commandment
+58. The Tourist
+59. The Way
+60. The Woman in the Wall
+61. This City is Ours
+62. This Town
+63. Towards Zero
+64. Vigil
+65. What It Feels Like for a Girl
+66. Wild Isles
+67. Wreck
+            |                                          |
 #### NOTE 
 In the series above not every episode is available in HLG. Glastonbury is particularly 
 tricky. When Devine is told to expect HLG and then finds no output, devine will throw an error. 
