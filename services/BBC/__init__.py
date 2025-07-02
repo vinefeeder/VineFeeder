@@ -49,6 +49,7 @@ class BbcLoader(BaseLoader):
         html = self.get_data(uhd_url)
         sel = Selector(text=html)
         uhd_list = sel.xpath("(//ul)[9]//a/text()").getall()
+        #url_list = sel.xpath("(//ul)[9]//a/@href").getall()
 
         return uhd_list
 
@@ -63,6 +64,7 @@ class BbcLoader(BaseLoader):
         self.options_list = split_options(BbcLoader.options)
         # prepare in UHD list
         self.uhd_list = self.check_uhd()
+        # standardize for comparison later
         results = []
         for item in self.uhd_list:
             item = item.title()
@@ -72,7 +74,10 @@ class BbcLoader(BaseLoader):
         
 
         # standardize
-        search_term = search_term.strip().lower().title().replace('  ',' ')
+        if "https" in search_term:
+            pass
+        else:
+            search_term = search_term.strip().lower().title().replace('  ',' ')
 
 
         """
@@ -103,7 +108,8 @@ class BbcLoader(BaseLoader):
             series_name = split(search_term, "/", 6)[1].split("-series")[0]
             if series_name:
                 for hlg_item in self.uhd_list:
-                    if series_name and series_name.lower() in hlg_item:
+                    hlg_item = hlg_item.lower().replace(" ", "-")
+                    if series_name and series_name in hlg_item:
                         self.AVAILABLE_HLG = True
                         break
                 search_term = split(search_term, "?", 1)[0].replace(
