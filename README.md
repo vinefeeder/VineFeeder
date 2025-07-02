@@ -179,11 +179,50 @@ appear. The file may also be manually deleted.
 
 Note: While batch-run is downloading you may still add videos to batch.txt if you paste 
 the video link for a service into VineFeeder's text box. You may not interact with a service 
-if the service needs to use Terminal to display.
+if the service needs to use Terminal to display.  
 
+Batch mode preserves state; you may close VineFeeder down, if you wish,
+and resume later.
 
+**UHD**
 
+Currently only the BBC service carries HLG output.  Vinefeeder will attempt to automatically 
+detect if HLG videos are available.  Software compares the search term to a fetched list of 
+HLG titles. For this reason the search term *must* accurately match the programme title.
+The BBC programme "The Gold"  will only be found with search terms 'the gold'; 'The Gold' 
+or upper/lower-case  variations.
+The current BBC H.265 output:
 
+| A Good Girl's Guide to Murder          | His Dark Materials                     | The Americas                             |
+| A Perfect Planet                       | Industry, Series 2 and 3               | The Bombing of Pan Am 103                |
+| Asia                                   | Life After Life                        | The Boy, the Mole, the Fox and the Horse |
+| Attenborough and the Giant Sea Monster | Mammals                                | The English                              |
+| Attenborough's Wonder of Song          | Men Up                                 | The Gold                                 |
+| Blue Lights                            | Mood                                   | The Green Planet                         |
+| Blue Planet II                         | Mr Loverman                            | The Jetty                                |
+| Boarders                               | Murder is Easy                         | The Mating Game                          |
+| Boat Story                             | Nightsleeper                           | The Reckoning                            |
+| Boiling Point                          | Peaky Blinders, Series 6               | The Responder                            |
+| Champion                               | Planet Earth III                       | The Sixth Commandment                    |
+| Cunk on Life                           | Red Rose                               | The Tourist                              |
+| Doctor Who                             | Reunion                                | The Way                                  |
+| Doctor Who: 60th Anniversary Special   | SAS Rogue Heroes                       | The Woman in the Wall                    |
+| Doctor Who: Revolution of the Daleks   | Serengeti, Series 3                    | This City is Ours                        |
+| Doctor Who: The Power of the Doctor    | Seven Worlds, One Planet               | This Town                                |
+| Domino Day                             | Sherwood                               | Towards Zero                             |
+| Dynasties                              | Showtrial                              | Vigil                                    |
+| Everything I know about Love           | Squad Goals: Dorking 'Til I Die        | What It Feels Like for a Girl            |
+| Families Like Ours                     | Storyville: Your Fat Friend            | Wild Isles                               |
+| Frozen Planet II                       | Strike: The Ink Black Heart            | Wreck                                    |
+| Fungi: The Web of Life                 | Swan Lake from English National Ballet |                                          |
+| Glastonbury                            | Ten Pound Poms                         |                                          |
+#### NOTE 
+In the series above not every episode is available in HLG. Glastonbury is particularly 
+tricky. When Devine is told to expect HLG and then finds no output, devine will throw an error. 
+E.g this fails; devine dl -r HLG --list iP https://www.bbc.co.uk/iplayer/episodes/b007r6vx/glastonbury
+as some output is SDR
+A way around this is to start the service editor  with the command:  " python vinefeeder.py --service-folder BBC".
+Then edit the line hlg_status: True; change True to False, and save the file. This turns off HLG from being downloaded.
 
 **Closing Down**
 

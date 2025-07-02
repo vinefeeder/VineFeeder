@@ -48,8 +48,10 @@ class BbcLoader(BaseLoader):
         uhd_url = "https://www.bbc.co.uk/iplayer/help/questions/programme-availability/uhd-content"
         html = self.get_data(uhd_url)
         sel = Selector(text=html)
-        uhd_list = sel.xpath("(//ul)[8]//a/@href").getall()
+        uhd_list = sel.xpath("(//ul)[9]//a/text()").getall()
+
         return uhd_list
+
 
     def receive(
         self, inx: None, search_term: None, category=None, hlg_status=False, opts=None
@@ -61,6 +63,13 @@ class BbcLoader(BaseLoader):
         self.options_list = split_options(BbcLoader.options)
         # prepare in UHD list
         self.uhd_list = self.check_uhd()
+        for item in self.uhd_list:
+            print(item)
+        
+
+        # standardize
+        search_term = search_term.strip().lower().title().replace('  ',' ')
+
 
         """
         First fetch for series titles matching all or part of search_term.
@@ -113,8 +122,8 @@ class BbcLoader(BaseLoader):
                             "iP",
                             search_term,
                         ]
-                        if self.options_list
-                        else ["devine", "dl", "iP", search_term]
+                        if  self.options_list
+                        else ["devine", "dl", "--range", "HLG", "iP", search_term]
                     )
                     self.runsubprocess(command)
                 except Exception as e:
@@ -145,7 +154,7 @@ class BbcLoader(BaseLoader):
         elif inx == 3:
             print(f"Searching for {search_term}")
             for hlg_item in self.uhd_list:
-                if search_term.lower() in hlg_item:
+                if search_term in hlg_item:
                     self.AVAILABLE_HLG = True
                     break
             return self.fetch_videos(search_term)

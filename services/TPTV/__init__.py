@@ -1,9 +1,6 @@
 from base_loader import BaseLoader
 from parsing_utils import extract_script_with_id_json, parse_json, split_options
-import subprocess
 from rich.console import Console
-import jmespath
-import re
 import json
 from beaupy import select_multiple
 
@@ -95,7 +92,7 @@ class TptvLoader(BaseLoader):
                     command = ["devine", "dl", "TPTV", search_term]
                 else:
                     command = ["devine", "dl", *self.options_list, "TPTV", search_term]
-                subprocess.run(command)  # url
+                self.runsubprocess(command)  # url
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -214,7 +211,7 @@ class TptvLoader(BaseLoader):
                     command = ["devine", "dl", "TPTV", url]
                 else:
                     command = ["devine", "dl", *self.options_list, "TPTV", url]
-                subprocess.run(command)
+                self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
@@ -233,3 +230,4 @@ class TptvLoader(BaseLoader):
         """
         print("Category fetch not Implemented")
         return None
+    
