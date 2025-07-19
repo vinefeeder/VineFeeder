@@ -109,7 +109,7 @@ class BbcLoader(BaseLoader):
             if series_name:
                 for hlg_item in self.uhd_list:
                     hlg_item = hlg_item.lower().replace(" ", "-")
-                    if series_name and series_name in hlg_item:
+                    if series_name in hlg_item:
                         self.AVAILABLE_HLG = True
                         break
                 search_term = split(search_term, "?", 1)[0].replace(
@@ -124,7 +124,7 @@ class BbcLoader(BaseLoader):
                 try:
                     command = (
                         [
-                            "devine",
+                            self.DOWNLOAD_ORCHESTRATOR,
                             "dl",
                             *self.options_list,
                             "--range",
@@ -133,29 +133,29 @@ class BbcLoader(BaseLoader):
                             search_term,
                         ]
                         if  self.options_list
-                        else ["devine", "dl", "--range", "HLG", "iP", search_term]
+                        else [self.DOWNLOAD_ORCHESTRATOR, "dl", "--range", "HLG", "iP", search_term]
                     )
                     self.runsubprocess(command)
                 except Exception as e:
                     print(
                         "Error downloading video:",
                         e,
-                        "Is devine installed correctly via 'pip install devine?",
+                        "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                     )
 
             else:
                 try:
                     command = (
-                        ["devine", "dl", *self.options_list, "iP", search_term]
+                        [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "iP", search_term]
                         if self.options_list
-                        else ["devine", "dl", "iP", search_term]
+                        else [self.DOWNLOAD_ORCHESTRATOR, "dl", "iP", search_term]
                     )
                     self.runsubprocess(command)
                 except Exception as e:
                     print(
                         "Error downloading video:",
                         e,
-                        "Is devine installed correctly via 'pip install devine?",
+                        "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                     )
 
             return
@@ -353,7 +353,7 @@ class BbcLoader(BaseLoader):
                 if BbcLoader.HLG and self.AVAILABLE_HLG:
                     command = (
                         [
-                            "devine",
+                            self.DOWNLOAD_ORCHESTRATOR,
                             "dl",
                             *self.options_list,
                             "--range",
@@ -363,7 +363,7 @@ class BbcLoader(BaseLoader):
                         ]
                     )
                 else:
-                    command = (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
+                    command = ([self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "iP", url.replace(" ", "-")])
 
                 self.runsubprocess(command)
             
@@ -371,7 +371,7 @@ class BbcLoader(BaseLoader):
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
             return
 
@@ -397,10 +397,10 @@ class BbcLoader(BaseLoader):
 
             if BbcLoader.HLG and self.AVAILABLE_HLG:
                 command = (
-                    ["devine", "dl", *self.options_list, "--range", "HLG", "iP", url.replace(" ", "-")]
+                    [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "--range", "HLG", "iP", url.replace(" ", "-")]
                 )
             else:
-                command = (["devine", "dl", *self.options_list, "iP", url.replace(" ", "-")])
+                command = ([self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "iP", url.replace(" ", "-")])
             self.runsubprocess(command)
         return
 

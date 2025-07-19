@@ -73,16 +73,16 @@ class All4Loader(BaseLoader):
         if "http" in search_term and inx == 1:
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "ALL4", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "ALL4", search_term]
                 else:
-                    command = ["devine", "dl", *self.options_list, "ALL4", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "ALL4", search_term]
                 self.runsubprocess(command)
                 return
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    f"Is {self.DOWNLOAD_ORCHESTRATOR} installed correctly via 'pip install {self.DOWNLOAD_ORCHESTRATOR}?",
                 )
                 return
 
@@ -214,16 +214,16 @@ class All4Loader(BaseLoader):
             url = "https://www.channel4.com" + item["url"]
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "ALL4", url]
+                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", "ALL4", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "ALL4", url]
+                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", *self.options_list, "ALL4", url]
                 self.runsubprocess(command)
                 return None
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
                 return
 
@@ -244,15 +244,15 @@ class All4Loader(BaseLoader):
             try:
 
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "ALL4", url]
+                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", "ALL4", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "ALL4", url]
+                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", *self.options_list, "ALL4", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
                 return
 

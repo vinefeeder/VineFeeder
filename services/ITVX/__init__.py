@@ -52,15 +52,15 @@ class ItvxLoader(BaseLoader):
             self.options_list = split_options(self.options)
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "ITVX", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "ITVX", search_term]
                 else:
-                    command = ["devine", "dl", *self.options_list, "ITVX", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "ITVX", search_term]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
 
             return
@@ -103,7 +103,7 @@ class ItvxLoader(BaseLoader):
             "Host": "textsearch.prd.oasvc.itv.com",
             "user-agent": "Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)",
         }
-        url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,widevine,fairplay,bbts,progressive,hd,rtmpe&onlyFree=true&platform=dotcom&query={search_term}&size=24"
+        url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,wiself.DOWNLOAD_ORCHESTRATOR,fairplay,bbts,progressive,hd,rtmpe&onlyFree=true&platform=dotcom&query={search_term}&size=24"
         html = self.get_data(url, headers)
         parsed_data = self.parse_data(html)
 
@@ -235,15 +235,15 @@ class ItvxLoader(BaseLoader):
                     url = match.group()
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "ITVX", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "ITVX", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "ITVX", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "ITVX", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
 
         return None

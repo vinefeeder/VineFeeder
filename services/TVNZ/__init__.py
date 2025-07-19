@@ -71,16 +71,16 @@ class TvnzLoader(BaseLoader):
         if "http" in search_term and inx == 1:
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "TVNZ", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "TVNZ", search_term]
                 else:
-                    command = ["devine", "dl", *self.options_list, "TVNZ", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "TVNZ", search_term]
                 self.runsubprocess(command)
                 return
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
                 return
 
@@ -199,9 +199,9 @@ class TvnzLoader(BaseLoader):
                 for item in selected:
                     url = item[1]
                     if self.options_list[0] == "":
-                        command = ["devine", "dl", "TVNZ", url]
+                        command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "TVNZ", url]
                     else:
-                        command = ["devine", "dl", *self.options_list, "TVNZ", url]
+                        command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "TVNZ", url]
                     self.runsubprocess(command)
                 return None
 
@@ -216,9 +216,9 @@ class TvnzLoader(BaseLoader):
                         # https://www.tvnz.co.nz/shows/circle-of-friends/movie/s1-e1
                         url = f"https://www.tvnz.co.nz/shows/{series_name}/movie/s1-e1"
                         if self.options_list[0] == "":
-                            command = ["devine", "dl", "TVNZ", url]
+                            command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "TVNZ", url]
                         else:
-                            command = ["devine", "dl", *self.options_list, "TVNZ", url]
+                            command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "TVNZ", url]
                         self.runsubprocess(command)
                         return
 
@@ -226,7 +226,7 @@ class TvnzLoader(BaseLoader):
                         print(
                             "Error downloading video:",
                             e,
-                            "Is devine installed correctly via 'pip install devine?",
+                            "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                         )
                         return
                 try:
@@ -293,16 +293,16 @@ class TvnzLoader(BaseLoader):
                 url = f'https://www.tvnz.co.nz{item["url"]}'
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "TVNZ", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "TVNZ", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "TVNZ", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "TVNZ", url]
                 self.runsubprocess(command)
                 return None
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
                 return
         # else present list of series and display for multiple selection
@@ -322,9 +322,9 @@ class TvnzLoader(BaseLoader):
                 continue
 
             if self.options_list[0] == "":
-                command = ["devine", "dl", "TVNZ", url]
+                command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "TVNZ", url]
             else:
-                command = ["devine", "dl", *self.options_list, "TVNZ", url]
+                command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "TVNZ", url]
             self.runsubprocess(command)
 
         return

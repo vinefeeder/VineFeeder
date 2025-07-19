@@ -50,15 +50,15 @@ class ULoader(BaseLoader):
             # options_list = split_options(ULoader.options)
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "U", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "U", search_term]
                 else:
-                    command = ["devine", "dl", *self.options_list, "U", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "U", search_term]
                 self.runsubprocess(command)  # url
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
 
             return
@@ -198,15 +198,15 @@ class ULoader(BaseLoader):
             url = item.split(",")[2].lstrip()
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "U", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "U", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "U", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "U", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
 
         return None

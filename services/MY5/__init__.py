@@ -51,9 +51,9 @@ class My5Loader(BaseLoader):
         if "http" in search_term and inx == 1:
             # options_list = split_options(self.options)
             if self.options_list[0] == "":
-                command = ["devine", "dl", "MY5", search_term]
+                command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "MY5", search_term]
             else:
-                command = ["devine", "dl", *self.options_list, "MY5", search_term]
+                command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "MY5", search_term]
             self.runsubprocess(command)
 
             return
@@ -132,15 +132,15 @@ class My5Loader(BaseLoader):
             self.options_list = split_options(self.options)
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "MY5", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "MY5", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "MY5", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "MY5", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
             return
         else:
@@ -208,15 +208,15 @@ class My5Loader(BaseLoader):
 
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "MY5", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "MY5", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "MY5", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "MY5", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
         return
 

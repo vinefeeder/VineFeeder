@@ -1,6 +1,6 @@
 # VineFeeder
 
-VineFeeder is a dynamic Python-based application and **framework** that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) - a video-downloader
+VineFeeder is a dynamic Python-based application and **framework** that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) or unshackle (https://github.com/unshackle-dl/unshackle)  - each a video-downloader, unshackle being a fork of devine.
 
 Vinefeeder enables users to more easily interact with Devine's streaming services. The project allows users to browse and select media content from multiple services, each of which is dynamically loaded as a separate module.  Each service has a configuration which will work out of the box, but Devine download options may be set on a service by service basis.
 
@@ -51,17 +51,19 @@ Requirements
         Scrapy
 
 You can install the necessary VineFeeder packages with bash or a Window's Terminal. Make sure to install python modules to the same python environment (env) as Devine
-First be sure to follow Devine's install and set-up procedure and ensure it all works correctly to your liking.
+First be sure to follow Devine or unshackle's install and set-up procedure and ensure it all works correctly to your liking.
 
 **If you have installed Devine using Poetry and you run Devine by 'poetry run devine' then install devine again using pip, keeping the poetry install for when you use the command line directly. The pip installed version is the developer's recommended way. If you go off-piste you may break something! Both versions sit happily together**
 
 **If you have installed Devine by any other way than via poetry or by  'pip install devine' then remove it and re-install using the correct method before running VineFeeder!  The re-install should pick-up the last configuration. if not re-configure Devine. Make absolutely sure devine can be called from any folder on your system.**  
 
+**If you are using unshackle make sure you have installed the tool version that runs from the command unshackle. See https://github.com/unshackle-dl/unshackle for installtion details**
+
 **Setup**
 
-if you've installed Devine, via pip, in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder to the same environment.
+if you've installed Devine or unshackle , via pip or uv, in a specific python environment  (virtual environment - venv) , first start that environment before installing VineFeeder to the same environment.
 
-For all users, after devine is configured
+For all users, after devine/unshackle is configured
 
 Clone the repository:
 With bash or a Window's Terminal
@@ -100,6 +102,7 @@ If left empty a menu is offered.
 **Help**
 
 Starting VineFeeder with python vinefeeder.py --help will show options to set a service congfiguration - if required.
+In the top level folder is config.yaml. Open the file in a text editor and set your preferred DOWNLOAD_ORCHESTRATOR to devine or unshackle.
 
 **Service Configuration**
 

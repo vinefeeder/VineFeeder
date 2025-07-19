@@ -39,6 +39,7 @@ class BaseLoader:
         with open('./config.yaml', "r") as f:
             myconfig = yaml.safe_load(f)
             self.BATCH_DOWNLOAD = myconfig['BATCH_DOWNLOAD']
+            self.DOWNLOAD_ORCHESTRATOR = myconfig['DOWNLOAD_ORCHESTRATOR']
             f.close()
             
 

@@ -53,15 +53,15 @@ class StvLoader(BaseLoader):
             try:
                 self.options_list = split_options(StvLoader.options)
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "STV", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "STV", search_term]
                 else:
-                    command = ["devine", "dl", *self.options_list, "STV", search_term]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "STV", search_term]
                 self.runsubprocess(command)  # url
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
 
             return
@@ -294,15 +294,15 @@ class StvLoader(BaseLoader):
             url = item.split(",")[2].lstrip()
             try:
                 if self.options_list[0] == "":
-                    command = ["devine", "dl", "STV", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "STV", url]
                 else:
-                    command = ["devine", "dl", *self.options_list, "STV", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "STV", url]
                 self.runsubprocess(command)
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is devine installed correctly via 'pip install devine?",
+                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
                 )
         return None
 
