@@ -214,16 +214,16 @@ class All4Loader(BaseLoader):
             url = "https://www.channel4.com" + item["url"]
             try:
                 if self.options_list[0] == "":
-                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", "ALL4", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "ALL4", url]
                 else:
-                    command = ["self.DOWNLOAD_ORCHESTRATOR", "dl", *self.options_list, "ALL4", url]
+                    command = [self.DOWNLOAD_ORCHESTRATOR, "dl", *self.options_list, "ALL4", url]
                 self.runsubprocess(command)
                 return None
             except Exception as e:
                 print(
                     "Error downloading video:",
                     e,
-                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
+                    f"Is {self.DOWNLOAD_ORCHESTRATOR} installed correctly via 'pip install {self.DOWNLOAD_ORCHESTRATOR}?",
                 )
                 return
 

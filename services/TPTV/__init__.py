@@ -184,7 +184,10 @@ class TptvLoader(BaseLoader):
                 }
                 self.add_episode(title,episode)
         except Exception as e:
-            print("Nothing found. Try another search term.")
+            if len(self.series_data) > 0:
+                pass
+            else:
+                print("Nothing found. Try another search term.")
             return
         eps = self.get_series()
         beaupylist = []
@@ -216,7 +219,7 @@ class TptvLoader(BaseLoader):
                 print(
                     "Error downloading video:",
                     e,
-                    "Is self.DOWNLOAD_ORCHESTRATOR installed correctly via 'pip install self.DOWNLOAD_ORCHESTRATOR?",
+                    "Is devine/unshackle installed correctly via 'pip install <program name>?",
                 )
         return None
 

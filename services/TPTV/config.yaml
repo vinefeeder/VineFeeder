@@ -1,6 +1,6 @@
 service: TPTV
 
-options: --no-folder 
+options: 
 
 media_dict:
   Not Implemented: None

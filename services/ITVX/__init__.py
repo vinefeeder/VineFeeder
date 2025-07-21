@@ -99,11 +99,12 @@ class ItvxLoader(BaseLoader):
         headers = {
             "Accept": "*/*",
             "Accept-Encoding": "gzip, deflate, br",
-            "authority": "www.itv.com",
             "Host": "textsearch.prd.oasvc.itv.com",
+            "Origin": "https://www.itv.com",
+            "Referer": "https://www.itv.com/",
             "user-agent": "Dalvik/2.9.8 (Linux; U; Android 9.9.2; ALE-L94 Build/NJHGGF)",
         }
-        url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,wiself.DOWNLOAD_ORCHESTRATOR,fairplay,bbts,progressive,hd,rtmpe&onlyFree=true&platform=dotcom&query={search_term}&size=24"
+        url = f"https://textsearch.prd.oasvc.itv.com/search?broadcaster=itv&channelType=simulcast&featureSet=clearkey,outband-webvtt,hls,aes,playready,widevine,fairplay,bbts,progressive,hd,rtmpe&platform=dotcom&pretx=true&query={search_term}&size=24"
         html = self.get_data(url, headers)
         parsed_data = self.parse_data(html)
 

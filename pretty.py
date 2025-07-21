@@ -33,7 +33,7 @@ def pretty_print():
         f"| |/ / / _ \\/ -_) _// -_) -_) _  / -_) __/" "\n"
         f"|___/_/_//_/\\__/__/  \\__/\\__/\\_,_/\\__/_/     [/]" "\n\n\n"
         f"[{catppuccin_mocha['green']}]A front-end for Devine or Unshackle[/]\n"
-        f"[{catppuccin_mocha['text2']}]Copyright © 2024  A_n_g_e_l_a[/]\n"
+        f"[{catppuccin_mocha['text2']}]Copyright © 2024-25  A_n_g_e_l_a[/]\n"
         f"[{catppuccin_mocha['blue']}]https://github.com/vinefeeder[/]"
     )
 
