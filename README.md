@@ -57,7 +57,7 @@ First be sure to follow Devine or unshackle's install and set-up procedure and e
 
 **If you have installed Devine by any other way than via poetry or by  'pip install devine' then remove it and re-install using the correct method before running VineFeeder!  The re-install should pick-up the last configuration. if not re-configure Devine. Make absolutely sure devine can be called from any folder on your system.**  
 
-**If you are using unshackle make sure you have installed the tool version that runs from the command unshackle. See https://github.com/unshackle-dl/unshackle for installtion details**
+**If you are using unshackle make sure you have installed the tool version that runs from the command unshackle. See https://github.com/unshackle-dl/unshackle for installation details**
 
 **Setup**
 
@@ -95,9 +95,11 @@ preferences, a dark background for better contrast with the colours used in Vine
 
 **Interacting with Services**
 
-Once the GUI is launched, you mau interact with various streaming services by clicking on their corresponding buttons.
+Once the GUI is launched, you may interact with various streaming services by clicking on their corresponding buttons.
 The 'URL or search' box MAY be used for an immediate search entry or direct-download URL or it may be left empty. 
 If left empty a menu is offered.
+A search for a series-name will usually end with a list of episodes to select from.
+If a series-url is pasted in the text-box then Vinefeeder will immediatly pass the url to the downloader. And being a series-url the downloader will download the complete series. So if you wish to select episodes use a search term.
 
 **Help**
 
@@ -291,7 +293,7 @@ are already written in this framework.
 Any new service will need an __init__.py to be written and to implement just four 
 methods. 
 
-The ultimate aim of a services's __init__.py is to extract a list of video-data from  a content 
+The ultimate aim of a services' __init__.py is to extract a list of video-data from  a content 
 provide and store it a numerous dict items in a list container. The video-data is collected in 
 dict objects labelled 'episode'.
 
@@ -376,11 +378,10 @@ To add a new service:
         a script is extracted from which json is pulled using the facility methods in BaseLoader and parsing _utils.
         
         FETCH_VIDEO_BY_CATEGORY
-        Displays the media_dict from congig.yaml - so put any category heading andn links in the new service config.
-        One a category is selected again parse json and follow an existing service for a model answer adjusting to suite the 
-        syntax required by our new service. 
+        Displays the media_dict from congig.yaml - so put any category heading and links in the new service config.
+        Once a category is selected, again parse the json and follow an existing service for a model answer, adjusting to suit the syntax required by our new service. 
         Potentially, you may not implement this if the site does not provide a worthwhile browse by category list,
-        or the data cannot be parsed readily. U falls into this category. 
+        or the data cannot be parsed readily. The service U falls into this category. 
 
 VineFeeder will dynamically detect and load the new services on the next start.
 

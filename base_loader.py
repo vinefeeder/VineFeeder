@@ -436,6 +436,12 @@ class BaseLoader:
         greedy-search with url
         browse-category search using
         media_dict from config.yaml for service.
+        Uses inx, an int variable to switch:-
+            0 for greedy search using url
+            1 for direct url download
+            2 for category browse
+            3 for search with keyword 
+        inx is sent automatically from vinefeeder.py       
         method called from vinefeeder and implemented in service/__init__
         """
         raise NotImplementedError(

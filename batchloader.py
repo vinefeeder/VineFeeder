@@ -17,7 +17,8 @@ def _batchloader():
         yesno = input("delete batch file?  (y/n) ")
         if yesno.lower() == 'y':
             os.remove("./batch.txt")
-            print("batch.txt deleted.")
+            print("batch.txt deleted.\n\nReady.")
+
 
     except FileNotFoundError:
         print("batch.txt not found.\nFirst set batch mode to True in the GUI, then choose some videos.")
