@@ -4,6 +4,7 @@ from beaupy import select, select_multiple
 from rich.console import Console
 from abc import abstractmethod
 import os
+import platform
 import sys
 import time
 from pretty import create_clean_panel
@@ -42,7 +43,17 @@ class BaseLoader:
             self.DOWNLOAD_ORCHESTRATOR = myconfig['DOWNLOAD_ORCHESTRATOR']
             f.close()
             
-
+    def reset_terminal(self):
+        if self.DOWNLOAD_ORCHESTRATOR == "unshackle" and not self.BATCH_DOWNLOAD:
+            if os.name == 'nt':  # Windows
+                os.system('cls')
+                # Optionally, reinitialize ANSI or console buffer here if needed
+            else:  # Unix/Linux/macOS
+                try:
+                    subprocess.run(['reset'], check=True)
+                except Exception:
+                    os.system('clear')  # fallback if 'reset' is not available
+    
 
     def clear_series_data(self):
         self.series_data = {}
@@ -393,14 +404,16 @@ class BaseLoader:
     def clean_terminal(self):
         # clear for next use
         time.sleep(1)
-        if os.name == "posix":
+        self.reset_terminal()
+        '''if os.name == "posix":
             # os.system('clear')
             print("Ready!")
             return
         else:
-            # os.system('cls')
+            reset_terminal()
             print("Ready!")
-            return
+            return'''
+        print("Ready!")
         
     def runsubprocess(self, command):
         """
