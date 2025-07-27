@@ -173,8 +173,8 @@ class All4Loader(BaseLoader):
             url = self.get_selected_url(selected)
         try:
             myhtml = self.get_data(url=url)
-        except Exception:
-            print(f"No valid data at {url} found.\n Exiting")
+        except Exception as e:
+            print(f"[ALL4] Error occurred: {e}\nIs this title live on All4?\nThey list near-future titles (not yet downloadable). \n Exiting")
             return
 
         parsed_data = extract_params_json(myhtml)
@@ -211,7 +211,11 @@ class All4Loader(BaseLoader):
 
         if self.get_number_of_episodes(series_name) == 1:
             item = self.get_series(series_name)[0]
-            url = "https://www.channel4.com" + item["url"]
+            try:
+                url = "https://www.channel4.com" + item["url"]
+            except Exception as e:
+                print(f"[ALL4] Error occurred:\nIs this title live on All4?\nThey list near-future titles (not yet downloadable). \n\nExiting!")
+                exit(1)
             try:
                 if self.options_list[0] == "":
                     command = [self.DOWNLOAD_ORCHESTRATOR, "dl", "ALL4", url]

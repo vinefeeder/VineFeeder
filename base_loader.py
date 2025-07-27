@@ -69,8 +69,9 @@ class BaseLoader:
         response = self.client.get(
             url, headers=headers, params=params, follow_redirects=True
         )
+    
         if response.status_code != 200:
-            raise Exception
+            raise Exception(f"Request failed with status {response.status_code}")
         return response.text
 
     def get_options(self, url, headers=None):
