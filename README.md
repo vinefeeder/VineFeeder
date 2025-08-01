@@ -93,8 +93,8 @@ there are reports it works. This Ozivine fork has a downloader https://github.co
 It is recommended to use PowerShell or Terminal in Windows and a Unix-like terminal in Linux - but select, via 
 preferences, a dark background for better contrast with the colours used in Vinefeeder.
 
-Note: Unshackle has an issue releasing screen control back to VineFeeder when a download is finished. Presently a work-around resets the terminal after a download. I don't think the issue appears with Windows; it has not been tested.
-The reset clears screen history - which you may not want. So use batch mode. Select as many downloads as you need and the run the batch download. Download history will remain on the screen.
+Note: Unshackle has an issue releasing screen control back to VineFeeder when a download is finished. There is an option in the top-level config.yaml to reset the terminal after a download. As delivered the tetrminal-reset option is off. I don't think the issue appears with Windows; it has not been tested.
+The reset clears screen history - which you may not want. So use batch mode. Select as many downloads as you need and the run the batch download. Download history will remain on the screen until all dowloads are finished.
 
 **Interacting with Services**
 

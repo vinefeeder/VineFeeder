@@ -41,6 +41,7 @@ class BaseLoader:
             myconfig = yaml.safe_load(f)
             self.BATCH_DOWNLOAD = myconfig['BATCH_DOWNLOAD']
             self.DOWNLOAD_ORCHESTRATOR = myconfig['DOWNLOAD_ORCHESTRATOR']
+            self.TERMINAL_RESET = myconfig['TERMINAL_RESET']
             f.close()
             
     def reset_terminal(self):
@@ -405,7 +406,8 @@ class BaseLoader:
     def clean_terminal(self):
         # clear for next use
         time.sleep(1)
-        self.reset_terminal()
+        if self.TERMINAL_RESET:
+            self.reset_terminal()
         '''if os.name == "posix":
             # os.system('clear')
             print("Ready!")
