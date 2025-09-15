@@ -57,7 +57,7 @@ First be sure to follow Devine or unshackle's install and set-up procedure and e
 
 **If you have installed Devine by any other way than via poetry or by  'pip install devine' then remove it and re-install using the correct method before running VineFeeder!  The re-install should pick-up the last configuration. if not re-configure Devine. Make absolutely sure devine can be called from any folder on your system.**  
 
-**If you are using unshackle make sure you have installed the tool version that runs from the command unshackle. See https://github.com/unshackle-dl/unshackle for installation details**
+**If you are using unshackle make sure you have installed the tool version that runs from the command unshackle. See https://github.com/unshackle-dl/unshackle for installation details.**
 
 **Setup**
 
@@ -137,8 +137,14 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     
 **Services**
 
-Currently seven services are working  - All4, BBC, ITVX, My5 STV, U and TPTV , all UK services plus TVNZ. 
-Other services: awaiting contributors!!
+Currently nine services are working  - All4, BBC, ITVX, My5, PLEX, STV, U and TPTV, TVNZ. 
+Note these are VineFeeder services that provide search and select.
+
+Vinefeeder serves its selection to a downloader - envied/unshackle/devine and their services are at:
+*Devine/Envied/Unshackle/ services*
+https://github.com/stabbedbybrick/services  for non-premium
+https://github.com/vinefeeder/envied/tree/main/unshackle/services  for services found in public domain
+
 
 **Text Entry Box**
 

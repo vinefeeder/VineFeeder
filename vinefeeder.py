@@ -460,6 +460,7 @@ class VineFeeder(QWidget):
                                 )  # inx 3 for keyword search
                                 self.clear_search_box()
                                 loader_instance.clean_terminal()
+                               
                                 sys.exit(0)
                         else:
                             inx, text_to_pass, found = self.do_action_select(
