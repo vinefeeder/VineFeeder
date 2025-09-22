@@ -31,6 +31,7 @@ hlg_status in config.yaml may be set to False to not do this.
 
 *Precision Episode Selection*:  Vinefeeder handles the selection of episodes and 'feeds' 
 	Devine one-by-one, making Devine's -w switch defunct.
+*Correct Service Errors*:   In some instances, errors in a downloader may be mitigated in VineFeeder. Url normalization is one such instance where the Service creator has missed dealing with accented characters and parsing urls fail.
 
 
 **Installation**
@@ -137,7 +138,7 @@ Services are displayed in alphabetical order for easy access. From there, you ca
     
 **Services**
 
-Currently nine services are working  - All4, BBC, ITVX, My5, PLEX, STV, U and TPTV, TVNZ. 
+Currently ten services are working  - All4, BBC, ITVX, My5, PLEX, RTE, STV, U and TPTV, TVNZ. 
 Note these are VineFeeder services that provide search and select.
 
 Vinefeeder serves its selection to a downloader - envied/unshackle/devine and their services are at:
