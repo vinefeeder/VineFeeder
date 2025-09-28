@@ -1,6 +1,7 @@
 images/*
 batch.txt
 *.json
+key_store.db 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
