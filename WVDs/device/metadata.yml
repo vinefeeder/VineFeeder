@@ -1,0 +1,21 @@
+capabilities:
+  analog_output_capabilities: ANALOG_OUTPUT_UNKNOWN
+  anti_rollback_usage_table: false
+  can_update_srm: false
+  max_hdcp_version: HDCP_NONE
+  oem_crypto_api_version: 13
+  session_token: true
+  supported_certificate_key_type:
+  - RSA_2048
+client_info:
+  architecture_name: arm64-v8a
+  build_info: NVIDIA/icosa/icosa:9/PPR1.180610.011/4199485_1739.5219:user/release-keys
+  company_name: NINTENDO
+  device_name: icosa
+  model_name: Switch
+  oem_crypto_security_patch_level: '0'
+  product_name: icosa
+  widevine_cdm_version: 14.0.0
+wvd:
+  device_type: ANDROID
+  security_level: 3
