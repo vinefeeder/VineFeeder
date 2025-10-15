@@ -48,7 +48,7 @@ class BaseLoader:
             f.close()
             
     def reset_terminal(self):
-        if self.DOWNLOAD_ORCHESTRATOR == "unshackle" and not self.BATCH_DOWNLOAD:
+        if not self.BATCH_DOWNLOAD:
             if os.name == 'nt':  # Windows
                 os.system('cls')
                 # Optionally, reinitialize ANSI or console buffer here if needed
