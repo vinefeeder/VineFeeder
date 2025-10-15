@@ -76,10 +76,15 @@ class RteLoader(BaseLoader):
             return self.fetch_videos(search_term)
 
         elif inx == 0:
-            search_term = search_term.split("/")[4].replace("-", " ")
-            if "?" in search_term:
-                search_term = search_term.split("?")[0].replace("-", " ")
-            return self.fetch_videos(search_term)
+            if not 'https' in search_term:
+                return self.fetch_videos(search_term)
+            # need a search keyword(s) from category url
+            # split and select series name
+            else:
+                search_term = search_term.split("/")[4].replace("-", " ")
+                if "?" in search_term:
+                    search_term = search_term.split("?")[0].replace("-", " ")
+                return self.fetch_videos(search_term)
 
         elif "http" in search_term and inx == 2:
             self.category = category

@@ -66,23 +66,28 @@ class My5Loader(BaseLoader):
         # ALTERNATIVES BELOW FROM POP-UP MENU
         elif inx == 0:
             # from greedy-search OR selecting Browse-category
+            if not 'https' in search_term:
+                return self.fetch_videos(search_term)
+            # need a search keyword(s) from category url
+            # split and select series name
+            else:
             # example: https://www.channel5.com/the-teacher/season-2/episode-2
             # need a search keyword(s) from url
             # split and select series name
-            if "show" in search_term:
-                match = re.search(r"\/show\/([a-z-]+)", search_term)
+                if "show" in search_term:
+                    match = re.search(r"\/show\/([a-z-]+)", search_term)
 
-                if match:
-                    search_term = str(match.group(1))
-                    search_term = search_term.split("-")[:-1]
-                    search_term = str(" ".join(search_term)).replace("-", " ")
+                    if match:
+                        search_term = str(match.group(1))
+                        search_term = search_term.split("-")[:-1]
+                        search_term = str(" ".join(search_term)).replace("-", " ")
 
-            else:
-                search_term = search_term.split("/")[3].replace("-", " ")
-            # fetch_videos_by_category search_term may have other params to remove
-            if "/" in search_term:
-                search_term = search_term.split("/")[0].replace("-", " ")
-            return self.fetch_videos(search_term)
+                else:
+                    search_term = search_term.split("/")[3].replace("-", " ")
+                # fetch_videos_by_category search_term may have other params to remove
+                if "/" in search_term:
+                    search_term = search_term.split("/")[0].replace("-", " ")
+                return self.fetch_videos(search_term)
 
         elif "http" in search_term and inx == 2:
             self.category = category

@@ -92,11 +92,14 @@ class TvnzLoader(BaseLoader):
         #  POP-UP MENU alternates:
         elif inx == 0:
             # from greedy-search OR selecting Browse-category
-            # need a search keyword(s) from url
-            # split and select series name
-            search_term = search_term.split("/")[4]
+            if not 'https' in search_term:
+                return self.fetch_videos(search_term)
+            else:
+                # need a search keyword(s) from url
+                # split and select series name
+                search_term = search_term.split("/")[4]
 
-            return self.fetch_videos(search_term)
+                return self.fetch_videos(search_term)
 
         elif "http" in search_term and inx == 2:
             self.category = category
