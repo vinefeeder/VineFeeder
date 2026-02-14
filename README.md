@@ -1,3 +1,11 @@
+
+
+*Note:  This reposistory was a staging point in the development of something larger. Now, the reason for its existence has been eclipsed by a newer project
+
+TwinVine  -   https://github.com/vinefeeder/TwinVine
+
+It is recommended that you install that instead of this.  Instead of you having to  install and configure a downloader, in TwinVine a fork of unshackle is automaticaly installed with the package.  The project uses uv as its package manager . It has Windows and Linux scripts to automate the install of the required binaries*
+
 # VineFeeder
 
 VineFeeder is a dynamic Python-based application and **framework** that presents a graphical user interface (GUI) to act as a front-end for Devine (https://github.com/devine-dl/devine) or unshackle (https://github.com/unshackle-dl/unshackle)  - each a video-downloader, unshackle being a fork of devine.
